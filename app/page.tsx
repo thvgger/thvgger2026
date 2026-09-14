@@ -1,69 +1,107 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
+type SectionKey =
+  | "music"
+  | "tour"
+  | "about"
+  | "journey"
+  | "gallery"
+  | "news"
+  | "contact"
+  | "store"
+  | null;
+
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks: { label: string; key: SectionKey }[] = [
+    { label: "Music", key: "music" },
+    { label: "Tour", key: "tour" },
+    { label: "About", key: "about" },
+    { label: "Journey", key: "journey" },
+    { label: "Gallery", key: "gallery" },
+    { label: "News", key: "news" },
+    { label: "Contact", key: "contact" },
+    { label: "Store", key: "store" },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="relative flex flex-col justify-between min-h-screen w-full bg-white text-black overflow-hidden select-none">
+      {/* 1. MAIN HEADER (Figma #30:333 & #24:6) */}
+      <header className="relative z-20 w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 pt-6 pb-4">
+        {/* Top-Left Monogram Logo (74x74 in Figma) */}
+        <div className="group flex items-center gap-2 cursor-pointer">
+          <div className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] lg:w-[74px] lg:h-[74px] transition-transform duration-300 group-hover:scale-105">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src="/images/header-icon.svg"
+              alt="Thvgger Logo"
+              width={74}
+              height={74}
+              priority
+              className="w-full h-full object-contain"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
         </div>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden md:flex items-center gap-[36px]">
+          {navLinks.map((item) => (
+            <button
+              key={item.key}
+              className="text-[12px] font-semibold tracking-[-0.01em] text-black hover:opacity-50 transition-opacity cursor-pointer focus:outline-none"
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Mobile Navigation Toggle */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-[12px] font-semibold tracking-wider uppercase px-2 py-1 border border-black/20 rounded"
+          >
+            {mobileMenuOpen ? "Close" : "Menu"}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute top-6 right-6 text-sm font-semibold p-2"
+          >
+            ✕ Close
+          </button>
+          <nav className="flex flex-col items-center gap-6 text-center">
+            {navLinks.map((item) => (
+              <button
+                key={item.key}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-2xl font-medium text-black hover:opacity-50 transition-opacity"
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Main Hero Placeholder */}
+      <main className="relative flex-1 flex items-center justify-center w-full px-4 py-6">
+        <h1 className="text-5xl sm:text-7xl font-medium tracking-tight">Thvgger</h1>
       </main>
+
+      {/* Footer Placeholder */}
+      <footer className="w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 text-xs text-gray-500">
+        <span>Now playing</span>
+        <span>Sound OFF</span>
+      </footer>
     </div>
   );
 }
