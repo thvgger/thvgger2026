@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 type SectionKey =
@@ -16,7 +16,14 @@ type SectionKey =
 
 export default function Home() {
   const [introPhase, setIntroPhase] = useState<"initial" | "morphing" | "complete">("initial");
+  const [soundOn, setSoundOn] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const audioNodesRef = useRef<{
+    gainNode: GainNode;
+    timerId: number | null;
+  } | null>(null);
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
@@ -43,6 +50,104 @@ export default function Home() {
     }, 1900);
   };
 
+  const toggleSound = () => {
+    if (soundOn) {
+      if (audioNodesRef.current) {
+        const { gainNode, timerId } = audioNodesRef.current;
+        if (timerId) window.clearInterval(timerId);
+        gainNode.gain.setTargetAtTime(0, audioContextRef.current?.currentTime || 0, 0.1);
+        setTimeout(() => {
+          audioNodesRef.current = null;
+        }, 200);
+      }
+      setSoundOn(false);
+    } else {
+      try {
+        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        const ctx = audioContextRef.current || new AudioCtx();
+        audioContextRef.current = ctx;
+
+        if (ctx.state === "suspended") {
+          ctx.resume();
+        }
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0.01, ctx.currentTime);
+        masterGain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 1.2);
+        masterGain.connect(ctx.destination);
+
+        const chordFrequencies = [110, 164.81, 196, 261.63];
+        chordFrequencies.forEach((freq) => {
+          const osc = ctx.createOscillator();
+          const filter = ctx.createBiquadFilter();
+          const oscGain = ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(450, ctx.currentTime);
+
+          oscGain.gain.setValueAtTime(0.12, ctx.currentTime);
+
+          osc.connect(filter);
+          filter.connect(oscGain);
+          oscGain.connect(masterGain);
+          osc.start();
+        });
+
+        let step = 0;
+        const timerId = window.setInterval(() => {
+          if (!audioContextRef.current) return;
+          const now = audioContextRef.current.currentTime;
+
+          if (step % 2 === 0) {
+            const kickOsc = ctx.createOscillator();
+            const kickGain = ctx.createGain();
+            kickOsc.frequency.setValueAtTime(120, now);
+            kickOsc.frequency.exponentialRampToValueAtTime(38, now + 0.12);
+            kickGain.gain.setValueAtTime(0.35, now);
+            kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            kickOsc.connect(kickGain);
+            kickGain.connect(masterGain);
+            kickOsc.start(now);
+            kickOsc.stop(now + 0.28);
+          }
+
+          const clickOsc = ctx.createOscillator();
+          const clickGain = ctx.createGain();
+          clickOsc.type = "triangle";
+          clickOsc.frequency.setValueAtTime(800 + Math.random() * 400, now);
+          clickGain.gain.setValueAtTime(0.04, now);
+          clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+          clickOsc.connect(clickGain);
+          clickGain.connect(masterGain);
+          clickOsc.start(now);
+          clickOsc.stop(now + 0.06);
+
+          step = (step + 1) % 8;
+        }, 500);
+
+        audioNodesRef.current = { gainNode: masterGain, timerId };
+        setSoundOn(true);
+      } catch (err) {
+        console.error("Audio playback error:", err);
+        setSoundOn(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioNodesRef.current?.timerId) {
+        window.clearInterval(audioNodesRef.current.timerId);
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close().catch(() => {});
+      }
+    };
+  }, []);
+
   const navLinks: { label: string; key: SectionKey }[] = [
     { label: "Music", key: "music" },
     { label: "Tour", key: "tour" },
@@ -62,7 +167,6 @@ export default function Home() {
           introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
         }`}
       >
-        {/* Top-Left Monogram Logo (74x74 in Figma) */}
         <button
           onClick={replayIntro}
           title="Replay intro animation"
@@ -80,7 +184,6 @@ export default function Home() {
           </div>
         </button>
 
-        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-[36px]">
           {navLinks.map((item) => (
             <button
@@ -92,7 +195,6 @@ export default function Home() {
           ))}
         </nav>
 
-        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -103,7 +205,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 md:hidden">
           <button
@@ -128,7 +229,6 @@ export default function Home() {
 
       {/* 2. HERO SECTION (Figma #30:354 & #30:378) */}
       <main className="relative flex-1 flex items-center justify-center w-full px-4 py-6">
-        {/* Animated Hero State: Big Centered Logo overlay during intro */}
         <div
           className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             introPhase === "initial"
@@ -150,7 +250,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Wordmark Container ("Huge Centered Wordmark with Embedded Monochrome Image") */}
         <div
           className={`flex items-center justify-center gap-3 sm:gap-4 lg:gap-[10px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             introPhase === "complete"
@@ -160,7 +259,6 @@ export default function Home() {
               : "opacity-0 translate-y-6 scale-90"
           }`}
         >
-          {/* Isometric Logo embedded in the wordmark (84x95.34 in Figma) */}
           <div
             onClick={replayIntro}
             title="Click to replay intro"
@@ -176,17 +274,76 @@ export default function Home() {
             />
           </div>
 
-          {/* "Thvgger" Typography (Inter Medium 128px, -0.0559em tracking, 110px line-height) */}
           <h1 className="text-[52px] sm:text-[80px] md:text-[104px] lg:text-[128px] font-medium leading-[0.86] tracking-[-0.0559em] text-black">
             Thvgger
           </h1>
         </div>
       </main>
 
-      {/* Footer Placeholder */}
-      <footer className="w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 text-xs text-gray-500">
-        <span>Now playing</span>
-        <span>Sound OFF</span>
+      {/* 3. MAIN FOOTER (Figma #30:360 & #24:37) */}
+      <footer
+        className={`relative z-20 w-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 gap-6 md:gap-0 transition-opacity duration-1000 ${
+          introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
+        }`}
+      >
+        <div className="flex-1 flex items-center justify-center md:justify-start gap-3">
+          <div
+            onClick={toggleSound}
+            title={soundOn ? "Click to pause sound" : "Click to play sound"}
+            className="flex items-end justify-between w-4 h-4 gap-[2px] cursor-pointer"
+          >
+            <span
+              className={`w-[2px] bg-black rounded-full transition-all duration-300 ${
+                soundOn ? "animate-eq-1" : "h-[5px]"
+              }`}
+            />
+            <span
+              className={`w-[2px] bg-black rounded-full transition-all duration-300 ${
+                soundOn ? "animate-eq-2" : "h-[12px]"
+              }`}
+            />
+            <span
+              className={`w-[2px] bg-black rounded-full transition-all duration-300 ${
+                soundOn ? "animate-eq-3" : "h-[7px]"
+              }`}
+            />
+            <span
+              className={`w-[2px] bg-black rounded-full transition-all duration-300 ${
+                soundOn ? "animate-eq-4" : "h-[14px]"
+              }`}
+            />
+            <span
+              className={`w-[2px] bg-black rounded-full transition-all duration-300 ${
+                soundOn ? "animate-eq-5" : "h-[9px]"
+              }`}
+            />
+          </div>
+
+          <div className="flex flex-col text-left">
+            <span className="text-[11px] font-medium leading-[13.75px] text-[#6B7280]">
+              Now playing
+            </span>
+            <span className="text-[12px] font-medium leading-[15px] tracking-[-0.025em] text-black">
+              Time To Dance
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-1 flex justify-center text-center">
+          <p className="text-[11.5px] font-medium leading-[15.53px] tracking-[-0.025em] text-black max-w-[340px] whitespace-pre-line">
+            Explore and take a look around at what{"\n"}
+            I’ve been designing, building, and breaking lately.
+          </p>
+        </div>
+
+        <div className="flex-1 flex items-center justify-center md:justify-end">
+          <button
+            onClick={toggleSound}
+            className="text-[12px] font-medium leading-[16px] tracking-[-0.025em] text-black hover:opacity-50 transition-opacity cursor-pointer focus:outline-none flex items-center gap-1.5"
+          >
+            {soundOn ? "Sound ON" : "Sound OFF"}
+          </button>
+        </div>
       </footer>
     </div>
   );
