@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 import Image from "next/image";
 
 type SectionKey =
@@ -17,19 +17,24 @@ type SectionKey =
 export default function Home() {
   const [introPhase, setIntroPhase] = useState<"initial" | "morphing" | "complete">("initial");
   const [soundOn, setSoundOn] = useState(false);
+  const [activeSection, setActiveSection] = useState<SectionKey>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Web Audio Context reference
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioNodesRef = useRef<{
     gainNode: GainNode;
     timerId: number | null;
   } | null>(null);
 
+  // Intro animation sequence
   useEffect(() => {
+    // Phase 1: Wait with big centered logo for 800ms
     const timer1 = setTimeout(() => {
       setIntroPhase("morphing");
     }, 850);
 
+    // Phase 2: Complete the morph and reveal all elements at ~1900ms
     const timer2 = setTimeout(() => {
       setIntroPhase("complete");
     }, 1900);
@@ -50,8 +55,10 @@ export default function Home() {
     }, 1900);
   };
 
+  // Web Audio Synthesizer (Ambient Electronic Minimal Track)
   const toggleSound = () => {
     if (soundOn) {
+      // Stop sound
       if (audioNodesRef.current) {
         const { gainNode, timerId } = audioNodesRef.current;
         if (timerId) window.clearInterval(timerId);
@@ -62,6 +69,7 @@ export default function Home() {
       }
       setSoundOn(false);
     } else {
+      // Start ambient minimal soundscape
       try {
         const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
         const ctx = audioContextRef.current || new AudioCtx();
@@ -76,7 +84,8 @@ export default function Home() {
         masterGain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 1.2);
         masterGain.connect(ctx.destination);
 
-        const chordFrequencies = [110, 164.81, 196, 261.63];
+        // Ambient chord pad
+        const chordFrequencies = [110, 164.81, 196, 261.63]; // A minor 7th voicing
         chordFrequencies.forEach((freq) => {
           const osc = ctx.createOscillator();
           const filter = ctx.createBiquadFilter();
@@ -96,11 +105,13 @@ export default function Home() {
           osc.start();
         });
 
+        // Soft rhythmic kick & shaker pulse every 500ms (120 BPM minimal pulse)
         let step = 0;
         const timerId = window.setInterval(() => {
           if (!audioContextRef.current) return;
           const now = audioContextRef.current.currentTime;
 
+          // Kick on downbeats (every 4 steps)
           if (step % 2 === 0) {
             const kickOsc = ctx.createOscillator();
             const kickGain = ctx.createGain();
@@ -114,6 +125,7 @@ export default function Home() {
             kickOsc.stop(now + 0.28);
           }
 
+          // Ambient subtle click / percussion
           const clickOsc = ctx.createOscillator();
           const clickGain = ctx.createGain();
           clickOsc.type = "triangle";
@@ -132,11 +144,12 @@ export default function Home() {
         setSoundOn(true);
       } catch (err) {
         console.error("Audio playback error:", err);
-        setSoundOn(true);
+        setSoundOn(true); // fall back to visualizer toggle
       }
     }
   };
 
+  // Clean up audio on unmount
   useEffect(() => {
     return () => {
       if (audioNodesRef.current?.timerId) {
@@ -161,12 +174,15 @@ export default function Home() {
 
   return (
     <div className="relative flex flex-col justify-between min-h-screen w-full bg-white text-black overflow-hidden select-none">
-      {/* 1. MAIN HEADER (Figma #30:333 & #24:6) */}
+      {/* ======================================================== */}
+      {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
+      {/* ======================================================== */}
       <header
         className={`relative z-20 w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 pt-6 pb-4 transition-opacity duration-1000 ${
           introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
         }`}
       >
+        {/* Top-Left Monogram Logo (74x74 in Figma) */}
         <button
           onClick={replayIntro}
           title="Replay intro animation"
@@ -184,10 +200,12 @@ export default function Home() {
           </div>
         </button>
 
+        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-[36px]">
           {navLinks.map((item) => (
             <button
               key={item.key}
+              onClick={() => setActiveSection(item.key)}
               className="text-[12px] font-semibold tracking-[-0.01em] text-black hover:opacity-50 transition-opacity cursor-pointer focus:outline-none"
             >
               {item.label}
@@ -195,6 +213,7 @@ export default function Home() {
           ))}
         </nav>
 
+        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -205,6 +224,7 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 md:hidden">
           <button
@@ -217,7 +237,10 @@ export default function Home() {
             {navLinks.map((item) => (
               <button
                 key={item.key}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => {
+                  setActiveSection(item.key);
+                  setMobileMenuOpen(false);
+                }}
                 className="text-2xl font-medium text-black hover:opacity-50 transition-opacity"
               >
                 {item.label}
@@ -227,8 +250,11 @@ export default function Home() {
         </div>
       )}
 
-      {/* 2. HERO SECTION (Figma #30:354 & #30:378) */}
+      {/* ======================================================== */}
+      {/* 2. HERO SECTION (Figma #30:354 & #30:378)                */}
+      {/* ======================================================== */}
       <main className="relative flex-1 flex items-center justify-center w-full px-4 py-6">
+        {/* Animated Hero State: Big Centered Logo overlay during intro */}
         <div
           className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             introPhase === "initial"
@@ -250,6 +276,7 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Wordmark Container ("Huge Centered Wordmark with Embedded Monochrome Image") */}
         <div
           className={`flex items-center justify-center gap-3 sm:gap-4 lg:gap-[10px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             introPhase === "complete"
@@ -259,6 +286,7 @@ export default function Home() {
               : "opacity-0 translate-y-6 scale-90"
           }`}
         >
+          {/* Isometric Logo embedded in the wordmark (84x95.34 in Figma) */}
           <div
             onClick={replayIntro}
             title="Click to replay intro"
@@ -274,19 +302,24 @@ export default function Home() {
             />
           </div>
 
+          {/* "Thvgger" Typography (Inter Medium 128px, -0.0559em tracking, 110px line-height) */}
           <h1 className="text-[52px] sm:text-[80px] md:text-[104px] lg:text-[128px] font-medium leading-[0.86] tracking-[-0.0559em] text-black">
             Thvgger
           </h1>
         </div>
       </main>
 
-      {/* 3. MAIN FOOTER (Figma #30:360 & #24:37) */}
+      {/* ======================================================== */}
+      {/* 3. MAIN FOOTER (Figma #30:360 & #24:37)                  */}
+      {/* ======================================================== */}
       <footer
         className={`relative z-20 w-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 gap-6 md:gap-0 transition-opacity duration-1000 ${
           introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
         }`}
       >
+        {/* Left: Now Playing Widget */}
         <div className="flex-1 flex items-center justify-center md:justify-start gap-3">
+          {/* Equalizer Visualizer Bars (16x16 container) */}
           <div
             onClick={toggleSound}
             title={soundOn ? "Click to pause sound" : "Click to play sound"}
@@ -319,6 +352,7 @@ export default function Home() {
             />
           </div>
 
+          {/* Track Info */}
           <div className="flex flex-col text-left">
             <span className="text-[11px] font-medium leading-[13.75px] text-[#6B7280]">
               Now playing
@@ -329,6 +363,7 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Center: Brief Biography Statement */}
         <div className="flex-1 flex justify-center text-center">
           <p className="text-[11.5px] font-medium leading-[15.53px] tracking-[-0.025em] text-black max-w-[340px] whitespace-pre-line">
             Explore and take a look around at what{"\n"}
@@ -336,6 +371,7 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Right: Sound Switch Indicator */}
         <div className="flex-1 flex items-center justify-center md:justify-end">
           <button
             onClick={toggleSound}
@@ -345,6 +381,238 @@ export default function Home() {
           </button>
         </div>
       </footer>
+
+      {/* ======================================================== */}
+      {/* 4. MODAL / DRAWER FOR NAVIGATION CONTENT                 */}
+      {/* ======================================================== */}
+      {activeSection && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setActiveSection(null)}
+        >
+          <div
+            className="bg-white border border-black/10 shadow-2xl rounded-none w-full max-w-xl p-8 max-h-[85vh] overflow-y-auto text-black relative animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setActiveSection(null)}
+              className="absolute top-6 right-6 text-xs font-semibold uppercase tracking-wider text-black hover:opacity-50 p-2 cursor-pointer"
+            >
+              ✕ Close
+            </button>
+
+            {/* Music Section */}
+            {activeSection === "music" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Discography</h2>
+                <div className="space-y-4 text-sm divide-y divide-black/10">
+                  <div className="pt-2 flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold text-base">Time To Dance</p>
+                      <p className="text-gray-500 text-xs">Single • 2026</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (!soundOn) toggleSound();
+                      }}
+                      className="px-3 py-1 bg-black text-white text-xs font-medium hover:bg-black/80 transition-colors"
+                    >
+                      {soundOn ? "Playing" : "Play"}
+                    </button>
+                  </div>
+                  <div className="pt-4 flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold text-base">Isometric Structures</p>
+                      <p className="text-gray-500 text-xs">EP • 2025</p>
+                    </div>
+                    <span className="text-xs text-gray-400">4 Tracks</span>
+                  </div>
+                  <div className="pt-4 flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold text-base">Berlin Reverberations</p>
+                      <p className="text-gray-500 text-xs">Album • 2024</p>
+                    </div>
+                    <span className="text-xs text-gray-400">12 Tracks</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tour Section */}
+            {activeSection === "tour" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Live Performances</h2>
+                <div className="space-y-4 text-sm divide-y divide-black/10">
+                  {[
+                    { date: "OCT 14", venue: "Berghain / Panorama Bar", city: "Berlin, DE", status: "Sold Out" },
+                    { date: "NOV 02", venue: "Printworks Redux", city: "London, UK", status: "Tickets" },
+                    { date: "NOV 20", venue: "Warehouse Project", city: "Manchester, UK", status: "Tickets" },
+                    { date: "DEC 05", venue: "Grelle Forelle", city: "Vienna, AT", status: "Selling Fast" },
+                    { date: "JAN 18", venue: "Contact Tokyo", city: "Tokyo, JP", status: "Tickets" },
+                  ].map((show, i) => (
+                    <div key={i} className="pt-3 flex justify-between items-center">
+                      <div>
+                        <span className="text-xs font-mono text-gray-500">{show.date}</span>
+                        <p className="font-semibold">{show.venue}</p>
+                        <p className="text-xs text-gray-500">{show.city}</p>
+                      </div>
+                      <span className="text-xs font-semibold px-2 py-1 border border-black">
+                        {show.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* About Section */}
+            {activeSection === "about" && (
+              <div className="space-y-4">
+                <h2 className="text-3xl font-medium tracking-tight">About Thvgger</h2>
+                <p className="text-sm leading-relaxed text-gray-700">
+                  Thvgger is an electronic music producer, sound designer, and creative technologist.
+                  Blending architectural isometric aesthetics with raw, hypnotic electronic rhythms,
+                  his work spans minimalist techno, ambient soundscapes, and digital art installations.
+                </p>
+                <p className="text-sm leading-relaxed text-gray-700">
+                  Inspired by Berlin’s club culture, industrial design, and modernist typography,
+                  every performance is an exploration of sound, spatial tension, and visual identity.
+                </p>
+              </div>
+            )}
+
+            {/* Journey Section */}
+            {activeSection === "journey" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">The Journey</h2>
+                <div className="space-y-4 border-l border-black/20 pl-4 text-sm">
+                  <div>
+                    <span className="font-mono text-xs text-gray-400">2026</span>
+                    <p className="font-semibold">New Audio-Visual Live Tour Launch</p>
+                    <p className="text-xs text-gray-600">Debut of the isometric stage installation.</p>
+                  </div>
+                  <div>
+                    <span className="font-mono text-xs text-gray-400">2024</span>
+                    <p className="font-semibold">Berlin Reverberations LP</p>
+                    <p className="text-xs text-gray-600">Critically acclaimed vinyl release & residency.</p>
+                  </div>
+                  <div>
+                    <span className="font-mono text-xs text-gray-400">2021</span>
+                    <p className="font-semibold">Origins & Hardware Experimentation</p>
+                    <p className="text-xs text-gray-600">Analog synthesizer sessions and modular development.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Gallery Section */}
+            {activeSection === "gallery" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Visual Archive</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="aspect-square bg-zinc-100 flex items-center justify-center p-4 border border-black/10">
+                    <Image
+                      src="/images/logo-hero.svg"
+                      alt="Isometric Logo"
+                      width={160}
+                      height={180}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="aspect-square bg-zinc-100 flex items-center justify-center p-4 border border-black/10">
+                    <Image
+                      src="/images/header-icon.svg"
+                      alt="Cube Monogram"
+                      width={120}
+                      height={120}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 text-center">
+                  Curated monochrome graphic assets and stage projection visuals.
+                </p>
+              </div>
+            )}
+
+            {/* News Section */}
+            {activeSection === "news" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Latest News</h2>
+                <div className="space-y-4 text-sm divide-y divide-black/10">
+                  <div className="pt-2">
+                    <span className="text-xs font-mono text-gray-400">September 2026</span>
+                    <p className="font-semibold text-base">“Time To Dance” Official Release</p>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Now streaming across all major platforms with extended club mix.
+                    </p>
+                  </div>
+                  <div className="pt-3">
+                    <span className="text-xs font-mono text-gray-400">August 2026</span>
+                    <p className="font-semibold text-base">Autumn European Tour Announced</p>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Headlining dates in Berlin, London, Manchester, and Vienna.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Contact Section */}
+            {activeSection === "contact" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Contact & Bookings</h2>
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <span className="text-xs font-medium text-gray-400 uppercase">Management & Booking</span>
+                    <p className="font-mono text-black select-all">booking@thvgger.com</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium text-gray-400 uppercase">Press & Inquiries</span>
+                    <p className="font-mono text-black select-all">press@thvgger.com</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium text-gray-400 uppercase">Studio</span>
+                    <p className="text-gray-700">Kreuzberg, Berlin, Germany</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Store Section */}
+            {activeSection === "store" && (
+              <div className="space-y-6">
+                <h2 className="text-3xl font-medium tracking-tight">Official Store</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div className="border border-black/10 p-4 flex flex-col justify-between">
+                    <div>
+                      <p className="font-semibold">Time To Dance 12&quot; Vinyl</p>
+                      <p className="text-xs text-gray-500">Heavyweight 180g limited pressing</p>
+                    </div>
+                    <div className="mt-4 flex justify-between items-center">
+                      <span className="font-mono font-medium">€28.00</span>
+                      <button className="px-2 py-1 bg-black text-white text-xs">Pre-order</button>
+                    </div>
+                  </div>
+                  <div className="border border-black/10 p-4 flex flex-col justify-between">
+                    <div>
+                      <p className="font-semibold">Isometric Monogram Tee</p>
+                      <p className="text-xs text-gray-500">Heavy organic cotton in black</p>
+                    </div>
+                    <div className="mt-4 flex justify-between items-center">
+                      <span className="font-mono font-medium">€45.00</span>
+                      <button className="px-2 py-1 bg-black text-white text-xs">Buy</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
