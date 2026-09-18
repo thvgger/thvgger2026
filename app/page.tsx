@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useId } from "react";
 import Image from "next/image";
+import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
 
 type SectionKey =
   | "music"
@@ -178,7 +179,7 @@ export default function Home() {
       {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
       {/* ======================================================== */}
       <header
-        className={`relative z-20 w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 pt-6 pb-4 transition-opacity duration-1000 ${
+        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12 py-2 transition-opacity duration-1000 ${
           introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
         }`}
       >
@@ -286,21 +287,12 @@ export default function Home() {
               : "opacity-0 translate-y-6 scale-90"
           }`}
         >
-          {/* Isometric Logo embedded in the wordmark (84x95.34 in Figma) */}
-          <div
+          {/* Interactive 3D Cube Logo embedded in the wordmark (84x95.34 in Figma) */}
+          <InteractiveCubeLogo
+            className="w-[44px] h-[50px] sm:w-[62px] sm:h-[70px] md:w-[76px] md:h-[86px] lg:w-[84px] lg:h-[95.34px] flex-shrink-0"
             onClick={replayIntro}
-            title="Click to replay intro"
-            className="cursor-pointer w-[44px] h-[50px] sm:w-[62px] sm:h-[70px] md:w-[76px] md:h-[86px] lg:w-[84px] lg:h-[95.34px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
-          >
-            <Image
-              src="/images/logo-static.svg"
-              alt="Thvgger Logo"
-              width={84}
-              height={96}
-              priority
-              className="w-full h-full object-contain"
-            />
-          </div>
+            title="Click or drag to spin the 3D logo"
+          />
 
           {/* "Thvgger" Typography (Inter Medium 128px, -0.0559em tracking, 110px line-height) */}
           <h1 className="text-[52px] sm:text-[80px] md:text-[104px] lg:text-[128px] font-medium leading-[0.86] tracking-[-0.0559em] text-black">
