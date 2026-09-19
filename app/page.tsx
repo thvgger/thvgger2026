@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useId } from "react";
 import Image from "next/image";
 import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
+import AnimatedFavicon from "@/components/AnimatedFavicon";
 
 type SectionKey =
   | "music"
@@ -71,6 +72,17 @@ export default function Home() {
       clearTimeout(timer2);
       clearTimeout(timer3);
     };
+  }, [introCount]);
+
+  const [periodicSpin, setPeriodicSpin] = useState(0);
+
+  // Auto-spin both header and hero logos every 20 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPeriodicSpin((prev) => prev + 1);
+    }, 20000);
+
+    return () => clearInterval(interval);
   }, [introCount]);
 
   const replayIntro = () => {
@@ -197,11 +209,14 @@ export default function Home() {
 
   return (
     <div className="relative flex flex-col justify-between min-h-screen w-full bg-white text-black overflow-hidden select-none">
+      {/* Dynamic 3D Isometric Favicon */}
+      <AnimatedFavicon spinTrigger={introCount + periodicSpin} />
+
       {/* ======================================================== */}
       {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
       {/* ======================================================== */}
       <header
-        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`relative z-20 w-full flex items-center justify-between p-1 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           introPhase === "complete"
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-4 pointer-events-none"
@@ -209,8 +224,9 @@ export default function Home() {
       >
         {/* Top-Left Interactive 3D Cube Logo */}
         <InteractiveCubeLogo
-          className="w-[28px] h-[28px] sm:w-[34px] sm:h-[34px] lg:w-[38px] lg:h-[38px] flex-shrink-0 cursor-pointer"
+          className="w-[25px] h-[25px] sm:w-[29px] sm:h-[29px] lg:w-[33px] lg:h-[33px] flex-shrink-0 cursor-pointer"
           onClick={replayIntro}
+          spinTrigger={periodicSpin}
         />
 
         {/* Desktop Navigation Links */}
@@ -291,7 +307,7 @@ export default function Home() {
             style={{
               transition: "width 650ms cubic-bezier(0.25, 1, 0.5, 1), height 650ms cubic-bezier(0.25, 1, 0.5, 1)",
             }}
-            spinTrigger={introCount}
+            spinTrigger={introCount + periodicSpin}
           />
 
           {/* "Thvgger" Typography: enters from offscreen right, pushes cube into place */}
