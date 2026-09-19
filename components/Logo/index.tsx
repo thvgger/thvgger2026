@@ -62,8 +62,8 @@ export const LogoStatic: React.FC<LogoProps> = ({
       style={style}
       className={className}
       viewBox={VIEWBOX}
-      title={title}
     >
+      {title && <title>{title}</title>}
       <defs>
         <filter
           id={shadowId}
@@ -139,36 +139,25 @@ export const Logo: React.FC<LogoProps> = ({
   const springDragX = useSpring(dragX, SPRING_PARAMS);
   const springDragY = useSpring(dragY, SPRING_PARAMS);
 
-  const revolutionTransform = useTransform(springRotationY, (r) =>
-    Matrix.rotationY(r),
-  );
+  const pathD = useTransform(() => {
+    const rev = springRotationY.get();
+    const sx = springDragX.get();
+    const sy = springDragY.get();
 
-  const dragVector = useTransform(
-    [springDragX, springDragY],
-    ([x, y]) => new Vector([x as number, y as number, 0, 1]),
-  );
-
-  const dragTransform = useTransform(dragVector, (dv) => {
+    const revTransform = Matrix.rotationY(rev);
+    const dv = new Vector([sx, sy, 0, 1]);
     const rotationAxis = dv.rotateZ(Math.PI / 2).normalize();
     const angle = dv.norm() / 30;
-    return Matrix.rotation(rotationAxis, angle);
+    const dTransform = Matrix.rotation(rotationAxis, angle);
+
+    const transform = Matrix.scale(BASE_SCALE)
+      .dot(Matrix.rotationY(BASE_ROTATION_Y))
+      .dot(revTransform)
+      .dot(Matrix.rotationX(BASE_ROTATION_X))
+      .dot(dTransform);
+
+    return createCube(transform).map(facePath).join(" ");
   });
-
-  const projectedCubeStripes = useTransform(
-    [revolutionTransform, dragTransform],
-    ([revTransform, dTransform]) => {
-      const transform = Matrix.scale(BASE_SCALE)
-        .dot(Matrix.rotationY(BASE_ROTATION_Y))
-        .dot(revTransform as Matrix)
-        .dot(Matrix.rotationX(BASE_ROTATION_X))
-        .dot(dTransform as Matrix);
-      return createCube(transform);
-    },
-  );
-
-  const pathD = useTransform(projectedCubeStripes, (stripes) =>
-    stripes.map(facePath).join(" "),
-  );
 
   return (
     <motion.svg
@@ -178,7 +167,6 @@ export const Logo: React.FC<LogoProps> = ({
       whileTap={{ scale: 0.92 }}
       className={`cursor-grab active:cursor-grabbing select-none ${className}`.trim()}
       viewBox={VIEWBOX}
-      title={title}
       onClick={(e) => {
         if (isDraggingRef.current) return;
         rotate();
@@ -207,6 +195,7 @@ export const Logo: React.FC<LogoProps> = ({
         }, 50);
       }}
     >
+      {title && <title>{title}</title>}
       <motion.path style={{ fill }} d={pathD} />
     </motion.svg>
   );
