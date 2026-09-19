@@ -16,7 +16,10 @@ type SectionKey =
   | null;
 
 export default function Home() {
-  const [introPhase, setIntroPhase] = useState<"initial" | "morphing" | "complete">("initial");
+  const [introPhase, setIntroPhase] = useState<"spinning" | "shrinking" | "pushing" | "complete">("spinning");
+  const [introCount, setIntroCount] = useState(0);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [pushDistance, setPushDistance] = useState(240);
   const [soundOn, setSoundOn] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionKey>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,32 +31,51 @@ export default function Home() {
     timerId: number | null;
   } | null>(null);
 
-  // Intro animation sequence
-  useEffect(() => {
-    // Phase 1: Wait with big centered logo for 800ms
-    const timer1 = setTimeout(() => {
-      setIntroPhase("morphing");
-    }, 850);
+  // Measure push distance accurately so the cube sits exactly in the center before push
+  const measurePush = () => {
+    if (textRef.current) {
+      const textW = textRef.current.offsetWidth;
+      const gap = window.innerWidth >= 1024 ? 16 : window.innerWidth >= 640 ? 16 : 12;
+      setPushDistance((textW + gap) / 2);
+    }
+  };
 
-    // Phase 2: Complete the morph and reveal all elements at ~1900ms
+  useEffect(() => {
+    measurePush();
+    window.addEventListener("resize", measurePush);
+    return () => window.removeEventListener("resize", measurePush);
+  }, []);
+
+  // Intro animation sequence matching user's video:
+  // 1. Spinning large in dead center (0 - 650ms)
+  // 2. Shrinks smoothly in place in the center (650ms - 1300ms, 650ms duration)
+  // 3. "Thvgger" contacts and pushes the cube into center alignment (1300ms - 1950ms)
+  // 4. Settled at center, header and footer appear, logo becomes interactive (1950ms+)
+  useEffect(() => {
+    measurePush();
+    const timer1 = setTimeout(() => {
+      measurePush();
+      setIntroPhase("shrinking");
+    }, 650);
+
     const timer2 = setTimeout(() => {
+      setIntroPhase("pushing");
+    }, 1300);
+
+    const timer3 = setTimeout(() => {
       setIntroPhase("complete");
-    }, 1900);
+    }, 1950);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
     };
-  }, []);
+  }, [introCount]);
 
   const replayIntro = () => {
-    setIntroPhase("initial");
-    setTimeout(() => {
-      setIntroPhase("morphing");
-    }, 850);
-    setTimeout(() => {
-      setIntroPhase("complete");
-    }, 1900);
+    setIntroPhase("spinning");
+    setIntroCount((prev) => prev + 1);
   };
 
   // Web Audio Synthesizer (Ambient Electronic Minimal Track)
@@ -179,27 +201,17 @@ export default function Home() {
       {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
       {/* ======================================================== */}
       <header
-        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12  transition-opacity duration-1000 ${
-          introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
+        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          introPhase === "complete"
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
       >
-        {/* Top-Left Monogram Logo (74x74 in Figma) */}
-        <button
+        {/* Top-Left Interactive 3D Cube Logo */}
+        <InteractiveCubeLogo
+          className="w-[28px] h-[28px] sm:w-[34px] sm:h-[34px] lg:w-[38px] lg:h-[38px] flex-shrink-0 cursor-pointer"
           onClick={replayIntro}
-          title="Replay intro animation"
-          className="group flex items-center gap-2 cursor-pointer focus:outline-none"
-        >
-          <div className="w-[45px] h-[45px] sm:w-[64px] sm:h-[64px] lg:w-[74px] lg:h-[74px] transition-transform duration-300 group-hover:scale-105">
-            <Image
-              src="/images/header-icon.svg"
-              alt="Thvgger Logo"
-              width={74}
-              height={74}
-              priority
-              className="w-full h-full object-contain"
-            />
-          </div>
-        </button>
+        />
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-[36px]">
@@ -252,52 +264,55 @@ export default function Home() {
       )}
 
       {/* ======================================================== */}
-      {/* 2. HERO SECTION (Figma #30:354 & #30:378)                */}
+      {/* 2. HERO SECTION                                          */}
       {/* ======================================================== */}
       <main className="relative flex-1 flex items-center justify-center w-full px-4 py-6">
-        {/* Animated Hero State: Big Centered Logo overlay during intro */}
+        {/* Wordmark Lockup: shifted by pushDistance so cube is centered, then pushed into center alignment */}
         <div
-          className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            introPhase === "initial"
-              ? "opacity-100 scale-100"
-              : introPhase === "morphing"
-              ? "opacity-0 scale-50 -translate-x-24"
-              : "opacity-0 pointer-events-none hidden"
-          }`}
+          className="flex items-center justify-center"
+          style={{
+            transform:
+              introPhase === "pushing" || introPhase === "complete"
+                ? "translateX(0px)"
+                : `translateX(${pushDistance}px)`,
+            transition:
+              introPhase === "pushing"
+                ? "transform 500ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
+                : "none",
+          }}
         >
-          <div className="w-[280px] h-[318px] sm:w-[340px] sm:h-[386px] md:w-[400px] md:h-[454px]">
-            <Image
-              src="/images/logo-hero.svg"
-              alt="Thvgger Centered Mark"
-              width={400}
-              height={454}
-              priority
-              className="w-full h-full object-contain"
-            />
-          </div>
-        </div>
-
-        {/* Wordmark Container ("Huge Centered Wordmark with Embedded Monochrome Image") */}
-        <div
-          className={`flex items-center justify-center gap-3 sm:gap-4 lg:gap-[10px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            introPhase === "complete"
-              ? "opacity-100 translate-y-0 scale-100"
-              : introPhase === "morphing"
-              ? "opacity-80 translate-y-2 scale-95"
-              : "opacity-0 translate-y-6 scale-90"
-          }`}
-        >
-          {/* Interactive 3D Cube Logo embedded in the wordmark (84x95.34 in Figma) */}
+          {/* 3D Cube Logo: large during initial spin, shrinks smoothly in center, then pushed into place */}
           <InteractiveCubeLogo
-            className="w-[44px] h-[50px] sm:w-[62px] sm:h-[70px] md:w-[76px] md:h-[86px] lg:w-[84px] lg:h-[95.34px] flex-shrink-0"
-            onClick={replayIntro}
-            title="Click or drag to spin the 3D logo"
+            className={`flex-shrink-0 ${
+              introPhase === "spinning"
+                ? "w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] lg:w-[360px] lg:h-[360px] pointer-events-none"
+                : "w-[44px] h-[50px] sm:w-[62px] sm:h-[70px] md:w-[76px] md:h-[86px] lg:w-[84px] lg:h-[95.34px]"
+            }`}
+            style={{
+              transition: "width 650ms cubic-bezier(0.25, 1, 0.5, 1), height 650ms cubic-bezier(0.25, 1, 0.5, 1)",
+            }}
+            spinTrigger={introCount}
           />
 
-          {/* "Thvgger" Typography (Inter Medium 128px, -0.0559em tracking, 110px line-height) */}
-          <h1 className="text-[52px] sm:text-[80px] md:text-[104px] lg:text-[128px] font-medium leading-[0.86] tracking-[-0.0559em] text-black">
-            Thvgger
-          </h1>
+          {/* "Thvgger" Typography: enters from offscreen right, pushes cube into place */}
+          <div
+            ref={textRef}
+            className="ml-3 sm:ml-4 lg:ml-[16px] flex-shrink-0"
+            style={{
+              transform:
+                introPhase === "spinning" || introPhase === "shrinking"
+                  ? "translateX(100vw)"
+                  : "translateX(0px)",
+              transition:
+                introPhase === "pushing"
+                  ? "transform 650ms cubic-bezier(0.22, 1, 0.36, 1)"
+                  : "none",
+            }}
+          >
+            <h1 className="text-[52px] sm:text-[80px] md:text-[104px] lg:text-[128px] font-medium leading-[0.86] tracking-[-0.0559em] text-black whitespace-nowrap select-none">
+              Thvgger
+            </h1>
+          </div>
         </div>
       </main>
 
@@ -305,8 +320,10 @@ export default function Home() {
       {/* 3. MAIN FOOTER (Figma #30:360 & #24:37)                  */}
       {/* ======================================================== */}
       <footer
-        className={`relative z-20 w-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 gap-6 md:gap-0 transition-opacity duration-1000 ${
-          introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
+        className={`relative z-20 w-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 lg:px-12 pt-4 pb-6 gap-6 md:gap-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          introPhase === "complete"
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
         {/* Left: Now Playing Widget */}

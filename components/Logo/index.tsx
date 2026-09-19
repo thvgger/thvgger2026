@@ -34,6 +34,7 @@ export type LogoProps = {
   height?: number;
   fill?: string;
   title?: string;
+  spinTrigger?: number | boolean;
   onClick?: (event?: React.MouseEvent<SVGSVGElement>) => void;
   onMouseDown?: (event?: React.MouseEvent<SVGSVGElement>) => void;
   gradientId?: string;
@@ -103,19 +104,28 @@ export const Logo: React.FC<LogoProps> = ({
   onMouseDown,
   title = "Click or drag to spin the 3D logo",
   fill = "currentColor",
+  spinTrigger,
   ref,
 }) => {
   const revolutions = useMotionValue(0);
 
+  const isDraggingRef = React.useRef(false);
+  const isMountedRef = React.useRef(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      revolutions.set(1);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [revolutions]);
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      const timer = setTimeout(() => {
+        revolutions.set(1);
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (spinTrigger !== undefined) {
+      revolutions.set(revolutions.get() + 1);
+    }
+  }, [spinTrigger, revolutions]);
 
   function rotate() {
-    revolutions.set(1 - revolutions.get());
+    revolutions.set(revolutions.get() + 1);
   }
 
   const springRotationY = useSpring(
@@ -164,10 +174,13 @@ export const Logo: React.FC<LogoProps> = ({
     <motion.svg
       ref={ref}
       style={{ touchAction: "none", ...style }}
-      className={`hover:scale-105 active:scale-90 transition-transform cursor-grab active:cursor-grabbing select-none ${className}`.trim()}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.92 }}
+      className={`cursor-grab active:cursor-grabbing select-none ${className}`.trim()}
       viewBox={VIEWBOX}
       title={title}
       onClick={(e) => {
+        if (isDraggingRef.current) return;
         rotate();
         onClick?.(e);
       }}
@@ -177,6 +190,9 @@ export const Logo: React.FC<LogoProps> = ({
       }}
       onPan={(_, { offset }) => {
         const norm = Math.sqrt(offset.x ** 2 + offset.y ** 2);
+        if (norm > 3) {
+          isDraggingRef.current = true;
+        }
         if (norm === 0) return;
         // Square root falloff for natural elasticity
         const ratio = (Math.sqrt(norm) / norm) * 10;
@@ -186,6 +202,9 @@ export const Logo: React.FC<LogoProps> = ({
       onPanEnd={() => {
         dragX.set(0);
         dragY.set(0);
+        setTimeout(() => {
+          isDraggingRef.current = false;
+        }, 50);
       }}
     >
       <motion.path style={{ fill }} d={pathD} />
