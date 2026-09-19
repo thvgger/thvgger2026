@@ -10,12 +10,10 @@ export interface NavItem {
 }
 
 export const NAV_LINKS: NavItem[] = [
-  { label: "Work", href: "#work" },
-  { label: "Experiments", href: "#experiments" },
   { label: "About", href: "#about" },
-  { label: "Writing", href: "#writing" },
-  { label: "Stack", href: "#stack" },
-  { label: "Contact", href: "mailto:hello@thvgger.com", external: true },
+  { label: "Work", href: "#work" },
+  { label: "Playground", href: "#playground" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export interface HeaderProps {
@@ -60,9 +58,28 @@ export default function Header({
               href={item.href}
               target={item.external ? "_blank" : undefined}
               rel={item.external ? "noopener noreferrer" : undefined}
-              className="text-[12px] font-semibold tracking-[-0.01em] text-black hover:opacity-50 transition-opacity cursor-pointer focus:outline-none"
+              className="group relative inline-flex items-center gap-1 py-1 text-[12px] font-semibold tracking-[-0.01em] text-black cursor-pointer focus:outline-none"
             >
-              {item.label}
+              {/* Text with micro-lift on hover */}
+              <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-[1.5px]">
+                {item.label}
+              </span>
+
+              {/* External link indicator with diagonal glide */}
+              {item.external && (
+                <span
+                  aria-hidden="true"
+                  className="inline-block text-[10px] opacity-40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                >
+                  ↗
+                </span>
+              )}
+
+              {/* Smooth expanding underline */}
+              <span
+                aria-hidden="true"
+                className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+              />
             </a>
           ))}
         </nav>
@@ -71,7 +88,7 @@ export default function Header({
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-[12px] font-semibold tracking-wider uppercase px-2.5 py-1 border border-black/20 rounded cursor-pointer"
+            className="text-[12px] font-semibold tracking-wider uppercase px-2.5 py-1 border border-black/20 rounded cursor-pointer transition-all duration-200 hover:border-black hover:bg-black hover:text-white active:scale-95"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? "Close" : "Menu"}
@@ -84,7 +101,7 @@ export default function Header({
         <div className="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 md:hidden">
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 text-sm font-semibold p-2 cursor-pointer"
+            className="absolute top-6 right-6 text-sm font-semibold p-2 cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-90"
             aria-label="Close menu"
           >
             ✕ Close
@@ -97,9 +114,23 @@ export default function Header({
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noopener noreferrer" : undefined}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-2xl font-medium text-black hover:opacity-50 transition-opacity cursor-pointer"
+                className="group relative inline-flex items-center gap-2 text-2xl font-medium text-black cursor-pointer"
               >
-                {item.label}
+                <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
+                  {item.label}
+                </span>
+                {item.external && (
+                  <span
+                    aria-hidden="true"
+                    className="text-base opacity-40 transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-1"
+                  >
+                    ↗
+                  </span>
+                )}
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-1 left-0 w-full h-[2px] bg-black scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+                />
               </a>
             ))}
           </nav>
