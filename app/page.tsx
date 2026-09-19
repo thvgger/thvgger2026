@@ -179,7 +179,7 @@ export default function Home() {
       {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
       {/* ======================================================== */}
       <header
-        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12 py-2 transition-opacity duration-1000 ${
+        className={`relative z-20 w-full flex items-center justify-between px-4 sm:px-10 lg:px-12  transition-opacity duration-1000 ${
           introPhase === "complete" ? "opacity-100" : "opacity-10 pointer-events-none"
         }`}
       >
@@ -189,7 +189,7 @@ export default function Home() {
           title="Replay intro animation"
           className="group flex items-center gap-2 cursor-pointer focus:outline-none"
         >
-          <div className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] lg:w-[74px] lg:h-[74px] transition-transform duration-300 group-hover:scale-105">
+          <div className="w-[45px] h-[45px] sm:w-[64px] sm:h-[64px] lg:w-[74px] lg:h-[74px] transition-transform duration-300 group-hover:scale-105">
             <Image
               src="/images/header-icon.svg"
               alt="Thvgger Logo"
