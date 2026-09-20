@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
 import Header from "@/components/Header";
+import CubePatternSection from "@/components/CubePatternSection";
 
 export default function Home() {
   const [introPhase, setIntroPhase] = useState<"spinning" | "shrinking" | "pushing" | "complete">("spinning");
@@ -184,18 +185,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative flex flex-col justify-between min-h-screen w-full bg-white text-black overflow-hidden select-none">
+    <div className="relative w-full bg-black text-black select-none overflow-x-clip">
       {/* Dynamic 3D Isometric Favicon */}
       <AnimatedFavicon spinTrigger={introCount + periodicSpin} />
 
       {/* ======================================================== */}
-      {/* 1. MAIN HEADER (Figma #30:333 & #24:6)                   */}
+      {/* 1. HERO VIEWPORT (Header + Hero Lockup + Footer)         */}
       {/* ======================================================== */}
-      <Header
-        introPhase={introPhase}
-        periodicSpin={periodicSpin}
-        onReplayIntro={replayIntro}
-      />
+      <div id="hero" className="relative flex flex-col justify-between min-h-screen w-full bg-white text-black overflow-hidden z-10">
+        <Header
+          introPhase={introPhase}
+          periodicSpin={periodicSpin}
+          onReplayIntro={replayIntro}
+        />
 
       {/* ======================================================== */}
       {/* 2. HERO SECTION                                          */}
@@ -324,6 +326,12 @@ export default function Home() {
           </button>
         </div>
       </footer>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. NEXT SECTION: BLACK BG WITH 3D CUBE STROKE PATTERN    */}
+      {/* ======================================================== */}
+      <CubePatternSection id="work" />
     </div>
   );
 }
