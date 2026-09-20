@@ -19,6 +19,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
+  scroll-behavior: smooth;
 }
 
 @keyframes eq1 {
@@ -61,3 +62,13 @@ body {
 .animate-eq-5 {
   animation: eq5 0.75s ease-in-out infinite alternate 0.1s;
 }
+
+@keyframes bounceX {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+.animate-bounce-x {
+  animation: bounceX 1.2s ease-in-out infinite;
+}
+
