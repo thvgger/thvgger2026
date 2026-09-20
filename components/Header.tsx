@@ -10,8 +10,8 @@ export interface NavItem {
 }
 
 export const NAV_LINKS: NavItem[] = [
-  { label: "About", href: "#about" },
   { label: "Work", href: "#work" },
+  { label: "About", href: "#about" },
   { label: "Playground", href: "#playground" },
   { label: "Contact", href: "#contact" },
 ];
