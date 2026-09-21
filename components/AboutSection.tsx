@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import Button from "@/components/Button";
 
 export interface AboutSectionProps {
@@ -13,7 +13,7 @@ const STATEMENT =
 
 const words = STATEMENT.split(" ");
 
-const statementContainerVariants = {
+const statementContainerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -23,7 +23,7 @@ const statementContainerVariants = {
   },
 };
 
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 20,
