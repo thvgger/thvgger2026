@@ -16,7 +16,7 @@ export default function CubePatternSection({
     >
       {/* Eyebrow Label — Top Left */}
       <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider leading-snug max-w-[280px] text-white">
-        Designer, developer, and everything in between.
+        Developer, designer and everything in between.
       </p>
 
       {/* Manifesto Statement + CTA directly underneath */}
@@ -27,7 +27,7 @@ export default function CubePatternSection({
           over every detail.
         </h2>
 
-        {/* Reusable Paul Kalkbrenner kinetic button */}
+
         <Button href="#projects" variant="dark" size="md">
           DIG DEEPER
         </Button>

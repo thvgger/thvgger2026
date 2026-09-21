@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
 import Header from "@/components/Header";
-import CubePatternSection from "@/components/CubePatternSection";
+import CubePatternSection from "@/components/AboutSection";
 
 export default function Home() {
   const [introPhase, setIntroPhase] = useState<"spinning" | "shrinking" | "pushing" | "complete">("spinning");
