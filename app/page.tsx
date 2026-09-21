@@ -62,6 +62,22 @@ export default function Home() {
     };
   }, [introCount]);
 
+  // Lock scrolling while the intro loading animation is running
+  useEffect(() => {
+    if (introPhase !== "complete") {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      window.scrollTo(0, 0);
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, [introPhase]);
+
   const [periodicSpin, setPeriodicSpin] = useState(0);
 
   // Auto-spin both header and hero logos every 20 seconds
@@ -329,9 +345,14 @@ export default function Home() {
       </div>
 
       {/* ======================================================== */}
-      {/* 2. NEXT SECTION: BLACK BG WITH 3D CUBE STROKE PATTERN    */}
+      {/* 2. MANIFESTO SECTION                                      */}
       {/* ======================================================== */}
       <CubePatternSection id="work" />
+
+      {/* ======================================================== */}
+      {/* 3. BLANK SECTION                                          */}
+      {/* ======================================================== */}
+      <section id="projects" className="relative w-full min-h-screen bg-white" />
     </div>
   );
 }

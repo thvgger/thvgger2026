@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
+import UnderlineLink from "@/components/UnderlineLink";
 
 export interface NavItem {
   label: string;
@@ -50,37 +51,17 @@ export default function Header({
           title="Click to replay intro or spin 3D cube"
         />
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links with Kinetic Rolling Text & Expanding Underline */}
         <nav className="hidden md:flex items-center gap-[36px]">
           {links.map((item) => (
-            <a
+            <UnderlineLink
               key={item.label}
               href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
-              className="group relative inline-flex items-center gap-1 py-1 text-[12px] font-semibold tracking-[-0.01em] text-black cursor-pointer focus:outline-none"
+              external={item.external}
+              className="text-[12px] font-semibold tracking-[-0.01em]"
             >
-              {/* Text with micro-lift on hover */}
-              <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-[1.5px]">
-                {item.label}
-              </span>
-
-              {/* External link indicator with diagonal glide */}
-              {item.external && (
-                <span
-                  aria-hidden="true"
-                  className="inline-block text-[10px] opacity-40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                >
-                  ↗
-                </span>
-              )}
-
-              {/* Smooth expanding underline */}
-              <span
-                aria-hidden="true"
-                className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
-              />
-            </a>
+              {item.label}
+            </UnderlineLink>
           ))}
         </nav>
 
@@ -108,30 +89,16 @@ export default function Header({
           </button>
           <nav className="flex flex-col items-center gap-6 text-center">
             {links.map((item) => (
-              <a
+              <UnderlineLink
                 key={item.label}
                 href={item.href}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noopener noreferrer" : undefined}
+                external={item.external}
                 onClick={() => setMobileMenuOpen(false)}
-                className="group relative inline-flex items-center gap-2 text-2xl font-medium text-black cursor-pointer"
+                className="text-2xl font-medium"
+                underlineClassName="h-[2px] -bottom-1"
               >
-                <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
-                  {item.label}
-                </span>
-                {item.external && (
-                  <span
-                    aria-hidden="true"
-                    className="text-base opacity-40 transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-1"
-                  >
-                    ↗
-                  </span>
-                )}
-                <span
-                  aria-hidden="true"
-                  className="absolute -bottom-1 left-0 w-full h-[2px] bg-black scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
-                />
-              </a>
+                {item.label}
+              </UnderlineLink>
             ))}
           </nav>
         </div>
