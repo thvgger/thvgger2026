@@ -2,21 +2,13 @@ import React from "react";
 
 export interface UnderlineLinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  /** Link text label (string enables kinetic rolling character animation) */
   children?: React.ReactNode;
-  /** Explicit text string alternative */
   text?: string;
-  /** Target link URL */
   href: string;
-  /** If true, adds external indicator icon ↗ and opens in new tab */
   external?: boolean;
-  /** Optional theme: "light" (black text/underline) or "dark" (white text/underline) */
   variant?: "light" | "dark";
-  /** Custom wrapper classes */
   className?: string;
-  /** Custom underline classes */
   underlineClassName?: string;
-  /** Click handler */
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
@@ -45,7 +37,6 @@ export default function UnderlineLink({
       className={`group relative inline-flex items-center gap-1 py-1 cursor-pointer focus:outline-none select-none ${colorClasses} ${className}`.trim()}
       {...props}
     >
-      {/* Kinetic character-rolling text (if string provided) */}
       {contentString ? (
         <span className="relative inline-block overflow-hidden leading-tight py-0.5">
           {contentString.split("").map((char, i) => (
@@ -66,7 +57,6 @@ export default function UnderlineLink({
         children
       )}
 
-      {/* External link diagonal glide indicator */}
       {external && (
         <span
           aria-hidden="true"
@@ -76,7 +66,6 @@ export default function UnderlineLink({
         </span>
       )}
 
-      {/* Smooth expanding underline */}
       <span
         aria-hidden="true"
         className={`absolute bottom-0 left-0 w-full h-[1.5px] bg-current scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 ${underlineClassName}`.trim()}

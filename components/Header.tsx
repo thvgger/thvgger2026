@@ -43,7 +43,6 @@ export default function Header({
             : "opacity-0 -translate-y-4 pointer-events-none"
         } ${className}`.trim()}
       >
-        {/* Top-Left Interactive 3D Cube Logo */}
         <InteractiveCubeLogo
           className="w-[25px] h-[25px] sm:w-[29px] sm:h-[29px] lg:w-[33px] lg:h-[33px] flex-shrink-0 cursor-pointer"
           onClick={onReplayIntro}
@@ -51,7 +50,6 @@ export default function Header({
           title="Click to replay intro or spin 3D cube"
         />
 
-        {/* Desktop Navigation Links with Kinetic Rolling Text & Expanding Underline */}
         <nav className="hidden md:flex items-center gap-[36px]">
           {links.map((item) => (
             <UnderlineLink
@@ -65,7 +63,6 @@ export default function Header({
           ))}
         </nav>
 
-        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -77,7 +74,6 @@ export default function Header({
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 md:hidden">
           <button
