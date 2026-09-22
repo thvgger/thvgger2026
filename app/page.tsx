@@ -5,6 +5,7 @@ import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
 import Header from "@/components/Header";
 import AboutSection from "@/components/AboutSection";
+import ProjectsSection from "@/components/ProjectsSection";
 
 export default function Home() {
   const [introPhase, setIntroPhase] = useState<"spinning" | "shrinking" | "pushing" | "complete">("spinning");
@@ -311,7 +312,7 @@ export default function Home() {
 
       <AboutSection id="about" />
 
-      <section id="projects" className="relative w-full min-h-screen bg-white" />
+      <ProjectsSection id="projects" />
     </div>
   );
 }
