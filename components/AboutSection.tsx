@@ -45,7 +45,7 @@ export default function AboutSection({
   return (
     <section
       id={id}
-      className={`relative w-full min-h-[45vh] bg-black text-white flex flex-col justify-between px-6 sm:px-10 lg:px-16 py-8 sm:py-10 lg:py-12 ${className}`.trim()}
+      className={`relative w-full min-h-[45vh] bg-black text-white flex flex-col justify-between px-6 sm:px-10 lg:px-16 py-8 sm:py-10 lg:py-12 mb-12 ${className}`.trim()}
     >
       <motion.p
         initial={{ opacity: 0, y: 16 }}

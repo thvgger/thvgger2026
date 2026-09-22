@@ -72,7 +72,7 @@ export default function ProjectsSection({
   return (
     <section
       id={id}
-      className={`relative w-full bg-black text-white px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 overflow-hidden ${className}`.trim()}
+      className={`relative w-full bg-black text-white px-2 sm:px-4 lg:px-5 py-12 sm:py-16 lg:py-24 overflow-hidden ${className}`.trim()}
     >
       <div id="work" className="absolute -top-16 pointer-events-none" />
 
@@ -80,12 +80,12 @@ export default function ProjectsSection({
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-8 sm:mb-12 lg:mb-16"
+          className="mb-6 sm:mb-8 lg:mb-2"
         >
-          <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[108px] xl:text-[128px] font-bold tracking-[-0.045em] leading-[0.88] uppercase text-white select-none">
-            WORKS
+          <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-[1000] tracking-[-0.040em] leading-none uppercase text-white select-none">
+            WORK
           </h2>
         </motion.div>
 
