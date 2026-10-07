@@ -11,6 +11,9 @@ export interface Project {
   kind: string;
   summary: string;
   cover: string;
+  coverTreatment?: "logo";
+  presentation?: "logo-guide";
+  status?: string;
   gallery: { src: string; alt: string; contain?: boolean }[];
   role: string;
   tools: string;
@@ -18,6 +21,20 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: "studio-space",
+    title: "Studio Space",
+    kind: "Visual identity exploration",
+    role: "Identity design",
+    tools: "Wordmarks, symbol, colour & applications",
+    status: "In progress",
+    presentation: "logo-guide",
+    coverTreatment: "logo",
+    summary: "An identity in motion: slanted lettering, a sharp pink symbol, and a family of marks that adapts from a full wordmark to a browser tab. A work in progress.",
+    cover: "/images/portfolio/studio-space/horizontal-white.svg",
+    gallery: [{ src: "/images/portfolio/studio-space/horizontal-white.svg", alt: "Studio Space wordmark in white with its angular pink symbol", contain: true }],
+    details: [],
+  },
   {
     id: "identity", title: "Thvgger identity", kind: "Personal brand identity", role: "Identity design & art direction", tools: "Logo system, typography, applications",
     summary: "A personal identity built around a striped isometric cube. One simple structure, with room to play across print and the web.",

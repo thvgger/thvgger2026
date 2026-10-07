@@ -18,7 +18,7 @@ Precise, sculptural, curious. Continue the monochrome palette and striped cube i
 
 ## Structure
 
-Home, Work, About, Contact, and Playground are separate pages. Each project has its own detail page. Playground remains a Coming soon placeholder until the user supplies its direction.
+Home, Work, About, Contact, and Playground are separate pages. Each project has its own detail page. Studio Space has a dedicated visual identity guide using the user's Figma artwork, labelled as in progress, and is featured alongside the Thvgger identity on the homepage. Playground remains a Coming soon placeholder until the user supplies its direction.
 
 ## Anti-references
 
@@ -34,3 +34,5 @@ Music-template content, named-brand work presented as client experience, replaci
 ## Accessibility & Inclusion
 
 Use keyboard navigation, visible focus, native mobile-menu dialog behavior, readable text, responsive layouts, and reduced-motion preferences. These are implementation defaults rather than a claim of certified accessibility conformance.
+
+Hide native page scrollbar chrome at the user's request while preserving ordinary scrolling and the visible Scroll to explore link. The homepage intro must settle immediately on input and skip motion for visitors who request it.

@@ -7,17 +7,17 @@ export default function ProjectsSection() {
     <section className="work-page page-shell" aria-labelledby="work-title">
       <div className="page-heading">
         <h1 id="work-title">Work</h1>
-        <p>A selection of personal projects.</p>
+        <p>Selected design and development work.</p>
       </div>
       <div className="work-grid">
         {projects.map((project, index) => (
-          <Link key={project.id} href={`/work/${project.id}`} className={`work-entry ${index === 0 ? "work-entry-featured" : ""}`}>
-            <div className={`work-image ${project.id === "portfolio" ? "image-contained" : ""}`}>
+          <Link key={project.id} href={`/work/${project.id}`} className="work-entry">
+            <div className={`work-image ${project.coverTreatment === "logo" ? "logo-cover" : project.gallery[0].contain ? "image-contained" : ""}`}>
               <Image
                 src={project.cover}
                 alt={project.gallery[0].alt}
                 fill
-                sizes={index === 0 ? "(max-width: 1320px) 94vw, 1240px" : "(max-width: 760px) 92vw, (max-width: 1320px) 46vw, 604px"}
+                sizes="(max-width: 760px) 92vw, (max-width: 1320px) 46vw, 604px"
                 loading={index === 0 ? "eager" : "lazy"}
               />
             </div>

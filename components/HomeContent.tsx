@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/lib/portfolio";
 
-const selectedProjects = projects.filter(project => project.id === "identity" || project.id === "print");
+const selectedProjects = projects.filter(project => project.id === "studio-space" || project.id === "identity");
 const capabilities = [
   {
     title: "Visual identity",
@@ -29,7 +29,7 @@ export default function HomeContent() {
         <div className="home-projects">
           {selectedProjects.map((project, index) => (
             <Link key={project.id} href={`/work/${project.id}`} className="home-project">
-              <div className="home-project-image">
+              <div className={`home-project-image ${project.coverTreatment === "logo" ? "logo-cover" : ""}`}>
                 <Image
                   src={project.cover}
                   alt={project.gallery[0].alt}

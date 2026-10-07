@@ -1,5 +1,21 @@
 # UI/UX Improvements
 
+## Restored intro and hidden scrollbar, 7 October 2026
+
+Restored the original cube-spin, shrink, and wordmark-push opening as a 1.86-second sequence. The name enters through a mask, the cube uses a controlled initial turn, and the supporting copy and scroll link enter last. CSS transforms keep the final document layout stable. The composition centres the initial cube using relative geometry, so it adapts to the wordmark and viewport without measuring text in JavaScript. Corrected the initial cube spin's effect cleanup so development Strict Mode can restart it properly.
+
+The native root scrollbar is hidden through standard and WebKit rules. Page scrolling stays native. The intro settles on wheel, touch, pointer, keyboard, scroll, resize, and tab visibility changes; navigation remains available. Reduced-motion visitors see the settled hero immediately. The CSS entrance finishes even without JavaScript.
+
+Verification: production build, TypeScript, and ESLint passed. Browser checks confirmed the initial cube and final wordmark centre correctly, and the cube rotates through changing vector paths. No scrollbar gutter or horizontal overflow was found at 320, 390, 768, and 1440 pixels. Native wheel, touch, keyboard, and anchor scrolling passed; interaction settled the intro. Mobile-menu Escape and focus restoration passed. Other main routes retain the hidden root scrollbar. Reduced-motion checks found no active hero animation or automatic cube rotation, and content appeared without JavaScript. Animation frames and desktop/mobile screenshots were inspected, with no runtime exceptions observed. This is not a full assistive-technology or cross-browser audit.
+
+## Studio Space identity case study, 7 October 2026
+
+Added the user's Studio Space work from the linked Figma frame, inspected and exported through Figma Console. Original wordmark and symbol components are preserved as complete SVGs. A dedicated `/work/studio-space` page presents the logo family, primary and secondary marks, compact symbol, actual-size favicons, colour treatments, website placement examples, clear space, and an outline display treatment. Explanatory text stays responsive rather than being baked into screenshots. The structure follows the user's Quaandry logo-variation reference using the user's artwork and original copy.
+
+The project is labelled as in progress and is featured on Home and Work. Four projects now fit a two-column work index. The portfolio shell keeps its monochrome palette; Studio Space's pink and cream appear inside the project artwork. No client relationship or results are invented. Playground remains a placeholder.
+
+Verification: production build, TypeScript, and ESLint passed. Browser checks covered the new case study at 320, 390, 768, and 1440 pixels with no horizontal overflow. All nine SVG files matched their original Figma exports, allowing for line endings. All 20 artwork instances loaded with the exported aspect ratios; favicon previews measured 16, 32, and 48 pixels. Native project links, keyboard chapter navigation, touch scrolling, and mobile-menu Escape/focus restoration passed. Chapter links scrolled below the sticky header, reduced motion disabled smooth scrolling, all project routes loaded, and unknown projects returned 404. Home and Work link to the new case study. Desktop and mobile screenshots were inspected; no runtime exceptions were observed. This is not a full assistive-technology or performance audit.
+
 ## Scrolling homepage revision, 7 October 2026
 
 The latest homepage expands the minimal opening into a normal scrolling introduction. It adds a clear role statement, an anchor to selected work, two offset image previews linking to project pages, a personal introduction, native expandable capability notes, and a circular contact link. Work, About, Contact, individual projects, and the Playground placeholder retain their own URLs.

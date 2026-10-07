@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/portfolio";
+import LogoCaseStudy from "@/components/LogoCaseStudy";
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
@@ -31,28 +32,34 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div><p className="project-kind">{project.kind}</p><h1>{project.title}</h1></div>
         <p className="project-summary">{project.summary}</p>
       </div>
-      <div className={`project-cover ${project.gallery[0].contain ? "image-contained" : ""}`}>
-        <Image src={project.cover} alt={project.gallery[0].alt} fill loading="eager" sizes="(max-width: 1320px) 94vw, 1240px" />
-      </div>
-      <div className="project-notes">
-        <dl className="project-facts">
-          <div><dt>Role</dt><dd>{project.role}</dd></div>
-          <div><dt>Focus</dt><dd>{project.tools}</dd></div>
-        </dl>
-        <div className="project-story">
-          {project.details.map(detail => <section key={detail.heading}><h2>{detail.heading}</h2><p>{detail.copy}</p></section>)}
-        </div>
-      </div>
-      <div className="project-gallery">
-        {project.gallery.slice(1).map(image => (
-          <figure key={image.src}>
-            <div className={`gallery-image ${image.contain ? "image-contained" : ""}`}>
-              <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1320px) 94vw, 1240px" />
+      {project.presentation === "logo-guide" ? (
+        <LogoCaseStudy project={project} />
+      ) : (
+        <>
+          <div className={`project-cover ${project.gallery[0].contain ? "image-contained" : ""}`}>
+            <Image src={project.cover} alt={project.gallery[0].alt} fill loading="eager" sizes="(max-width: 1320px) 94vw, 1240px" />
+          </div>
+          <div className="project-notes">
+            <dl className="project-facts">
+              <div><dt>Role</dt><dd>{project.role}</dd></div>
+              <div><dt>Focus</dt><dd>{project.tools}</dd></div>
+            </dl>
+            <div className="project-story">
+              {project.details.map(detail => <section key={detail.heading}><h2>{detail.heading}</h2><p>{detail.copy}</p></section>)}
             </div>
-            <figcaption>{image.alt}</figcaption>
-          </figure>
-        ))}
-      </div>
+          </div>
+          <div className="project-gallery">
+            {project.gallery.slice(1).map(image => (
+              <figure key={image.src}>
+                <div className={`gallery-image ${image.contain ? "image-contained" : ""}`}>
+                  <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1320px) 94vw, 1240px" />
+                </div>
+                <figcaption>{image.alt}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </>
+      )}
       <div className="project-bottom-links">
         <Link href="/work">All work</Link>
         <Link href={`/work/${nextProject.id}`}>Next: {nextProject.title} <span aria-hidden="true">↗</span></Link>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId } from "react";
 import {
+  animate,
   motion,
   useMotionValue,
   useSpring,
@@ -110,19 +111,25 @@ export const Logo: React.FC<LogoProps> = ({
 }) => {
   const reducedMotion = useReducedMotion();
   const revolutions = useMotionValue(0);
+  const introRotation = useMotionValue(0);
 
   const isDraggingRef = React.useRef(false);
-  const isMountedRef = React.useRef(false);
+  const previousSpinTrigger = React.useRef(spinTrigger);
 
   useEffect(() => {
-    if (!isMountedRef.current) {
-      isMountedRef.current = true;
-      if (reducedMotion) return;
-      const timer = setTimeout(() => {
-        revolutions.set(1);
-      }, 100);
-      return () => clearTimeout(timer);
-    } else if (spinTrigger !== undefined) {
+    if (reducedMotion || document.hidden) return;
+    const spin = animate(introRotation, [0, 2 * Math.PI], {
+      duration: 0.82,
+      delay: 0.08,
+      ease: [0.4, 0, 0.2, 1],
+    });
+    return () => spin.stop();
+  }, [introRotation, reducedMotion]);
+
+  useEffect(() => {
+    if (previousSpinTrigger.current === spinTrigger) return;
+    previousSpinTrigger.current = spinTrigger;
+    if (spinTrigger !== undefined) {
       revolutions.set(revolutions.get() + (reducedMotion ? 0.25 : 1));
     }
   }, [spinTrigger, revolutions, reducedMotion]);
@@ -143,7 +150,7 @@ export const Logo: React.FC<LogoProps> = ({
   const springDragY = useSpring(dragY, SPRING_PARAMS);
 
   const pathD = useTransform(() => {
-    const rev = reducedMotion ? revolutions.get() * 2 * Math.PI : springRotationY.get();
+    const rev = reducedMotion ? revolutions.get() * 2 * Math.PI : springRotationY.get() + introRotation.get();
     const sx = reducedMotion ? dragX.get() : springDragX.get();
     const sy = reducedMotion ? dragY.get() : springDragY.get();
 
