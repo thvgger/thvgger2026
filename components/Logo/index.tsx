@@ -5,6 +5,7 @@ import {
   motion,
   useMotionValue,
   useSpring,
+  useReducedMotion,
   useTransform,
   type SpringOptions,
 } from "motion/react";
@@ -107,6 +108,7 @@ export const Logo: React.FC<LogoProps> = ({
   spinTrigger,
   ref,
 }) => {
+  const reducedMotion = useReducedMotion();
   const revolutions = useMotionValue(0);
 
   const isDraggingRef = React.useRef(false);
@@ -115,17 +117,18 @@ export const Logo: React.FC<LogoProps> = ({
   useEffect(() => {
     if (!isMountedRef.current) {
       isMountedRef.current = true;
+      if (reducedMotion) return;
       const timer = setTimeout(() => {
         revolutions.set(1);
       }, 100);
       return () => clearTimeout(timer);
     } else if (spinTrigger !== undefined) {
-      revolutions.set(revolutions.get() + 1);
+      revolutions.set(revolutions.get() + (reducedMotion ? 0.25 : 1));
     }
-  }, [spinTrigger, revolutions]);
+  }, [spinTrigger, revolutions, reducedMotion]);
 
   function rotate() {
-    revolutions.set(revolutions.get() + 1);
+    revolutions.set(revolutions.get() + (reducedMotion ? 0.25 : 1));
   }
 
   const springRotationY = useSpring(
@@ -140,9 +143,9 @@ export const Logo: React.FC<LogoProps> = ({
   const springDragY = useSpring(dragY, SPRING_PARAMS);
 
   const pathD = useTransform(() => {
-    const rev = springRotationY.get();
-    const sx = springDragX.get();
-    const sy = springDragY.get();
+    const rev = reducedMotion ? revolutions.get() * 2 * Math.PI : springRotationY.get();
+    const sx = reducedMotion ? dragX.get() : springDragX.get();
+    const sy = reducedMotion ? dragY.get() : springDragY.get();
 
     const revTransform = Matrix.rotationY(rev);
     const dv = new Vector([sx, sy, 0, 1]);
@@ -163,10 +166,20 @@ export const Logo: React.FC<LogoProps> = ({
     <motion.svg
       ref={ref}
       style={{ touchAction: "none", ...style }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.92 }}
+      whileHover={reducedMotion ? undefined : { scale: 1.05 }}
+      whileTap={reducedMotion ? undefined : { scale: 0.92 }}
       className={`cursor-grab active:cursor-grabbing select-none ${className}`.trim()}
       viewBox={VIEWBOX}
+      role="button"
+      tabIndex={0}
+      aria-label={title}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          rotate();
+          onClick?.();
+        }
+      }}
       onClick={(e) => {
         if (isDraggingRef.current) return;
         rotate();

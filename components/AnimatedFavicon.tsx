@@ -92,6 +92,10 @@ export default function AnimatedFavicon({ spinTrigger = 0 }: AnimatedFaviconProp
       isFirstMount.current = false;
     }
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      renderFrame(0);
+      return;
+    }
     let startTime: number | null = null;
     const duration = 850; // ms
 

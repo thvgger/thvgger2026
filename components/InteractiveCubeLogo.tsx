@@ -3,7 +3,7 @@
 import React from "react";
 import { Logo, LogoStatic, type LogoProps } from "./Logo";
 
-export interface InteractiveCubeLogoProps extends LogoProps {}
+export type InteractiveCubeLogoProps = LogoProps;
 
 export { Logo, LogoStatic };
 

@@ -1,27 +1,28 @@
 # Thvgger
 
-Minimalist, editorial web experience for electronic artist and designer **Thvgger**, crafted with Next.js 16, React 19, and Tailwind CSS v4.
+A personal design and development portfolio built with Next.js, React, TypeScript, and Motion. A scrolling monochrome homepage introduces the Thvgger wordmark, interactive cube, selected work, and design practice. Separate pages cover the work, about, and contact.
 
-Designed in Figma: [thvgger](https://www.figma.com/design/Soa9r1gO0VaWoXMP7l6fdS/thvgger).
+## Local development
 
-## Features
+Run `npm run dev` and open http://localhost:3000.
 
-- **Hero Morph Animation**: Transitions from a bold, centered isometric monogram (`400px × 454px`) into the resting wordmark alongside the 128px `Thvgger` typography. Replayable anytime.
-- **Web Audio Synthesizer**: Interactive sound switch toggle (`Sound OFF` / `Sound ON`) synthesizing an ambient minimal electronic groove via Web Audio API.
-- **Dynamic Equalizer Visualizer**: 5-bar audio visualizer pulsing in real time to the ambient groove with pure CSS keyframes.
-- **Interactive Navigation Overlays**: Dedicated modal views for Discography (`Music`), Live Performances (`Tour`), Biography (`About`), Milestones (`Journey`), Archive (`Gallery`), Updates (`News`), Bookings (`Contact`), and Merchandise (`Store`).
-- **Typography & Precision Layout**: Swiss editorial layout with Google Font `Inter` (Medium 500, Semi Bold 600) and Figma vector assets.
+Run `npm run lint` and `npm run build` to check the project.
 
-## Getting Started
+## Pages
 
-```bash
-npm run dev
-```
+- `/` — an introduction, selected projects, expandable capability notes, and contact invitation.
+- `/work` — a selection of personal projects.
+- `/work/identity`, `/work/portfolio`, `/work/print` — individual project pages.
+- `/about` — design and development introduction.
+- `/contact` — email link and copy action.
+- `/playground` — a Coming soon placeholder.
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Content
 
-## Build
+Project content, gallery assets, and contact details live in `lib/portfolio.ts`. The featured work is self-initiated: the Thvgger identity, this website, and print studies from the same identity system. Template brand examples are not displayed.
 
-```bash
-npm run build
-```
+The email uses the reserved placeholder `hello@thvgger.example`. Replace it with your real address before publishing. GitHub links point to https://github.com/thvgger.
+
+The visual direction is documented in `DESIGN.md`. Keyboard controls have visible focus and effects respect reduced-motion preferences.
+
+Set NEXT_PUBLIC_SITE_URL to your deployed origin when publishing so social preview URLs resolve to the live site.
