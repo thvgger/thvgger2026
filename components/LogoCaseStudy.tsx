@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import type { Project } from "@/lib/portfolio";
 import { studioSpace } from "@/lib/studio-space";
+import UnderlineLink from "@/components/UnderlineLink";
 
 type LogoName = keyof typeof studioSpace.assets;
 
@@ -56,7 +57,7 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
 
       <nav className="identity-contents" aria-label="Explore the Studio Space identity">
         <span>Explore the system</span>
-        <div>{chapters.map(chapter => <a key={chapter.id} href={`#${chapter.id}`}>{chapter.label}</a>)}</div>
+        <div>{chapters.map(chapter => <UnderlineLink key={chapter.id} href={`#${chapter.id}`}>{chapter.label}</UnderlineLink>)}</div>
       </nav>
 
       <section id="primary" className="identity-chapter">
@@ -141,7 +142,7 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
       </section>
 
       <figure className="identity-display identity-dark"><Logo name="outlined-display" alt="Large outlined Studio Space wordmark with the original pink symbol" /><figcaption>The outline treatment, reserved for larger displays.</figcaption></figure>
-      <p className="identity-source">An identity exploration by Thvgger. <a href={studioSpace.source} target="_blank" rel="noopener noreferrer">View the Figma file <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></p>
+      <p className="identity-source">An identity exploration by Thvgger. <UnderlineLink href={studioSpace.source} external aria-label="View the Figma file (opens in a new tab)">View the Figma file</UnderlineLink></p>
     </div>
   );
 }

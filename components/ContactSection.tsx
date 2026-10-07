@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { site } from "@/lib/portfolio";
+import Button from "@/components/Button";
+import UnderlineLink from "@/components/UnderlineLink";
 
 export default function ContactSection() {
   const [copyState, setCopyState] = useState("Copy email");
@@ -19,8 +21,8 @@ export default function ContactSection() {
     <section className="contact-page page-shell" aria-labelledby="contact-title">
       <h1 id="contact-title">Let’s talk.</h1>
       <p className="contact-introduction">For a project, a collaboration, or just a hello.</p>
-      <a href={`mailto:${site.email}`} className="contact-email">{site.email}</a>
-      <button className="plain-button copy-email" onClick={copyEmail} aria-live="polite">{copyState}</button>
+      <UnderlineLink href={`mailto:${site.email}`} className="contact-email">{site.email}</UnderlineLink>
+      <Button className="copy-email" onClick={copyEmail} aria-live="polite">{copyState}</Button>
     </section>
   );
 }

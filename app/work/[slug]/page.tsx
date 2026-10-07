@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import UnderlineLink from "@/components/UnderlineLink";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/portfolio";
 import LogoCaseStudy from "@/components/LogoCaseStudy";
@@ -27,7 +27,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <article className="project-page page-shell">
-      <Link href="/work" className="back-link"><span aria-hidden="true">←</span> All work</Link>
+      <UnderlineLink href="/work" className="back-link" arrow="←">All work</UnderlineLink>
       <div className="project-heading">
         <div><p className="project-kind">{project.kind}</p><h1>{project.title}</h1></div>
         <p className="project-summary">{project.summary}</p>
@@ -61,8 +61,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </>
       )}
       <div className="project-bottom-links">
-        <Link href="/work">All work</Link>
-        <Link href={`/work/${nextProject.id}`}>Next: {nextProject.title} <span aria-hidden="true">↗</span></Link>
+        <UnderlineLink href="/work">All work</UnderlineLink>
+        <UnderlineLink href={`/work/${nextProject.id}`} arrow="↗">{`Next: ${nextProject.title}`}</UnderlineLink>
       </div>
     </article>
   );

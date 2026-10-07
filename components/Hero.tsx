@@ -1,5 +1,6 @@
 import InteractiveCubeLogo from "@/components/InteractiveCubeLogo";
 import HeroIntro from "@/components/HeroIntro";
+import UnderlineLink from "@/components/UnderlineLink";
 
 export default function Hero() {
   return (
@@ -9,7 +10,7 @@ export default function Hero() {
         <div className="hero-name-window"><h1 id="home-title">Thvgger</h1></div>
       </div>
       <p className="hero-introduction">I design identities and build websites.</p>
-      <a href="#selected-work" className="home-scroll-link">Scroll to explore <span aria-hidden="true">↓</span></a>
+      <UnderlineLink href="#selected-work" className="home-scroll-link" arrow="↓">Scroll to explore</UnderlineLink>
     </HeroIntro>
   );
 }

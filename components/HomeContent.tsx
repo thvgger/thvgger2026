@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/lib/portfolio";
+import UnderlineLink from "@/components/UnderlineLink";
+import Button from "@/components/Button";
 
 const selectedProjects = projects.filter(project => project.id === "studio-space" || project.id === "identity");
 const capabilities = [
@@ -24,7 +26,7 @@ export default function HomeContent() {
       <section id="selected-work" className="home-selected page-shell" aria-labelledby="selected-work-title" tabIndex={-1}>
         <div className="home-section-heading">
           <h2 id="selected-work-title">Selected work</h2>
-          <Link href="/work" className="inline-link">See all work <span aria-hidden="true">↗</span></Link>
+          <UnderlineLink href="/work" className="inline-link" arrow="↗">See all work</UnderlineLink>
         </div>
         <div className="home-projects">
           {selectedProjects.map((project, index) => (
@@ -52,7 +54,7 @@ export default function HomeContent() {
             <h2 id="home-about-title">A little about me</h2>
             <p>I’m Thvgger, a designer and developer. I work across visual identities and the web, connecting how something looks with how it works.</p>
             <p>I like clear typography, useful interactions, and leaving enough space for an idea to breathe.</p>
-            <Link href="/about" className="inline-link">More about me <span aria-hidden="true">↗</span></Link>
+            <UnderlineLink href="/about" className="inline-link" arrow="↗">More about me</UnderlineLink>
           </div>
           <div className="home-capabilities">
             <h3>What I do</h3>
@@ -71,7 +73,7 @@ export default function HomeContent() {
           <h2 id="home-contact-title">Have something<br />in mind?</h2>
           <p>Tell me what you’re working on.</p>
         </div>
-        <Link href="/contact" className="home-contact-link"><span>Let’s talk</span><span aria-hidden="true">↗</span></Link>
+        <Button href="/contact" className="home-contact-button">Let’s talk</Button>
       </section>
     </>
   );

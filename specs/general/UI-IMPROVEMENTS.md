@@ -1,5 +1,19 @@
 # UI/UX Improvements
 
+## Compact button sizing, 7 October 2026
+
+Reduced primary buttons to a maximum width of 240px and a height of 72px on desktop and phones, following the user's size feedback. The outline, centred label, rising fill, letter roll, and larger mobile label stay intact.
+
+Browser verification confirmed the 240 × 72px dimensions on Home, About, and Contact at 390px and 1440px, without horizontal overflow.
+
+## Rolling links and reference buttons, 7 October 2026
+
+Restored the staggered vertical text roll alongside a drawing underline across navigation, utility links, chapter anchors, and the email address. A shared CSS treatment supports hover and keyboard focus without JavaScript animation handlers. Visual letters are hidden from accessibility APIs; each control retains one continuous accessible label. Internal links use Next.js navigation, while fragment links keep native anchor behavior.
+
+Replaced the circular homepage contact action and the About and copy-email actions with broad square outlined buttons matching the supplied reference's proportions and timing. Desktop buttons measure 345 × 135px with a 10.5px centred uppercase label; phone buttons fill their container and measure 180px tall with a 14px label. The diagonal fill rises over 700ms, while letters roll over 500ms with a 20ms stagger. Inter stays consistent with the portfolio. Header menu controls remain compact. Reduced motion stops the letter roll and updates fill and contrast instantly. The existing intro and native scrolling remain intact.
+
+Verification: production build and TypeScript passed. ESLint reported no errors; the already tracked `.review/final-smoke.mjs` has one unused-helper warning. Browser checks covered nine routes at 320, 390, 768, and 1440px, with no horizontal overflow or scrollbar gutter. Button dimensions and transition timing matched the intended values. Keyboard focus, current-page underlining, native CTA navigation, mobile-menu navigation, clipboard copying, reduced-motion contrast, and wheel scrolling passed. Desktop hover states and mobile layouts were visually inspected; no runtime exceptions were observed.
+
 ## Restored intro and hidden scrollbar, 7 October 2026
 
 Restored the original cube-spin, shrink, and wordmark-push opening as a 1.86-second sequence. The name enters through a mask, the cube uses a controlled initial turn, and the supporting copy and scroll link enter last. CSS transforms keep the final document layout stable. The composition centres the initial cube using relative geometry, so it adapts to the wordmark and viewport without measuring text in JavaScript. Corrected the initial cube spin's effect cleanup so development Strict Mode can restart it properly.

@@ -1,10 +1,11 @@
 import { site } from "@/lib/portfolio";
+import UnderlineLink from "@/components/UnderlineLink";
 
 export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <p>Designer & developer.</p>
-      <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <UnderlineLink href={site.github} external>GitHub</UnderlineLink>
     </footer>
   );
 }

@@ -1,75 +1,32 @@
-import React from "react";
+import Link from "next/link";
+import type { AnchorHTMLAttributes } from "react";
+import RollingText from "@/components/RollingText";
 
-export interface UnderlineLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  children?: React.ReactNode;
-  text?: string;
+interface UnderlineLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
+  text?: string;
   external?: boolean;
-  variant?: "light" | "dark";
-  className?: string;
-  underlineClassName?: string;
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  arrow?: "↗" | "←" | "↓";
 }
 
 export default function UnderlineLink({
-  children,
-  text,
-  href,
-  external = false,
-  variant = "light",
-  className = "",
-  underlineClassName = "",
-  onClick,
-  ...props
+  children, text, href, external = false, arrow, className = "", ...props
 }: UnderlineLinkProps) {
-  const contentString =
-    text || (typeof children === "string" ? children : undefined);
-
-  const colorClasses = variant === "dark" ? "text-white" : "text-black";
-
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      onClick={onClick}
-      className={`group relative inline-flex items-center gap-1 py-1 cursor-pointer focus:outline-none select-none ${colorClasses} ${className}`.trim()}
-      {...props}
-    >
-      {contentString ? (
-        <span className="relative inline-block overflow-hidden leading-tight py-0.5">
-          {contentString.split("").map((char, i) => (
-            <span
-              key={i}
-              style={
-                {
-                  "--char-delay": `${i * 18}ms`,
-                } as React.CSSProperties
-              }
-              className="inline-block transition-none group-hover:transition-transform group-hover:duration-500 group-hover:ease-[cubic-bezier(0.625,0.05,0,1)] group-hover:[transition-delay:var(--char-delay)] group-hover:-translate-y-[1.35em] [text-shadow:0_1.35em_currentColor]"
-            >
-              {char === " " ? "\u00A0" : char}
-            </span>
-          ))}
-        </span>
-      ) : (
-        children
-      )}
-
-      {external && (
-        <span
-          aria-hidden="true"
-          className="inline-block text-[10px] opacity-40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-        >
-          ↗
-        </span>
-      )}
-
-      <span
-        aria-hidden="true"
-        className={`absolute bottom-0 left-0 w-full h-[1.5px] bg-current scale-x-0 origin-left transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 ${underlineClassName}`.trim()}
-      />
-    </a>
+  const label = text ?? (typeof children === "string" ? children : undefined);
+  const content = (
+    <>
+      {arrow === "←" && <span className="link-arrow" aria-hidden="true">{arrow}</span>}
+      {label !== undefined ? <RollingText text={label} /> : children}
+      {arrow !== "←" && (arrow || external) && <span className="link-arrow" aria-hidden="true">{arrow ?? "↗"}</span>}
+    </>
   );
+  const anchorProps = {
+    ...props,
+    className: `kinetic-link ${className}`.trim(),
+    ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+  };
+
+  return href.startsWith("/") && !href.startsWith("//")
+    ? <Link href={href} {...anchorProps}>{content}</Link>
+    : <a href={href} {...anchorProps}>{content}</a>;
 }
