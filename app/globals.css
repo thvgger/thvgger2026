@@ -75,10 +75,13 @@ h1, h2 { font-weight: 500; }
 .skip-link { position: fixed; z-index: 50; top: 12px; left: 12px; padding: 14px 20px; background: var(--ink); color: var(--white); transform: translateY(-160%); }
 .skip-link:focus { transform: none; }
 
-.site-header { height: var(--header-height); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--gutter); position: sticky; top: 0; z-index: 20; background: var(--white); }
-.home-link { width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center; }
+.site-header { height: var(--header-height); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--gutter); position: sticky; top: 0; z-index: 20; background: var(--white); transition: background-color .24s ease; }
+.home-link { width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center; background: var(--white); pointer-events: auto; }
 .header-mark { width: 28px; height: 32px; }
 .desktop-nav { display: flex; gap: 36px; }
+.desktop-nav, .menu-trigger { opacity: 1; visibility: visible; transform: translateY(0); transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s; }
+.site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) { background: transparent; pointer-events: none; }
+.site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) :is(.desktop-nav, .menu-trigger) { opacity: 0; visibility: hidden; transform: translateY(calc(-100% - 24px)); pointer-events: none; transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s .24s; }
 .nav-link { position: relative; display: flex; align-items: center; min-height: 44px; font-size: 12px; }
 .nav-link { --underline-offset: 10px; }
 .menu-trigger { display: none; min-height: 44px; padding: 10px 0 10px 16px; font-size: 12px; }

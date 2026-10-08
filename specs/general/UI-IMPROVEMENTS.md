@@ -1,5 +1,11 @@
 # UI/UX Improvements
 
+## Header scroll behavior, 8 October 2026
+
+The sticky header now hides its navigation and full-width white background while scrolling down, then restores them when scrolling up. The logo remains visible and clickable on a compact white backing. A passive scroll listener batches updates through requestAnimationFrame and changes visibility only after 8px of movement. Scroll bounds are clamped to avoid false direction changes from iPhone overscroll. Header height stays stable; hidden areas pass pointer input through to the page. Navigation stays available near the top, during keyboard focus, and while the mobile dialog is open. Route changes and resizing reveal it, and reduced motion skips the transition.
+
+Verification: production build, TypeScript, and targeted ESLint passed. Production browser checks at 390 and 1440px confirmed hide-on-down, show-on-up, stable logo position and clickability, stable header height, and no horizontal overflow. Small scroll movements did not flicker the navigation. Touch scrolling, keyboard reveal, menu opening and Escape dismissal, navigation through the persistent logo, return-to-top behavior, and reduced motion passed. Hidden-header screenshots were inspected, with no runtime exceptions observed.
+
 ## Studio Space poster application, 8 October 2026
 
 Added the user's Jason & Lucia poster from the newly linked Figma frame 7:71. Figma Console inspected the file and exported the complete visible poster frame 16:2 as a local 1080 × 1440px PNG; the surrounding blank canvas and hidden draft stay outside the export. A new Poster chapter presents the original artwork at its 3:4 aspect ratio, with responsive image delivery, a short explanation of its identity treatment, a personal-study caption, and a full-size image link. The chapter index now includes Poster. Existing logo artwork stays intact.
