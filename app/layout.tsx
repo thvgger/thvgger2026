@@ -19,7 +19,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>
+      {/* Extensions such as ColorZilla add body attributes before hydration. */}
+      <body suppressHydrationWarning>
         <MotionProvider>
           <a className="skip-link" href="#main">Skip to content</a>
           <Header />

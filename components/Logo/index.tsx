@@ -56,8 +56,39 @@ export const LogoStatic: React.FC<LogoProps> = ({
   gradientId,
   gradientFrom = "currentColor",
   gradientTo = "currentColor",
+  spinTrigger,
 }) => {
   const shadowId = useId();
+  const reducedMotion = useReducedMotion();
+  const rotation = useMotionValue(0);
+  const previousSpin = React.useRef(spinTrigger);
+  const spinPath = useTransform(rotation, angle => createCube(
+    Matrix.scale(BASE_SCALE)
+      .dot(Matrix.rotationY(BASE_ROTATION_Y))
+      .dot(Matrix.rotationY(angle))
+      .dot(Matrix.rotationX(BASE_ROTATION_X)),
+  ).map(facePath).join(" "));
+
+  useEffect(() => {
+    if (reducedMotion) {
+      previousSpin.current = spinTrigger;
+      rotation.set(0);
+      return;
+    }
+    if (previousSpin.current === spinTrigger) return;
+    previousSpin.current = spinTrigger;
+    if (spinTrigger === undefined) return;
+
+    const fullTurn = Math.PI * 2;
+    const target = (Math.floor(rotation.get() / fullTurn) + 1) * fullTurn;
+    const spin = animate(rotation, target, {
+      duration: 0.65,
+      ease: [0.4, 0, 0.2, 1],
+      onComplete: () => rotation.set(0),
+    });
+    return () => spin.stop();
+  }, [spinTrigger, reducedMotion, rotation]);
+
   return (
     <motion.svg
       ref={ref}
@@ -92,7 +123,7 @@ export const LogoStatic: React.FC<LogoProps> = ({
       </defs>
       <motion.path
         filter={`url(#${shadowId})`}
-        d={cubeStaticPath}
+        d={spinTrigger === undefined ? cubeStaticPath : spinPath}
         fill={gradientId ? `url(#${gradientId})` : fill}
       />
     </motion.svg>

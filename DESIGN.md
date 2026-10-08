@@ -12,7 +12,9 @@ The Studio Space case study also includes the user's Jason & Lucia poster from F
 
 All main pages remain separate: Work, About, Contact, Playground, and individual projects. Homepage content introduces these destinations rather than replacing them. Playground stays a Coming soon placeholder.
 
-The sticky header hides its navigation and white bar while scrolling down, then returns them when scrolling up. Its logo remains visible and clickable on a small white backing. An 8px direction threshold avoids jitter, and the navigation stays available at the top, during keyboard focus, and while the mobile menu is open. Keep the header's layout height stable and let hidden space pass pointer input through to the page. Reduced motion changes visibility immediately.
+The sticky header hides its navigation and white bar while scrolling down, then returns them when scrolling up. Its logo remains in place and clickable as the original black mark, with no outline or rectangular backing. An 8px direction threshold avoids jitter, and the navigation stays available at the top, during keyboard focus, and while the mobile menu is open. Keep the header's layout height stable and let hidden space pass pointer input through to the page. Reduced motion changes visibility immediately.
+
+Clicking or activating the header logo with Enter gives it a quick 0.65-second cube turn while preserving its home link. It stays still on initial load, and reduced motion skips the spin. The main hero's existing intro and drag behavior remain separate.
 
 Design review: avoid turning the new sections into equal service cards, repeated oversized headings, or decorative counters. The custom cube and offset project images carry the identity. Keep the surrounding navigation and copy disciplined. Let the work provide the imagery rather than adding unrelated stock or fabricated client projects.
 

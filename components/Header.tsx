@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LogoStatic } from "@/components/InteractiveCubeLogo";
 import UnderlineLink from "@/components/UnderlineLink";
 import RollingText from "@/components/RollingText";
@@ -16,6 +16,7 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [logoSpin, setLogoSpin] = useState(0);
   const header = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDialogElement>(null);
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -67,8 +68,8 @@ export default function Header() {
 
   return (
     <header ref={header} className="site-header">
-      <Link href="/" className="home-link" aria-label="Thvgger home">
-        <LogoStatic className="header-mark" title="Thvgger" />
+      <Link href="/" className="home-link" aria-label="Thvgger home" onClick={() => setLogoSpin(spin => spin + 1)}>
+        <LogoStatic className="header-mark" title="Thvgger" spinTrigger={logoSpin} />
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         {links.map(link => (

@@ -1,5 +1,21 @@
 # UI/UX Improvements
 
+## Header logo click spin, 8 October 2026
+
+The persistent header logo now turns its cube for 0.65 seconds when its home link is activated. Mouse clicks, taps, and Enter retain native home navigation. Repeated clicks restart the turn, it stays still on initial load, and reduced motion skips the animation. Its original black fill and transparent background remain.
+
+Verification: production build and targeted ESLint passed. Production browser checks confirmed mouse, repeated-click, keyboard, route-to-home, and mobile touch activation; every turn settled back to the original cube. No initial spin, reduced motion, transparent background, and absence of a stroke passed. No runtime exceptions were observed.
+
+## Plain persistent logo, 8 October 2026
+
+Removed the white logo stroke at the user's request. The persistent logo uses its original black fill with a transparent background; its hit area and header scroll behavior stay intact.
+
+## Persistent logo outline, 8 October 2026
+
+Removed the white rectangular backing from the persistent header logo. A 1.5px white vector stroke sits behind the original black fill, keeping the mark recognisable over dark artwork while blending into the white canvas. The link retains its 44px hit area and the existing header scroll behavior.
+
+Verification: production build and TypeScript passed. Browser checks confirmed a transparent logo background, white non-scaling stroke, black fill, and preserved clickability. Captures on white and black backgrounds were visually inspected.
+
 ## Header scroll behavior, 8 October 2026
 
 The sticky header now hides its navigation and full-width white background while scrolling down, then restores them when scrolling up. The logo remains visible and clickable on a compact white backing. A passive scroll listener batches updates through requestAnimationFrame and changes visibility only after 8px of movement. Scroll bounds are clamped to avoid false direction changes from iPhone overscroll. Header height stays stable; hidden areas pass pointer input through to the page. Navigation stays available near the top, during keyboard focus, and while the mobile dialog is open. Route changes and resizing reveal it, and reduced motion skips the transition.
