@@ -27,7 +27,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <article className="project-page page-shell">
-      <UnderlineLink href="/work" className="back-link" arrow="←">All work</UnderlineLink>
+      <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
       <div className="project-heading">
         <div><p className="project-kind">{project.kind}</p><h1>{project.title}</h1></div>
         <p className="project-summary">{project.summary}</p>
@@ -62,7 +62,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       )}
       <div className="project-bottom-links">
         <UnderlineLink href="/work">All work</UnderlineLink>
-        <UnderlineLink href={`/work/${nextProject.id}`} arrow="↗">{`Next: ${nextProject.title}`}</UnderlineLink>
+        <UnderlineLink href={`/work/${nextProject.id}`} arrow="up-right">{`Next: ${nextProject.title}`}</UnderlineLink>
       </div>
     </article>
   );

@@ -44,6 +44,7 @@ h1, h2 { font-weight: 500; }
 .plain-button { min-height: 44px; padding: 10px 0; font-size: 13px; }
 .inline-link, .back-link { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 13px; }
 .link-arrow, .work-arrow { transition: transform .25s ease; }
+.arrow-icon { display: block; width: 1em; height: 1em; flex-shrink: 0; }
 .kinetic-link:is(:hover, :focus-visible) .link-arrow, .work-entry:hover .work-arrow { transform: translate(3px, -3px); }
 
 /* Shared letter roll: text shadows provide the second face, without repeating
@@ -338,6 +339,10 @@ body:has(dialog[open]) { overflow: hidden; }
 .identity-study .identity-palette { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; }
 .identity-palette span { display: inline-flex; gap: 12px; }
 .identity-palette b { font-weight: 400; }
+.identity-poster-board { display: flex; justify-content: center; padding: clamp(20px, 5vw, 64px); background: var(--canvas); }
+.identity-poster-image { display: block; width: 100%; max-width: 680px; height: auto; }
+.identity-poster-caption { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
+.identity-poster-caption a { color: var(--ink); flex-shrink: 0; }
 .identity-placement-board { padding: clamp(24px, 5vw, 64px); }
 .identity-header-example { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 32px; }
 .identity-header-example .identity-logo { width: 240px; }

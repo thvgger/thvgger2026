@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/lib/portfolio";
+import ArrowIcon from "@/components/ArrowIcon";
 
 export default function ProjectsSection() {
   return (
@@ -23,7 +24,7 @@ export default function ProjectsSection() {
             </div>
             <div className="work-caption">
               <div><h2>{project.title}</h2><p>{project.kind}</p></div>
-              <span className="work-arrow" aria-hidden="true">↗</span>
+              <ArrowIcon className="work-arrow" />
             </div>
           </Link>
         ))}

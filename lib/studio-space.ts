@@ -2,6 +2,12 @@
 // Dimensions are the exported SVG root dimensions, rather than rounded node bounds.
 export const studioSpace = {
   source: "https://www.figma.com/design/LkrxXceEnwhOXx0RpYMpDk/j-l?node-id=48-158",
+  poster: {
+    src: "/images/portfolio/studio-space/jason-and-lucia-poster.png",
+    width: 1080,
+    height: 1440,
+    source: "https://www.figma.com/design/LkrxXceEnwhOXx0RpYMpDk/j-l?node-id=16-2",
+  },
   assets: {
     "horizontal-ink": { width: 680, height: 120 },
     "horizontal-white": { width: 680, height: 120 },

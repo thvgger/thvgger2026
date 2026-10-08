@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { AnchorHTMLAttributes } from "react";
 import RollingText from "@/components/RollingText";
+import ArrowIcon, { type ArrowDirection } from "@/components/ArrowIcon";
 
 interface UnderlineLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   text?: string;
   external?: boolean;
-  arrow?: "↗" | "←" | "↓";
+  arrow?: ArrowDirection;
 }
 
 export default function UnderlineLink({
@@ -15,9 +16,9 @@ export default function UnderlineLink({
   const label = text ?? (typeof children === "string" ? children : undefined);
   const content = (
     <>
-      {arrow === "←" && <span className="link-arrow" aria-hidden="true">{arrow}</span>}
+      {arrow === "left" && <span className="link-arrow"><ArrowIcon direction="left" /></span>}
       {label !== undefined ? <RollingText text={label} /> : children}
-      {arrow !== "←" && (arrow || external) && <span className="link-arrow" aria-hidden="true">{arrow ?? "↗"}</span>}
+      {arrow !== "left" && (arrow || external) && <span className="link-arrow"><ArrowIcon direction={arrow ?? "up-right"} /></span>}
     </>
   );
   const anchorProps = {
@@ -26,7 +27,7 @@ export default function UnderlineLink({
     ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
   };
 
-  return href.startsWith("/") && !href.startsWith("//")
+  return !external && href.startsWith("/") && !href.startsWith("//")
     ? <Link href={href} {...anchorProps}>{content}</Link>
     : <a href={href} {...anchorProps}>{content}</a>;
 }

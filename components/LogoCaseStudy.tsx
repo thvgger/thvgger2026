@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { Project } from "@/lib/portfolio";
 import { studioSpace } from "@/lib/studio-space";
 import UnderlineLink from "@/components/UnderlineLink";
+import ArrowIcon from "@/components/ArrowIcon";
 
 type LogoName = keyof typeof studioSpace.assets;
 
@@ -21,6 +22,7 @@ const chapters = [
   { id: "symbol", label: "Symbol" },
   { id: "favicon", label: "Favicon" },
   { id: "colour", label: "Colour" },
+  { id: "poster", label: "Poster" },
   { id: "in-use", label: "In use" },
   { id: "clear-space", label: "Clear space" },
 ];
@@ -96,7 +98,7 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
           <div className="identity-board identity-light identity-favicon-board">
             <div className="identity-browser-preview">
               <div className="identity-browser-tab"><Logo name="symbol-pink" /><span>Studio Space</span><span aria-hidden="true">×</span></div>
-              <div className="identity-browser-bar"><span aria-hidden="true">←</span><span aria-hidden="true">→</span><span className="identity-browser-address">Studio Space / Home</span></div>
+              <div className="identity-browser-bar"><ArrowIcon direction="left" /><ArrowIcon direction="right" /><span className="identity-browser-address">Studio Space / Home</span></div>
             </div>
             <div className="identity-favicon-sizes">
               {[16, 32, 48].map(size => <div key={size}><div className="identity-icon-sample"><Logo name="symbol-pink" className={`identity-icon-${size}`} alt={`Studio Space symbol at ${size} pixels`} /></div><span>{size} px</span></div>)}
@@ -115,6 +117,26 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
             <div className="identity-colour-treatment identity-pink"><Logo name="horizontal-mono-white" alt="All-white logo on the identity’s pink field" /><span>On pink</span></div>
           </div>
           <figcaption className="identity-palette"><span>Ink <b>#080808</b></span><span>Pink <b>#F20D5E</b></span><span>Light <b>#F6F4EE</b></span></figcaption>
+        </figure>
+      </section>
+
+      <section id="poster" className="identity-chapter">
+        <ChapterHeading title="From mark to poster.">The stacked Studio Space wordmark anchors this Jason &amp; Lucia poster study. Pink accents and an angular crop carry the identity into a larger composition, balancing the character artwork with open black space.</ChapterHeading>
+        <figure>
+          <div className="identity-poster-board">
+            <Image
+              src={studioSpace.poster.src}
+              width={studioSpace.poster.width}
+              height={studioSpace.poster.height}
+              alt="Black Jason & Lucia poster with the white Studio Space wordmark, a pink angular frame around the characters, and large cream lettering"
+              className="identity-poster-image"
+              sizes="(max-width: 760px) 85vw, 680px"
+            />
+          </div>
+          <figcaption className="identity-poster-caption">
+            <span>Jason &amp; Lucia — a personal poster study using Grand Theft Auto VI character imagery.</span>
+            <UnderlineLink href={studioSpace.poster.src} external aria-label="View the full Jason & Lucia poster (opens in a new tab)">View full poster</UnderlineLink>
+          </figcaption>
         </figure>
       </section>
 

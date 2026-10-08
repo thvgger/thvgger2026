@@ -3,6 +3,7 @@ import Link from "next/link";
 import { projects } from "@/lib/portfolio";
 import UnderlineLink from "@/components/UnderlineLink";
 import Button from "@/components/Button";
+import ArrowIcon from "@/components/ArrowIcon";
 
 const selectedProjects = projects.filter(project => project.id === "studio-space" || project.id === "identity");
 const capabilities = [
@@ -26,7 +27,7 @@ export default function HomeContent() {
       <section id="selected-work" className="home-selected page-shell" aria-labelledby="selected-work-title" tabIndex={-1}>
         <div className="home-section-heading">
           <h2 id="selected-work-title">Selected work</h2>
-          <UnderlineLink href="/work" className="inline-link" arrow="↗">See all work</UnderlineLink>
+          <UnderlineLink href="/work" className="inline-link" arrow="up-right">See all work</UnderlineLink>
         </div>
         <div className="home-projects">
           {selectedProjects.map((project, index) => (
@@ -41,7 +42,7 @@ export default function HomeContent() {
               </div>
               <div className="home-project-caption">
                 <div><h3>{project.title}</h3><p>{project.kind}</p></div>
-                <span aria-hidden="true">↗</span>
+                <span><ArrowIcon /></span>
               </div>
             </Link>
           ))}
@@ -54,7 +55,7 @@ export default function HomeContent() {
             <h2 id="home-about-title">A little about me</h2>
             <p>I’m Thvgger, a designer and developer. I work across visual identities and the web, connecting how something looks with how it works.</p>
             <p>I like clear typography, useful interactions, and leaving enough space for an idea to breathe.</p>
-            <UnderlineLink href="/about" className="inline-link" arrow="↗">More about me</UnderlineLink>
+            <UnderlineLink href="/about" className="inline-link" arrow="up-right">More about me</UnderlineLink>
           </div>
           <div className="home-capabilities">
             <h3>What I do</h3>

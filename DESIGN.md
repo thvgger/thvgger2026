@@ -8,6 +8,8 @@ Homepage layout: a spacious name-and-cube opening with a direct role statement a
 
 Studio Space presentation: original Figma vectors lead a dedicated case study, informed by the user's Quaandry logo-variation guide. The portfolio shell stays white and black in Inter. Artwork boards use the source identity's ink #080808, pink #F20D5E, and light #F6F4EE. Lead with a large wordmark and its family; follow with short explanations and spacious examples of primary, stacked, symbol, favicon, colour, digital placements, and clear space. Keep explanatory text in responsive HTML and preserve the complete source SVGs. Mark the project as in progress. Do not infer a client, industry, commission, or outcome from the file name.
 
+The Studio Space case study also includes the user's Jason & Lucia poster from Figma frame 7:71, exported from its visible child 16:2. Present the complete composition on a quiet canvas, at its original 3:4 aspect ratio, with a full-size artwork link. Describe it as a personal poster study using game character imagery; keep its existing marks inside the original artwork without implying a client relationship.
+
 All main pages remain separate: Work, About, Contact, Playground, and individual projects. Homepage content introduces these destinations rather than replacing them. Playground stays a Coming soon placeholder.
 
 Design review: avoid turning the new sections into equal service cards, repeated oversized headings, or decorative counters. The custom cube and offset project images carry the identity. Keep the surrounding navigation and copy disciplined. Let the work provide the imagery rather than adding unrelated stock or fabricated client projects.
@@ -17,3 +19,5 @@ Motion: the homepage restores the original large-cube opening, shrink, and name-
 Links and buttons: text links pair a drawing underline with a staggered vertical letter roll, on hover and keyboard focus. Each label has one accessible text equivalent. Primary actions retain the reference site's square outline and centred uppercase Inter label, in a more compact 240 × 72px footprint on desktop and phones, capped by the available width. A slightly slanted black fill rises from the bottom over 700ms; letters roll over 500ms with a 20ms stagger. Keep header utility controls compact. Reduced motion keeps the label still and changes fill and contrast immediately. Visible focus outlines remain available throughout.
 
 Content: describe original personal work honestly. No music-template references, outside client brands, invented results, location, years of experience, or assumed credentials. GitHub points to the user's account; email remains the explicitly requested placeholder.
+
+Arrow icons use shared SVG paths in the current text colour, including project cards, text links, the scroll cue, and the case-study browser example. Keep their existing hover responses. Use vector icons rather than Unicode arrows so iPhone cannot substitute emoji glyphs.

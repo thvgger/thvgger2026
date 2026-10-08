@@ -10,7 +10,7 @@ export default function Hero() {
         <div className="hero-name-window"><h1 id="home-title">Thvgger</h1></div>
       </div>
       <p className="hero-introduction">I design identities and build websites.</p>
-      <UnderlineLink href="#selected-work" className="home-scroll-link" arrow="↓">Scroll to explore</UnderlineLink>
+      <UnderlineLink href="#selected-work" className="home-scroll-link" arrow="down">Scroll to explore</UnderlineLink>
     </HeroIntro>
   );
 }

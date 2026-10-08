@@ -1,5 +1,11 @@
 # UI/UX Improvements
 
+## Studio Space poster application, 8 October 2026
+
+Added the user's Jason & Lucia poster from the newly linked Figma frame 7:71. Figma Console inspected the file and exported the complete visible poster frame 16:2 as a local 1080 × 1440px PNG; the surrounding blank canvas and hidden draft stay outside the export. A new Poster chapter presents the original artwork at its 3:4 aspect ratio, with responsive image delivery, a short explanation of its identity treatment, a personal-study caption, and a full-size image link. The chapter index now includes Poster. Existing logo artwork stays intact.
+
+Verification: production build and TypeScript passed. Browser checks at 320, 390, 768, and 1440px confirmed successful image loading, correct aspect ratio, a maximum display width of 680px, no horizontal overflow, the chapter anchor, the full-size link, and all 20 existing SVG instances. The local PNG matches the exported byte count and dimensions. Desktop and phone screenshots were inspected; no runtime exceptions were observed.
+
 ## Compact button sizing, 7 October 2026
 
 Reduced primary buttons to a maximum width of 240px and a height of 72px on desktop and phones, following the user's size feedback. The outline, centred label, rising fill, letter roll, and larger mobile label stay intact.
