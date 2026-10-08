@@ -1,5 +1,21 @@
 # UI/UX Improvements
 
+## Personal introduction text motion, 8 October 2026
+
+The About heading now rises word by word with 60ms between words. Paragraphs and the About link follow with a small stagger, finishing within one second. The existing observer triggers the entrance once; text remains visible by default and reduced motion skips the sequence. The continuous heading text and native link remain accessible.
+
+Verification: targeted ESLint and diff checks passed. Browser checks at 320, 390, and 1440px confirmed the word and paragraph delays, active animation followed by a settled state, continuous heading text, and no horizontal overflow. Reduced motion passed, with no runtime exceptions. The mobile text layout was visually inspected.
+
+## Remove the About-section cube, 8 October 2026
+
+Removed the interactive cube and its caption from the homepage personal introduction at the user's request. Removed its geometry and unused animation styles. The texture, gentle text arrival, and animated capability disclosures remain.
+
+## Homepage personal introduction, 8 October 2026
+
+Applied the suggested About-section treatment: a faint version of the existing local texture, a nine-piece graphic using the original cube geometry, one section arrival, and animated native capability disclosures. Hover separates the cube; its button toggles the arrangement for touch and keyboard users. The existing copy, links, layout, and monochrome identity stay prominent. Next Image delivers the texture responsively. Reduced motion skips the arrival and height animations; text remains visible without waiting for an observer.
+
+Verification: production build and targeted ESLint passed. Browser checks at 320, 390, 768, and 1440px confirmed successful texture delivery, all nine pieces, the section arrival, and no horizontal overflow. Desktop and mobile screenshots were inspected. Animated opening and closing, quick repeated toggles, keyboard activation, hover, click, mobile touch, and reduced motion passed. An injected `cz-shortcut-listen` body attribute hydrated without console errors in development and production, verifying the body-level extension exception. No runtime exceptions were observed.
+
 ## Header logo click spin, 8 October 2026
 
 The persistent header logo now turns its cube for 0.65 seconds when its home link is activated. Mouse clicks, taps, and Enter retain native home navigation. Repeated clicks restart the turn, it stays still on initial load, and reduced motion skips the animation. Its original black fill and transparent background remain.

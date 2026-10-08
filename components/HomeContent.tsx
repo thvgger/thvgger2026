@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 import { projects } from "@/lib/portfolio";
 import UnderlineLink from "@/components/UnderlineLink";
 import Button from "@/components/Button";
 import ArrowIcon from "@/components/ArrowIcon";
+import HomePractice, { CapabilityDetail } from "@/components/HomePractice";
 
 const selectedProjects = projects.filter(project => project.id === "studio-space" || project.id === "identity");
 const capabilities = [
@@ -49,10 +51,18 @@ export default function HomeContent() {
         </div>
       </section>
 
-      <section className="home-practice" aria-labelledby="home-about-title">
+      <HomePractice>
+        <Image src="/images/about-texture.jpg" alt="" fill sizes="100vw" className="home-practice-texture" aria-hidden="true" />
         <div className="home-practice-inner page-shell">
           <div className="home-about-copy">
-            <h2 id="home-about-title">A little about me</h2>
+            <h2 id="home-about-title">
+              {["A", "little", "about", "me"].map((word, index) => (
+                <Fragment key={word}>
+                  <span className="practice-word-window"><span className="practice-word">{word}</span></span>
+                  {index < 3 ? " " : null}
+                </Fragment>
+              ))}
+            </h2>
             <p>I’m Thvgger, a designer and developer. I work across visual identities and the web, connecting how something looks with how it works.</p>
             <p>I like clear typography, useful interactions, and leaving enough space for an idea to breathe.</p>
             <UnderlineLink href="/about" className="inline-link" arrow="up-right">More about me</UnderlineLink>
@@ -60,14 +70,13 @@ export default function HomeContent() {
           <div className="home-capabilities">
             <h3>What I do</h3>
             {capabilities.map((capability, index) => (
-              <details key={capability.title} className="capability-detail" open={index === 0}>
-                <summary>{capability.title}<span className="capability-toggle" aria-hidden="true">+</span></summary>
-                <p>{capability.copy}</p>
-              </details>
+              <CapabilityDetail key={capability.title} title={capability.title} initiallyOpen={index === 0}>
+                {capability.copy}
+              </CapabilityDetail>
             ))}
           </div>
         </div>
-      </section>
+      </HomePractice>
 
       <section className="home-contact page-shell" aria-labelledby="home-contact-title">
         <div>
