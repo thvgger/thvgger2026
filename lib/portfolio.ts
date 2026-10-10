@@ -14,6 +14,7 @@ export interface Project {
   coverTreatment?: "logo" | "screen";
   presentation?: "logo-guide" | "storefront-study";
   status?: string;
+  video?: { src: string; poster: string; width: number; height: number; title: string; caption: string };
   gallery: { src: string; alt: string; contain?: boolean }[];
   role: string;
   tools: string;
@@ -56,6 +57,14 @@ export const projects: Project[] = [
   },
   {
     id: "thvgger", title: "Thvgger", kind: "Personal identity, print & web", role: "Identity design, art direction & web development", tools: "Logo system, stationery, Next.js, React, TypeScript & Motion",
+    video: {
+      src: "/videos/thvgger/intro.mp4",
+      poster: "/images/portfolio/thvgger/intro-poster.webp",
+      width: 1280,
+      height: 720,
+      title: "Homepage intro",
+      caption: "The cube turns, shrinks into place, and the Thvgger name and introduction appear.",
+    },
     summary: "A personal identity built around a striped isometric cube, carried through logo variations, stationery studies, and this website. One visual system across print and the web.",
     cover: "/images/portfolio/identity-laptop.webp",
     gallery: [

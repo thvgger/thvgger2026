@@ -51,6 +51,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.details.map(detail => <section key={detail.heading}><h2>{detail.heading}</h2><p>{detail.copy}</p></section>)}
             </div>
           </div>
+          {project.video ? (
+            <section className="project-video" aria-labelledby="project-video-title">
+              <h2 id="project-video-title">{project.video.title}</h2>
+              <figure>
+                <video
+                  controls
+                  muted
+                  playsInline
+                  preload="none"
+                  poster={project.video.poster}
+                  width={project.video.width}
+                  height={project.video.height}
+                  aria-label={project.video.title}
+                  aria-describedby="project-video-caption"
+                >
+                  <source src={project.video.src} type="video/mp4" />
+                  <a href={project.video.src}>Watch the homepage intro video</a>
+                </video>
+                <figcaption id="project-video-caption">{project.video.caption}</figcaption>
+              </figure>
+            </section>
+          ) : null}
           <div className="project-gallery">
             {project.gallery.slice(1).map(image => (
               <figure key={image.src}>

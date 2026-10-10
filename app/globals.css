@@ -162,6 +162,10 @@ body:has(dialog[open]) { overflow: hidden; }
 .project-story h2 { font-size: 17px; letter-spacing: -.02em; margin-bottom: 12px; }
 .project-story p { font-size: 15px; line-height: 1.8; color: var(--muted); }
 .project-gallery { display: flex; flex-direction: column; gap: 48px; }
+.project-video { margin-bottom: 64px; }
+.project-video h2 { font-size: 24px; letter-spacing: -.025em; margin-bottom: 24px; }
+.project-video video { display: block; width: 100%; height: auto; background: var(--canvas); }
+.project-video figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 14px; }
 .project-gallery figcaption { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 14px; }
 .project-bottom-links { display: flex; justify-content: space-between; gap: 32px; border-top: 1px solid var(--rule); padding-top: 32px; margin-top: 80px; font-size: 13px; }
 .project-bottom-links a { display: inline-flex; gap: 12px; align-items: center; min-height: 44px; }
