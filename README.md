@@ -16,14 +16,14 @@ Run `npm run lint` and `npm run build` to check the project.
 - `/work` — a selection of design and development work.
 - `/work/foolycooly` — a fashion storefront and identity case study with desktop, product-detail, and mobile views.
 - `/work/studio-space` — a visual identity case study covering logo variations and usage.
-- `/work/identity`, `/work/portfolio`, `/work/print` — individual project pages.
+- `/work/thvgger` — the personal identity, website, and print studies in one project. The former `/work/identity`, `/work/portfolio`, and `/work/print` URLs redirect here.
 - `/about` — design and development introduction.
 - `/contact` — email link and copy action.
 - `/playground` — a Coming soon placeholder.
 
 ## Content
 
-Project content, gallery assets, and contact details live in `lib/portfolio.ts`. Home features FOOLY COOLY and Studio Space. Work also includes the personal Thvgger identity, this website, and related print studies. Studio Space is marked as work in progress; no client relationship or results are claimed. Template brand examples are not displayed.
+Project content, gallery assets, and contact details live in `lib/portfolio.ts`. Home features FOOLY COOLY and Studio Space. Work includes one Thvgger project combining the personal identity, this website, and related print studies, with all their gallery assets. Studio Space is marked as work in progress; no client relationship or results are claimed. Template brand examples are not displayed.
 
 FOOLY COOLY is presented by `components/StorefrontCaseStudy.tsx`. Its original FLCL vector and actual interface captures live in `public/images/portfolio/foolycooly`. The case study describes the animated identity, collection, product selection, and mobile layout. It labels the project as a prototype and credits sample product photography from Stüssy and Fear of God references. Source: https://github.com/thvgger/foolycooly.
 

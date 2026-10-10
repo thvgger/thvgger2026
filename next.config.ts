@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: ["172.20.10.2"],
+  redirects() {
+    return ["identity", "portfolio", "print"].map(slug => ({
+      source: `/work/${slug}`,
+      destination: "/work/thvgger",
+      permanent: true,
+    }));
+  },
 };
-
-module.exports = {
-  allowedDevOrigins: ['172.20.10.2'],
-}
 
 export default nextConfig;
