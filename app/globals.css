@@ -78,6 +78,9 @@ h1, h2 { font-weight: 500; }
 .site-header { height: var(--header-height); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--gutter); position: sticky; top: 0; z-index: 20; background: var(--white); transition: background-color .24s ease; }
 .home-link { width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center; background: transparent; pointer-events: auto; }
 .header-mark { width: 28px; height: 32px; }
+.site-header[data-hero-mark] .home-link { opacity: 1; visibility: visible; transform: translateY(0) scale(1); transition: transform .36s cubic-bezier(.34, 1.4, .64, 1), opacity .18s ease, visibility 0s; }
+.site-header[data-hero-mark="visible"] .home-link { opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--header-height))) scale(.8); pointer-events: none; transition: transform .18s ease, opacity .12s ease, visibility 0s .18s; }
+.hero-mark-stage[data-header-logo="visible"] { visibility: hidden; pointer-events: none; }
 .desktop-nav { display: flex; gap: 36px; }
 .desktop-nav, .menu-trigger { opacity: 1; visibility: visible; transform: translateY(0); transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s; }
 .site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) { background: transparent; pointer-events: none; }

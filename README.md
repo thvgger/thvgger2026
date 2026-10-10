@@ -2,7 +2,7 @@
 
 A personal design and development portfolio built with Next.js, React, TypeScript, and Motion. A scrolling monochrome homepage introduces the Thvgger wordmark, interactive cube, selected work, and design practice. Separate pages cover the work, about, and contact.
 
-The homepage opens with a large rotating cube that shrinks and moves into the wordmark as the name enters. The intro settles when visitors interact, respects reduced motion, and finishes without JavaScript. Browser scrollbar chrome is hidden; wheel, touch, keyboard, and anchor scrolling remain native.
+The homepage opens with a large rotating cube that shrinks and moves into the wordmark as the name enters. The header cube stays hidden while the hero cube is visible, then pops in from above as visitors scroll past it. Returning to the hero hides the header cube again. The intro settles when visitors interact, respects reduced motion, and finishes without JavaScript. Browser scrollbar chrome is hidden; wheel, touch, keyboard, and anchor scrolling remain native.
 
 ## Local development
 

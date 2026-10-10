@@ -16,10 +16,43 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const [logoSpin, setLogoSpin] = useState(0);
   const header = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDialogElement>(null);
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  useEffect(() => {
+    const element = header.current;
+    const heroMark = document.querySelector<HTMLElement>(".hero-mark-stage");
+    const homeLink = element?.querySelector<HTMLAnchorElement>(".home-link");
+    if (!isHome || !element || !heroMark || !homeLink) return;
+
+    let observer: IntersectionObserver;
+    function update() {
+      const visible = heroMark!.getBoundingClientRect().bottom <= element!.offsetHeight;
+      element!.dataset.heroMark = visible ? "hidden" : "visible";
+      heroMark!.dataset.headerLogo = visible ? "visible" : "hidden";
+      heroMark!.inert = visible;
+      homeLink!.tabIndex = visible ? 0 : -1;
+    }
+    function observe() {
+      observer?.disconnect();
+      observer = new IntersectionObserver(update, { rootMargin: `-${element!.offsetHeight}px 0px 0px 0px` });
+      observer.observe(heroMark!);
+      update();
+    }
+    const resize = new ResizeObserver(observe);
+    resize.observe(element);
+    observe();
+    return () => {
+      observer.disconnect();
+      resize.disconnect();
+      delete heroMark.dataset.headerLogo;
+      heroMark.inert = false;
+      homeLink.removeAttribute("tabindex");
+    };
+  }, [isHome]);
 
   useEffect(() => {
     const element = header.current;
@@ -67,8 +100,14 @@ export default function Header() {
   }, [pathname]);
 
   return (
-    <header ref={header} className="site-header">
-      <Link href="/" className="home-link" aria-label="Thvgger home" onClick={() => setLogoSpin(spin => spin + 1)}>
+    <header ref={header} className="site-header" data-hero-mark={isHome ? "visible" : undefined}>
+      <Link href="/" className="home-link" tabIndex={isHome ? -1 : undefined} aria-label="Thvgger home" onClick={event => {
+        setLogoSpin(spin => spin + 1);
+        if (isHome && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+          event.preventDefault();
+          window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+        }
+      }}>
         <LogoStatic className="header-mark" title="Thvgger" spinTrigger={logoSpin} />
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
