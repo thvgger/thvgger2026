@@ -4,6 +4,7 @@ import UnderlineLink from "@/components/UnderlineLink";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/portfolio";
 import LogoCaseStudy from "@/components/LogoCaseStudy";
+import StorefrontCaseStudy from "@/components/StorefrontCaseStudy";
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
@@ -34,6 +35,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
       {project.presentation === "logo-guide" ? (
         <LogoCaseStudy project={project} />
+      ) : project.presentation === "storefront-study" ? (
+        <StorefrontCaseStudy project={project} />
       ) : (
         <>
           <div className={`project-cover ${project.gallery[0].contain ? "image-contained" : ""}`}>

@@ -14,6 +14,7 @@ Run `npm run lint` and `npm run build` to check the project.
 
 - `/` — an introduction, selected projects, expandable capability notes, and contact invitation.
 - `/work` — a selection of design and development work.
+- `/work/foolycooly` — a fashion storefront and identity case study with desktop, product-detail, and mobile views.
 - `/work/studio-space` — a visual identity case study covering logo variations and usage.
 - `/work/identity`, `/work/portfolio`, `/work/print` — individual project pages.
 - `/about` — design and development introduction.
@@ -22,7 +23,9 @@ Run `npm run lint` and `npm run build` to check the project.
 
 ## Content
 
-Project content, gallery assets, and contact details live in `lib/portfolio.ts`. The featured work includes the Studio Space identity exploration, the personal Thvgger identity, this website, and related print studies. Studio Space is marked as work in progress; no client relationship or results are claimed. Template brand examples are not displayed.
+Project content, gallery assets, and contact details live in `lib/portfolio.ts`. Home features FOOLY COOLY and Studio Space. Work also includes the personal Thvgger identity, this website, and related print studies. Studio Space is marked as work in progress; no client relationship or results are claimed. Template brand examples are not displayed.
+
+FOOLY COOLY is presented by `components/StorefrontCaseStudy.tsx`. Its original FLCL vector and actual interface captures live in `public/images/portfolio/foolycooly`. The case study describes the animated identity, collection, product selection, and mobile layout. It labels the project as a prototype and credits sample product photography from Stüssy and Fear of God references. Source: https://github.com/thvgger/foolycooly.
 
 Studio Space uses original vector components exported through Figma Console from https://www.figma.com/design/LkrxXceEnwhOXx0RpYMpDk/j-l?node-id=48-158. The complete SVGs live in `public/images/portfolio/studio-space`; dimensions and the source link are in `lib/studio-space.ts`. `components/LogoCaseStudy.tsx` presents the artwork with responsive text, colour examples, actual-size favicon previews, and clear-space guidance. The presentation takes its structure from the user's Quaandry logo-variation reference without reproducing that site's artwork.
 

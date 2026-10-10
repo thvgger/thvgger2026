@@ -11,8 +11,8 @@ export interface Project {
   kind: string;
   summary: string;
   cover: string;
-  coverTreatment?: "logo";
-  presentation?: "logo-guide";
+  coverTreatment?: "logo" | "screen";
+  presentation?: "logo-guide" | "storefront-study";
   status?: string;
   gallery: { src: string; alt: string; contain?: boolean }[];
   role: string;
@@ -21,6 +21,25 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: "foolycooly",
+    title: "FOOLY COOLY",
+    kind: "Fashion storefront & identity",
+    role: "Visual identity, interface design & development",
+    tools: "Next.js, React, TypeScript & SVG motion",
+    status: "Prototype",
+    presentation: "storefront-study",
+    coverTreatment: "screen",
+    summary: "An experimental fashion storefront built around the FLCL identity. A moving wordmark, a quiet product grid, and a browsing experience that adapts from desktop to mobile.",
+    cover: "/images/portfolio/foolycooly/collection-desktop.webp",
+    gallery: [
+      { src: "/images/portfolio/foolycooly/collection-desktop.webp", alt: "FOOLY COOLY desktop storefront with the FLCL mark, category sidebar, and four-column product grid" },
+      { src: "/images/portfolio/foolycooly/flcl.svg", alt: "Original black FLCL mark with the small FOOLY COOLY wordmark below", contain: true },
+      { src: "/images/portfolio/foolycooly/product-detail.webp", alt: "FOOLY COOLY product dialog showing a leather jacket, price, sizes, and add-to-cart control" },
+      { src: "/images/portfolio/foolycooly/collection-mobile.webp", alt: "FOOLY COOLY mobile storefront with compact navigation above a two-column product grid" },
+    ],
+    details: [],
+  },
   {
     id: "studio-space",
     title: "Studio Space",

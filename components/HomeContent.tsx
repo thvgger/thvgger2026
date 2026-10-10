@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 import ArrowIcon from "@/components/ArrowIcon";
 import HomePractice, { CapabilityDetail } from "@/components/HomePractice";
 
-const selectedProjects = projects.filter(project => project.id === "studio-space" || project.id === "identity");
+const selectedProjects = projects.filter(project => project.id === "foolycooly" || project.id === "studio-space");
 const capabilities = [
   {
     title: "Visual identity",
@@ -34,7 +34,7 @@ export default function HomeContent() {
         <div className="home-projects">
           {selectedProjects.map((project, index) => (
             <Link key={project.id} href={`/work/${project.id}`} className="home-project">
-              <div className={`home-project-image ${project.coverTreatment === "logo" ? "logo-cover" : ""}`}>
+              <div className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
                 <Image
                   src={project.cover}
                   alt={project.gallery[0].alt}

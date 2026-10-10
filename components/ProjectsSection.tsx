@@ -13,7 +13,7 @@ export default function ProjectsSection() {
       <div className="work-grid">
         {projects.map((project, index) => (
           <Link key={project.id} href={`/work/${project.id}`} className="work-entry">
-            <div className={`work-image ${project.coverTreatment === "logo" ? "logo-cover" : project.gallery[0].contain ? "image-contained" : ""}`}>
+            <div className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
               <Image
                 src={project.cover}
                 alt={project.gallery[0].alt}

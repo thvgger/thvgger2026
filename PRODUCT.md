@@ -18,7 +18,7 @@ Precise, sculptural, curious. Continue the monochrome palette and striped cube i
 
 ## Structure
 
-Home, Work, About, Contact, and Playground are separate pages. Each project has its own detail page. Studio Space has a dedicated visual identity guide using the user's Figma artwork, labelled as in progress, and is featured alongside the Thvgger identity on the homepage. Playground remains a Coming soon placeholder until the user supplies its direction.
+Home, Work, About, Contact, and Playground are separate pages. Each project has its own detail page. FOOLY COOLY has a dedicated storefront case study and leads the Work page. It is featured alongside Studio Space on the homepage. Studio Space has a dedicated visual identity guide using the user's Figma artwork, labelled as in progress. FOOLY COOLY is a personal prototype with sample product photography, browsing, and a demo cart; checkout is outside its scope. Playground remains a Coming soon placeholder until the user supplies its direction.
 
 ## Anti-references
 
