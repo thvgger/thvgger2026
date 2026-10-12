@@ -31,24 +31,26 @@ export default function HomeContent() {
           <h2 id="selected-work-title">Selected work</h2>
           <UnderlineLink href="/work" className="inline-link" arrow="up-right">See all work</UnderlineLink>
         </div>
-        <div className="home-projects">
-          {selectedProjects.map((project, index) => (
-            <ProjectLink key={project.id} href={`/work/${project.id}`} title={project.title} className="home-project">
-              <div className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
-                <Image
-                  src={project.cover}
-                  alt={project.gallery[0].alt}
-                  fill
-                  sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1320px) 52vw, 680px" : "(max-width: 760px) 92vw, (max-width: 1320px) 39vw, 504px"}
-                />
-              </div>
-              <div className="home-project-caption">
-                <div><h3>{project.title}</h3><p>{project.kind}</p></div>
-                <span><ArrowIcon /></span>
-              </div>
-            </ProjectLink>
+        <ul className="home-projects" role="list">
+          {selectedProjects.map((project) => (
+            <li key={project.id}>
+              <ProjectLink href={`/work/${project.id}`} title={project.title} className="home-project">
+                <div className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
+                  <Image
+                    src={project.cover}
+                    alt={project.gallery[0].alt}
+                    fill
+                    sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1200px) 54vw, 628px"
+                  />
+                </div>
+                <div className="home-project-caption">
+                  <div><h3>{project.title}</h3><p>{project.kind}</p><p className="project-list-summary">{project.summary}</p></div>
+                  <span><ArrowIcon /></span>
+                </div>
+              </ProjectLink>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <HomePractice>

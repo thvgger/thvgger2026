@@ -10,25 +10,27 @@ export default function ProjectsSection() {
         <h1 id="work-title">Work</h1>
         <p>Selected design and development work.</p>
       </div>
-      <div className="work-grid">
+      <ul className="work-list" role="list">
         {projects.map((project, index) => (
-          <ProjectLink key={project.id} href={`/work/${project.id}`} title={project.title} className="work-entry">
-            <div className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
-              <Image
-                src={project.cover}
-                alt={project.gallery[0].alt}
-                fill
-                sizes="(max-width: 760px) 92vw, (max-width: 1320px) 46vw, 604px"
-                loading={index === 0 ? "eager" : "lazy"}
-              />
-            </div>
-            <div className="work-caption">
-              <div><h2>{project.title}</h2><p>{project.kind}</p></div>
-              <ArrowIcon className="work-arrow" />
-            </div>
-          </ProjectLink>
+          <li key={project.id}>
+            <ProjectLink href={`/work/${project.id}`} title={project.title} className="work-entry">
+              <div className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
+                <Image
+                  src={project.cover}
+                  alt={project.gallery[0].alt}
+                  fill
+                  sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1200px) 54vw, 628px"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </div>
+              <div className="work-caption">
+                <div><h2>{project.title}</h2><p>{project.kind}</p><p className="project-list-summary">{project.summary}</p></div>
+                <ArrowIcon className="work-arrow" />
+              </div>
+            </ProjectLink>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

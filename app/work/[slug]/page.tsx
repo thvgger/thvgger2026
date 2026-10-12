@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { projects } from "@/lib/portfolio";
 import LogoCaseStudy from "@/components/LogoCaseStudy";
 import StorefrontCaseStudy from "@/components/StorefrontCaseStudy";
+import CaseStudyMotion from "@/components/CaseStudyMotion";
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
@@ -27,7 +28,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
-    <article className="project-page page-shell">
+    <CaseStudyMotion key={project.id}>
       <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
       <div className="project-heading">
         <div><p className="project-kind">{project.kind}</p><h1>{project.title}</h1></div>
@@ -89,6 +90,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <UnderlineLink href="/work">All work</UnderlineLink>
         <UnderlineLink href={`/work/${nextProject.id}`} arrow="up-right">{`Next: ${nextProject.title}`}</UnderlineLink>
       </div>
-    </article>
+    </CaseStudyMotion>
   );
 }
