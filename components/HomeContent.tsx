@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import ProjectLink from "@/components/ProjectLink";
 import { Fragment } from "react";
 import { projects } from "@/lib/portfolio";
 import UnderlineLink from "@/components/UnderlineLink";
@@ -33,7 +33,7 @@ export default function HomeContent() {
         </div>
         <div className="home-projects">
           {selectedProjects.map((project, index) => (
-            <Link key={project.id} href={`/work/${project.id}`} className="home-project">
+            <ProjectLink key={project.id} href={`/work/${project.id}`} title={project.title} className="home-project">
               <div className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
                 <Image
                   src={project.cover}
@@ -46,7 +46,7 @@ export default function HomeContent() {
                 <div><h3>{project.title}</h3><p>{project.kind}</p></div>
                 <span><ArrowIcon /></span>
               </div>
-            </Link>
+            </ProjectLink>
           ))}
         </div>
       </section>

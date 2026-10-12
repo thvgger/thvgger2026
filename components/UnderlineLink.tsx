@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link, { type LinkProps } from "next/link";
 import type { AnchorHTMLAttributes } from "react";
 import RollingText from "@/components/RollingText";
 import ArrowIcon, { type ArrowDirection } from "@/components/ArrowIcon";
@@ -8,10 +8,11 @@ interface UnderlineLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   text?: string;
   external?: boolean;
   arrow?: ArrowDirection;
+  onNavigate?: LinkProps["onNavigate"];
 }
 
 export default function UnderlineLink({
-  children, text, href, external = false, arrow, className = "", ...props
+  children, text, href, external = false, arrow, className = "", onNavigate, ...props
 }: UnderlineLinkProps) {
   const label = text ?? (typeof children === "string" ? children : undefined);
   const content = (
@@ -28,6 +29,6 @@ export default function UnderlineLink({
   };
 
   return !external && href.startsWith("/") && !href.startsWith("//")
-    ? <Link href={href} {...anchorProps}>{content}</Link>
+    ? <Link href={href} onNavigate={onNavigate} {...anchorProps}>{content}</Link>
     : <a href={href} {...anchorProps}>{content}</a>;
 }

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import ProjectLink from "@/components/ProjectLink";
 import { projects } from "@/lib/portfolio";
 import ArrowIcon from "@/components/ArrowIcon";
 
@@ -12,7 +12,7 @@ export default function ProjectsSection() {
       </div>
       <div className="work-grid">
         {projects.map((project, index) => (
-          <Link key={project.id} href={`/work/${project.id}`} className="work-entry">
+          <ProjectLink key={project.id} href={`/work/${project.id}`} title={project.title} className="work-entry">
             <div className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
               <Image
                 src={project.cover}
@@ -26,7 +26,7 @@ export default function ProjectsSection() {
               <div><h2>{project.title}</h2><p>{project.kind}</p></div>
               <ArrowIcon className="work-arrow" />
             </div>
-          </Link>
+          </ProjectLink>
         ))}
       </div>
     </section>

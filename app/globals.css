@@ -9,6 +9,7 @@
   --gutter: clamp(24px, 3vw, 48px);
   --header-height: 76px;
   --footer-height: 64px;
+  --layer-transition: 60;
 }
 
 @theme inline {
@@ -35,6 +36,16 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a:focus-visible, button:focus-visible, svg:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+
+/* Rounded triangular pointer, with a fine white edge for dark artwork. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  html { cursor: url("/cursors/rounded-arrow.svg") 4 4, auto; }
+  html body :is(a, button:not(:disabled), summary, [role="button"]:not([aria-disabled="true"])) {
+    cursor: pointer;
+  }
+  input, textarea, [contenteditable="true"] { cursor: text; }
+  :is(button, input, textarea):disabled, [aria-disabled="true"] { cursor: not-allowed; }
+}
 h1, h2, h3, p { margin: 0; }
 figure, dl, dd { margin: 0; }
 p { text-wrap: pretty; }
@@ -82,6 +93,29 @@ h1, h2 { font-weight: 500; }
 .site-header[data-hero-mark="visible"] .home-link { opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--header-height))) scale(.8); pointer-events: none; transition: transform .18s ease, opacity .12s ease, visibility 0s .18s; }
 .hero-mark-stage[data-header-logo="visible"] { visibility: hidden; pointer-events: none; }
 .desktop-nav { display: flex; gap: 36px; }
+.page-transition { position: fixed; inset: 0; z-index: var(--layer-transition); visibility: hidden; pointer-events: none; overflow: hidden; }
+.page-transition[data-active="true"] { visibility: visible; pointer-events: auto; }
+.page-transition-bars { position: absolute; inset: 0; display: flex; }
+.page-transition-bar { flex: 1; height: 100%; margin-right: -1px; background: var(--ink); transform: translateY(101%); }
+.page-transition-identity { position: absolute; top: max(28px, env(safe-area-inset-top)); left: var(--gutter); display: flex; align-items: center; gap: 14px; color: var(--white); font-size: 12px; opacity: 0; }
+.page-transition-mark { width: 32px; height: 36px; }
+.page-transition-caption { position: absolute; bottom: max(36px, env(safe-area-inset-bottom)); left: var(--gutter); right: var(--gutter); color: var(--white); }
+.page-transition-label { display: flex; font-size: clamp(32px, 8.5vw, 96px); line-height: 1.1; font-weight: 500; letter-spacing: -.04em; }
+.page-transition-clip { display: inline-block; overflow: hidden; padding-block: .08em; }
+.page-transition-letter { display: block; transform: translateY(110%); }
+.page-transition-rule { height: 1px; margin-top: 24px; background: var(--white); transform: scaleX(0); transform-origin: left; }
+.project-transition { position: fixed; inset: 0; z-index: var(--layer-transition); visibility: hidden; pointer-events: none; overflow: hidden; }
+.project-transition[data-active="true"] { visibility: visible; pointer-events: auto; }
+.project-transition-curtain { position: absolute; inset: -14vh -50%; background: var(--ink); border-radius: 50% / 14vh; transform: translateY(115%); }
+.project-transition-lockup { position: absolute; top: 50%; left: var(--gutter); right: var(--gutter); transform: translateY(-50%); color: var(--white); }
+.project-transition-slot { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: clamp(140px, 17vw, 260px); margin-bottom: clamp(24px, 3vw, 40px); }
+.project-transition-title { display: flex; justify-content: center; flex-wrap: wrap; column-gap: .25em; font-size: clamp(32px, 5.5vw, 80px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; }
+.project-transition-word-clip { overflow: clip; padding-block: .12em; margin-block: -.12em; }
+.project-transition-word { display: block; transform: translateY(110%); }
+.project-transition-media { position: absolute; top: 0; left: 0; transform-origin: top left; overflow: hidden; }
+.project-transition-ripple { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.project-transition-signature { position: absolute; top: max(28px, env(safe-area-inset-top)); left: var(--gutter); display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--white); opacity: 0; }
+.project-transition-signature svg { width: 32px; height: 36px; }
 .desktop-nav, .menu-trigger { opacity: 1; visibility: visible; transform: translateY(0); transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s; }
 .site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) { background: transparent; pointer-events: none; }
 .site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) :is(.desktop-nav, .menu-trigger) { opacity: 0; visibility: hidden; transform: translateY(calc(-100% - 24px)); pointer-events: none; transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s .24s; }
@@ -101,7 +135,7 @@ body:has(dialog[open]) { overflow: hidden; }
 .home-wordmark h1 { font-size: clamp(80px, 11vw, 156px); font-weight: 500; letter-spacing: -.055em; line-height: 1; }
 .hero-mark-stage { width: var(--hero-mark-width); height: var(--hero-mark-height); flex-shrink: 0; animation: cube-intro .98s cubic-bezier(.22, 1, .36, 1) both; }
 .hero-mark { width: 100%; height: 100%; }
-.hero-name-window { overflow: clip; padding-block: 10px; margin-block: -10px; }
+.hero-name-window { overflow-x: clip; overflow-y: visible; padding-block: 10px; margin-block: -10px; }
 .hero-name-window h1 { animation: name-intro .6s cubic-bezier(.22, 1, .36, 1) .88s both; }
 .hero-introduction { max-width: 36ch; font-size: 20px; line-height: 1.6; text-align: center; margin-top: 28px; color: var(--muted); text-wrap: balance; animation: intro-support .36s cubic-bezier(.22, 1, .36, 1) 1.38s both; }
 .home-scroll-link { position: absolute; bottom: 28px; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 12px; animation: intro-support .36s cubic-bezier(.22, 1, .36, 1) 1.5s both; }

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogoStatic } from "@/components/InteractiveCubeLogo";
 import UnderlineLink from "@/components/UnderlineLink";
 import RollingText from "@/components/RollingText";
+import { usePageTransition } from "@/components/PageTransition";
 
 const links = [
   { label: "Work", href: "/work" },
@@ -20,6 +21,7 @@ export default function Header() {
   const [logoSpin, setLogoSpin] = useState(0);
   const header = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDialogElement>(null);
+  const transitionTo = usePageTransition();
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
@@ -107,12 +109,12 @@ export default function Header() {
           event.preventDefault();
           window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
         }
-      }}>
+      }} onNavigate={event => { if (transitionTo("/", "Home")) event.preventDefault(); }}>
         <LogoStatic className="header-mark" title="Thvgger" spinTrigger={logoSpin} />
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         {links.map(link => (
-          <UnderlineLink key={link.href} href={link.href} className="nav-link" aria-current={isCurrent(link.href) ? "page" : undefined}>
+          <UnderlineLink key={link.href} href={link.href} className="nav-link" onNavigate={event => { if (transitionTo(link.href, link.label)) event.preventDefault(); }} aria-current={isCurrent(link.href) ? "page" : undefined}>
             {link.label}
           </UnderlineLink>
         ))}
@@ -122,12 +124,12 @@ export default function Header() {
       </button>
       <dialog ref={menu} id="mobile-menu" className="mobile-menu" aria-label="Navigation">
         <div className="menu-top">
-          <UnderlineLink href="/" onClick={() => menu.current?.close()}>Thvgger</UnderlineLink>
+          <UnderlineLink href="/" onNavigate={event => { menu.current?.close(); if (transitionTo("/", "Home")) event.preventDefault(); }} onClick={() => { if (isHome) menu.current?.close(); }}>Thvgger</UnderlineLink>
           <button className="plain-button kinetic-control" onClick={() => menu.current?.close()} autoFocus><RollingText text="Close" /></button>
         </div>
         <nav aria-label="Mobile navigation">
           {links.map(link => (
-            <UnderlineLink key={link.href} href={link.href} onClick={() => menu.current?.close()} aria-current={isCurrent(link.href) ? "page" : undefined}>
+            <UnderlineLink key={link.href} href={link.href} onNavigate={event => { menu.current?.close(); if (transitionTo(link.href, link.label)) event.preventDefault(); }} onClick={() => { if (pathname === link.href) menu.current?.close(); }} aria-current={isCurrent(link.href) ? "page" : undefined}>
               {link.label}
             </UnderlineLink>
           ))}

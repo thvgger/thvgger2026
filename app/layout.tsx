@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import SiteFooter from "@/components/SiteFooter";
 import { MotionProvider } from "@/components/MotionProvider";
+import PageTransition from "@/components/PageTransition";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
@@ -22,10 +23,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       {/* Extensions such as ColorZilla add body attributes before hydration. */}
       <body suppressHydrationWarning>
         <MotionProvider>
+          <PageTransition>
           <a className="skip-link" href="#main">Skip to content</a>
           <Header />
-          <main id="main" className="site-main">{children}</main>
+          <main id="main" className="site-main" tabIndex={-1}>{children}</main>
           <SiteFooter />
+          </PageTransition>
         </MotionProvider>
       </body>
     </html>

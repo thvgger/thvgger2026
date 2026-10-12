@@ -28,6 +28,7 @@ export default function StorefrontCaseStudy({ project }: { project: Pick<Project
           <h2>A name in motion. A quiet storefront.</h2>
           <p>FOOLY COOLY brings identity design and web development together. The full name compresses into FLCL while the collection stays visible. A restrained interface gives the clothing, footwear, and accessories room to carry the page.</p>
           <p>This is a storefront experiment with working search, filters, product details, and a demo cart. It explores the browsing experience before a real catalog and checkout.</p>
+          <UnderlineLink href="https://flcl.thvgger.site" external aria-label="Visit the FOOLY COOLY website (opens in a new tab)">Visit flcl.thvgger.site</UnderlineLink>
         </div>
       </div>
 

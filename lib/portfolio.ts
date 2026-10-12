@@ -1,7 +1,6 @@
 export const site = {
   name: "Thvgger",
-  // Replace this reserved example address with your real email before publishing.
-  email: "hello@thvgger.example",
+  email: "hello@thvgger.site",
   github: "https://github.com/thvgger",
 };
 
