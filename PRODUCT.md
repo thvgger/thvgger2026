@@ -10,7 +10,7 @@ Visitors exploring Thvgger's personal design and development work, including pot
 
 ## Product Purpose
 
-Present original work clearly and give visitors a direct route to contact Thvgger or explore his GitHub. The user wants a clean, spacious, multi-page portfolio inspired by paulkalkbrenner.net's typography and navigation, with his own work speaking for itself. The homepage must also scroll through useful content: selected work, a personal introduction, capabilities, and a contact invitation.
+Present original work clearly and give visitors a direct route to contact Thvgger or explore his GitHub. The user wants a clean, spacious, multi-page portfolio with restrained typography and navigation, with his own work speaking for itself. The homepage must also scroll through useful content: selected work, a personal introduction, capabilities, and a contact invitation.
 
 ## Brand Personality
 
@@ -20,7 +20,7 @@ Precise, sculptural, curious. Continue the monochrome palette and striped cube i
 
 Home, Work, About, Contact, and Playground are separate pages. Work contains three projects: FOOLY COOLY, Studio Space, and Thvgger. Each has its own detail page. Thvgger combines the personal identity, website, and print studies into one project; their former URLs redirect to `/work/thvgger`. FOOLY COOLY has a dedicated storefront case study and leads the Work page. It is featured alongside Studio Space on the homepage. Studio Space has a dedicated visual identity guide using the user's Figma artwork, labelled as in progress. FOOLY COOLY is a personal prototype with sample product photography, browsing, and a demo cart; checkout is outside its scope. Playground remains a Coming soon placeholder until the user supplies its direction.
 
-## Anti-references
+## Avoid
 
 Music-template content, named-brand work presented as client experience, replacing all dedicated pages with one page, busy interface panels, and active playground features.
 

@@ -50,13 +50,13 @@ Reduced primary buttons to a maximum width of 240px and a height of 72px on desk
 
 Browser verification confirmed the 240 × 72px dimensions on Home, About, and Contact at 390px and 1440px, without horizontal overflow.
 
-## Rolling links and reference buttons, 7 October 2026
+## Rolling links and outlined buttons, 7 October 2026
 
 Restored the staggered vertical text roll alongside a drawing underline across navigation, utility links, chapter anchors, and the email address. A shared CSS treatment supports hover and keyboard focus without JavaScript animation handlers. Visual letters are hidden from accessibility APIs; each control retains one continuous accessible label. Internal links use Next.js navigation, while fragment links keep native anchor behavior.
 
-Replaced the circular homepage contact action and the About and copy-email actions with broad square outlined buttons matching the supplied reference's proportions and timing. Desktop buttons measure 345 × 135px with a 10.5px centred uppercase label; phone buttons fill their container and measure 180px tall with a 14px label. The diagonal fill rises over 700ms, while letters roll over 500ms with a 20ms stagger. Inter stays consistent with the portfolio. Header menu controls remain compact. Reduced motion stops the letter roll and updates fill and contrast instantly. The existing intro and native scrolling remain intact.
+Replaced the circular homepage contact action and the About and copy-email actions with broad square outlined buttons with centred labels and staggered motion. Desktop buttons measure 345 × 135px with a 10.5px centred uppercase label; phone buttons fill their container and measure 180px tall with a 14px label. The diagonal fill rises over 700ms, while letters roll over 500ms with a 20ms stagger. Inter stays consistent with the portfolio. Header menu controls remain compact. Reduced motion stops the letter roll and updates fill and contrast instantly. The existing intro and native scrolling remain intact.
 
-Verification: production build and TypeScript passed. ESLint reported no errors; the already tracked `.review/final-smoke.mjs` has one unused-helper warning. Browser checks covered nine routes at 320, 390, 768, and 1440px, with no horizontal overflow or scrollbar gutter. Button dimensions and transition timing matched the intended values. Keyboard focus, current-page underlining, native CTA navigation, mobile-menu navigation, clipboard copying, reduced-motion contrast, and wheel scrolling passed. Desktop hover states and mobile layouts were visually inspected; no runtime exceptions were observed.
+Verification: production build and TypeScript passed. Application ESLint reported no errors. Browser checks covered nine routes at 320, 390, 768, and 1440px, with no horizontal overflow or scrollbar gutter. Button dimensions and transition timing matched the intended values. Keyboard focus, current-page underlining, native CTA navigation, mobile-menu navigation, clipboard copying, reduced-motion contrast, and wheel scrolling passed. Desktop hover states and mobile layouts were visually inspected; no runtime exceptions were observed.
 
 ## Restored intro and hidden scrollbar, 7 October 2026
 
@@ -68,7 +68,7 @@ Verification: production build, TypeScript, and ESLint passed. Browser checks co
 
 ## Studio Space identity case study, 7 October 2026
 
-Added the user's Studio Space work from the linked Figma frame, inspected and exported through Figma Console. Original wordmark and symbol components are preserved as complete SVGs. A dedicated `/work/studio-space` page presents the logo family, primary and secondary marks, compact symbol, actual-size favicons, colour treatments, website placement examples, clear space, and an outline display treatment. Explanatory text stays responsive rather than being baked into screenshots. The structure follows the user's Quaandry logo-variation reference using the user's artwork and original copy.
+Added the user's Studio Space work from the linked Figma frame, inspected and exported through Figma Console. Original wordmark and symbol components are preserved as complete SVGs. A dedicated `/work/studio-space` page presents the logo family, primary and secondary marks, compact symbol, actual-size favicons, colour treatments, website placement examples, clear space, and an outline display treatment. Explanatory text stays responsive rather than being baked into screenshots. The structure presents the logo family using original artwork and copy.
 
 The project is labelled as in progress and is featured on Home and Work. Four projects now fit a two-column work index. The portfolio shell keeps its monochrome palette; Studio Space's pink and cream appear inside the project artwork. No client relationship or results are invented. Playground remains a placeholder.
 
@@ -84,7 +84,7 @@ Verification: production build, TypeScript, and ESLint passed. Browser checks pa
 
 ## Earlier minimal multi-page revision, superseded
 
-The user's latest direction replaces the earlier one-page implementation with a cleaner portfolio inspired by the typography, navigation, and spacing of https://www.paulkalkbrenner.net/. Home shows the Thvgger cube, wordmark, and one link to the work. Work, About, Contact, and Playground have separate URLs. Each personal project has a dedicated page with images, role, focus, and short design notes. Playground is a Coming soon placeholder.
+The user's latest direction replaces the earlier one-page implementation with a cleaner portfolio with restrained typography, navigation, and generous spacing. Home shows the Thvgger cube, wordmark, and one link to the work. Work, About, Contact, and Playground have separate URLs. Each personal project has a dedicated page with images, role, focus, and short design notes. Playground is a Coming soon placeholder.
 
 The shared layout uses white backgrounds, small navigation, generous space, and subtle interaction. Dense editorial panels, project dialogs, About texture, and active playground experiments are removed. The user's own identity, print studies, GitHub account, and authorized email placeholder remain the content.
 
