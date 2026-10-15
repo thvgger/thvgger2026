@@ -11,15 +11,21 @@ const selectedProjects = projects.filter(project => project.id === "foolycooly" 
 const capabilities = [
   {
     title: "Visual identity",
-    copy: "Marks, typography, and a visual system that holds together. I explore how an identity works across the screen, print, and the small details in between.",
+    copy: "Logos, typography, and a family of marks that stays recognisable across different sizes and formats, from a browser tab to a printed piece.",
+    href: "/work/studio-space",
+    link: "View Studio Space",
   },
   {
     title: "Interface design",
-    copy: "Clear layouts, thoughtful interactions, and a sense of hierarchy. I think about what someone needs to see, understand, and do at each step.",
+    copy: "Layouts and interactions built around what someone needs to see and do. A product grid, a size picker, and a mobile menu each need a clear next step.",
+    href: "/work/foolycooly",
+    link: "View FOOLY COOLY",
   },
   {
     title: "Web development",
-    copy: "Bringing the design into the browser with responsive layouts and considered motion. Built with attention to keyboard navigation, smaller screens, and how the site feels to use.",
+    copy: "Turning the design into a working website, with responsive layouts, keyboard access, and motion that respects the visitor’s settings. I build the details as well as design them.",
+    href: "/work/thvgger#website",
+    link: "Explore this website",
   },
 ];
 
@@ -56,26 +62,29 @@ export default function HomeContent() {
       <HomePractice>
         <Image src="/images/about-texture.jpg" alt="" fill sizes="100vw" className="home-practice-texture" aria-hidden="true" />
         <div className="home-practice-inner page-shell">
-          <div className="home-about-copy">
-            <h2 id="home-about-title">
-              {["A", "little", "about", "me"].map((word, index) => (
+          <h2 id="home-about-title" className="home-practice-heading">
+              {["A", "little", "about", "me."].map((word, index) => (
                 <Fragment key={word}>
                   <span className="practice-word-window"><span className="practice-word">{word}</span></span>
                   {index < 3 ? " " : null}
                 </Fragment>
               ))}
-            </h2>
-            <p>I’m Thvgger, a designer and developer. I work across visual identities and the web, connecting how something looks with how it works.</p>
-            <p>I like clear typography, useful interactions, and leaving enough space for an idea to breathe.</p>
-            <UnderlineLink href="/about" className="inline-link" arrow="up-right">More about me</UnderlineLink>
-          </div>
-          <div className="home-capabilities">
-            <h3>What I do</h3>
-            {capabilities.map((capability, index) => (
-              <CapabilityDetail key={capability.title} title={capability.title} initiallyOpen={index === 0}>
-                {capability.copy}
-              </CapabilityDetail>
-            ))}
+          </h2>
+          <div className="home-practice-content">
+            <div className="home-about-copy">
+              <p className="home-about-introduction">I’m Thvgger, a designer who builds for the web.</p>
+              <p>I like taking an idea from its visual identity to a working website. I pay attention to the shape of a mark, the rhythm of the type, and how a page responds when someone uses it.</p>
+              <UnderlineLink href="/about" className="inline-link" arrow="up-right">More about me</UnderlineLink>
+            </div>
+            <div className="home-capabilities">
+              <h3>What I do</h3>
+              {capabilities.map((capability, index) => (
+                <CapabilityDetail key={capability.title} title={capability.title} initiallyOpen={index === 0}>
+                  <p>{capability.copy}</p>
+                  <UnderlineLink href={capability.href} className="capability-project" arrow="up-right">{capability.link}</UnderlineLink>
+                </CapabilityDetail>
+              ))}
+            </div>
           </div>
         </div>
       </HomePractice>

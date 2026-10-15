@@ -75,7 +75,7 @@ export function CapabilityDetail({ title, children, initiallyOpen = false }: {
   return (
     <details ref={detail} className="capability-detail" open={initiallyOpen}>
       <summary onClick={toggle}>{title}<span className="capability-toggle" aria-hidden="true">+</span></summary>
-      <div ref={content} className="capability-body"><p>{children}</p></div>
+      <div ref={content} className="capability-body">{children}</div>
     </details>
   );
 }
