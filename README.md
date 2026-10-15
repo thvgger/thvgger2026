@@ -4,6 +4,8 @@ A personal design and development portfolio built with Next.js, React, TypeScrip
 
 The homepage opens with a large rotating cube that shrinks and moves into the wordmark as the name enters. The header cube stays hidden while the hero cube is visible, then pops in from above as visitors scroll past it. Returning to the hero hides the header cube again. The intro settles when visitors interact, respects reduced motion, and finishes without JavaScript. Browser scrollbar chrome is hidden; wheel, touch, keyboard, and anchor scrolling remain native.
 
+A Drag to rotate hint briefly identifies the interactive homepage cube, disappearing after four seconds or on the first interaction. The cube makes a 1.2-second turn after eight idle seconds while visible, pausing for hover, focus, dragging, an offscreen cube, or a hidden tab. Reduced motion disables automatic turns; click, drag, and keyboard rotation remain available.
+
 ## Local development
 
 Run `npm run dev` and open http://localhost:3000.

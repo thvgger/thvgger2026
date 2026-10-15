@@ -8,6 +8,33 @@ export default function HeroIntro({ children }: { children: ReactNode }) {
   useEffect(() => {
     const element = hero.current;
     if (!element) return;
+    let dismissTimer: ReturnType<typeof setTimeout> | undefined;
+    const revealTimer = setTimeout(() => {
+      element.dataset.cubeHint = "visible";
+      dismissTimer = setTimeout(dismiss, 4000);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1900);
+
+    function dismiss() {
+      clearTimeout(revealTimer);
+      clearTimeout(dismissTimer);
+      element!.dataset.cubeHint = "dismissed";
+    }
+    function onInteraction(event: Event) {
+      if (event.target instanceof Element && event.target.closest(".hero-mark")) dismiss();
+    }
+    element.addEventListener("pointerdown", onInteraction);
+    element.addEventListener("keydown", onInteraction);
+    return () => {
+      clearTimeout(revealTimer);
+      clearTimeout(dismissTimer);
+      element.removeEventListener("pointerdown", onInteraction);
+      element.removeEventListener("keydown", onInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    const element = hero.current;
+    if (!element) return;
 
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const fallback = setTimeout(finish, 2600);

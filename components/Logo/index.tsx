@@ -6,7 +6,6 @@ import {
   motion,
   useMotionValue,
   useSpring,
-  useReducedMotion,
   useTransform,
   type SpringOptions,
 } from "motion/react";
@@ -27,6 +26,17 @@ const BASE_CUBE_TRANSFORMS = Matrix.scale(BASE_SCALE)
   .dot(Matrix.rotationX(BASE_ROTATION_X));
 
 const SPRING_PARAMS: SpringOptions = { stiffness: 38, damping: 9 };
+
+const motionQuery = "(prefers-reduced-motion: reduce)";
+const readMotionPreference = () => window.matchMedia(motionQuery).matches;
+function subscribeMotionPreference(onChange: () => void) {
+  const preference = window.matchMedia(motionQuery);
+  preference.addEventListener("change", onChange);
+  return () => preference.removeEventListener("change", onChange);
+}
+function useMotionPreference() {
+  return React.useSyncExternalStore(subscribeMotionPreference, readMotionPreference, () => true);
+}
 
 export type LogoProps = {
   ref?: React.Ref<SVGSVGElement>;
@@ -61,7 +71,7 @@ export const LogoStatic: React.FC<LogoProps> = ({
   spinTrigger,
 }) => {
   const shadowId = useId();
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useMotionPreference();
   const rotation = useMotionValue(0);
   const previousSpin = React.useRef(spinTrigger);
   const spinPath = useTransform(rotation, angle => createCube(
@@ -144,7 +154,7 @@ export const Logo: React.FC<LogoProps> = ({
   idleSpin = false,
   "aria-describedby": describedBy,
 }) => {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useMotionPreference();
   const revolutions = useMotionValue(0);
   const introRotation = useMotionValue(0);
   const idleRotation = useMotionValue(0);
@@ -188,7 +198,7 @@ export const Logo: React.FC<LogoProps> = ({
       spin = undefined;
     }
     function available() {
-      return visible && !document.hidden && !pointerDown && !isDraggingRef.current && !svg?.matches(":hover, :focus");
+      return visible && !document.hidden && !pointerDown && !svg?.matches(":hover, :focus");
     }
     function schedule() {
       clearTimeout(timer);

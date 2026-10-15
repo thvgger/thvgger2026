@@ -1,5 +1,19 @@
 # UI/UX Improvements
 
+## Project presentation and cube discoverability, 15 October 2026
+
+Implemented the project-detail review: Thvgger now groups all nine gallery assets into Identity, Website, and Print chapters, with native chapter links, contextual explanations, and its existing intro video in the Website chapter. Identity and print artwork share two-column groups on desktop and stack on phones. The light logo uses a dark board for contrast. Project copy explains the goals and decisions without adding client claims or measured outcomes.
+
+FOOLY COOLY retains its complete opening screenshot and uses a closer collection crop with navigation and product-hierarchy notes in its Collection chapter. Studio Space groups horizontal and stacked wordmarks in one chapter, preserving the existing secondary-mark anchor. Each project ends with a visual next-project link that reuses the artwork transition and includes its cover, name, and category, plus an All work link.
+
+Browser icons use the original cube artwork: an adaptive SVG, a multi-size ICO fallback, and a 180px Apple touch icon. The existing runtime favicon remains compatible with those fallback assets.
+
+The homepage cube now briefly shows a Drag to rotate hint after the intro, connected through its accessible description. The hint disappears after four seconds or on the first cube interaction. A controlled 1.2-second turn follows eight idle seconds while visible. Hover, keyboard focus, dragging, scrolling the cube out of view, and hiding the tab pause automatic turns. Reduced motion disables them, including when the preference changes during a session. The header keeps its existing home-link behavior.
+
+Verification: production build, TypeScript, and ESLint passed. Production browser checks covered all three case studies at 320, 390, 768, and 1440px with no horizontal overflow, failed images, or runtime exceptions. Chapter navigation, keyboard next-project navigation, reduced motion, content without JavaScript, and icon delivery passed. SVG icons were checked in light and dark themes; the collection crop and light-logo contrast were visually inspected at 390 and 1440px.
+
+Homepage browser checks at 320, 390, and 1440px confirmed that the hint stays within the viewport and disappears after its brief display. Idle rotation, pausing on hover, dragging, resuming after drag, keyboard rotation, stopping offscreen, and changing reduced-motion settings during a turn passed without runtime exceptions. Desktop and phone screenshots were visually inspected.
+
 ## Project detail review, 13 October 2026
 
 Source review of `/work/[slug]`, its three project presentations, shared styles, and entrance motion. These findings describe the implementation; no new browser or assistive-technology checks were performed.
