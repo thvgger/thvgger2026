@@ -1,5 +1,13 @@
 # UI/UX Improvements
 
+## Homepage About section overhaul, 15 October 2026
+
+Moved the section heading above a roomier two-column layout. A larger personal introduction leads into a short explanation of how Thvgger connects visual identity and web development. The existing texture remains at a quieter opacity. Identity, interface, and development disclosures now describe concrete work and link to Studio Space, FOOLY COOLY, and the Thvgger Website chapter. More about me uses the shared 240 × 72px outlined button and opens `/about`.
+
+Preserved the one-time heading and text entrance, native disclosures, keyboard interaction, reduced-motion behavior, and content without JavaScript. The layout stacks on phones; no new biography, client relationships, or results are claimed.
+
+Verification: production build, TypeScript, ESLint, and diff checks passed. Browser checks at 320, 390, 768, and 1440px confirmed responsive columns, no horizontal overflow, successful texture loading, correct initial disclosure states, un-clipped expanded content, and interrupted toggles. Keyboard disclosure activation, reduced motion, project and About links, the Website chapter destination, and content without JavaScript passed. The final button measures 240 × 72px at each tested width and opens About from the keyboard. Desktop and phone screenshots were visually inspected; no runtime exceptions were observed.
+
 ## Project presentation and cube discoverability, 15 October 2026
 
 Implemented the project-detail review: Thvgger now groups all nine gallery assets into Identity, Website, and Print chapters, with native chapter links, contextual explanations, and its existing intro video in the Website chapter. Identity and print artwork share two-column groups on desktop and stack on phones. The light logo uses a dark board for contrast. Project copy explains the goals and decisions without adding client claims or measured outcomes.

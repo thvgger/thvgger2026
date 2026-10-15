@@ -74,7 +74,7 @@ export default function HomeContent() {
             <div className="home-about-copy">
               <p className="home-about-introduction">I’m Thvgger, a designer who builds for the web.</p>
               <p>I like taking an idea from its visual identity to a working website. I pay attention to the shape of a mark, the rhythm of the type, and how a page responds when someone uses it.</p>
-              <UnderlineLink href="/about" className="inline-link" arrow="up-right">More about me</UnderlineLink>
+              <Button href="/about" className="home-about-button">More about me</Button>
             </div>
             <div className="home-capabilities">
               <h3>What I do</h3>

@@ -6,6 +6,8 @@ The homepage opens with a large rotating cube that shrinks and moves into the wo
 
 A Drag to rotate hint briefly identifies the interactive homepage cube, disappearing after four seconds or on the first interaction. The cube makes a 1.2-second turn after eight idle seconds while visible, pausing for hover, focus, dragging, an offscreen cube, or a hidden tab. Reduced motion disables automatic turns; click, drag, and keyboard rotation remain available.
 
+The homepage About section pairs a personal introduction with expandable identity, interface, and development notes. Each service links to a relevant project, and the More about me button opens the dedicated About page. The section keeps the subtle texture and stacks its columns on phones.
+
 ## Local development
 
 Run `npm run dev` and open http://localhost:3000.

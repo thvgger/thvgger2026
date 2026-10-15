@@ -297,17 +297,17 @@ body:has(dialog[open]) { overflow: hidden; }
 .home-about-copy p { font-size: 16px; line-height: 1.85; color: var(--muted); }
 .home-about-copy .home-about-introduction { max-width: 23ch; font-size: clamp(26px, 2.6vw, 36px); letter-spacing: -.025em; line-height: 1.35; color: var(--ink); text-wrap: balance; }
 .home-about-copy p + p { margin-top: 28px; }
-.home-about-copy .inline-link { margin-top: 28px; }
+.home-about-button { max-width: 240px; margin-top: 32px; }
 .practice-word-window { display: inline-block; overflow: hidden; vertical-align: bottom; }
 .practice-word { display: inline-block; }
 .home-practice[data-arrived="true"] .practice-word { animation: practice-word-arrive .6s cubic-bezier(.22, 1, .36, 1) backwards; }
 .practice-word-window:nth-of-type(2) .practice-word { animation-delay: 60ms; }
 .practice-word-window:nth-of-type(3) .practice-word { animation-delay: 120ms; }
 .practice-word-window:nth-of-type(4) .practice-word { animation-delay: 180ms; }
-.home-practice[data-arrived="true"] .home-about-copy > :is(p, .inline-link) { animation: practice-arrive .65s cubic-bezier(.22, 1, .36, 1) backwards; }
+.home-practice[data-arrived="true"] .home-about-copy > :is(p, .home-about-button) { animation: practice-arrive .65s cubic-bezier(.22, 1, .36, 1) backwards; }
 .home-practice[data-arrived="true"] .home-about-copy > p:first-of-type { animation-delay: 120ms; }
 .home-practice[data-arrived="true"] .home-about-copy > p:nth-of-type(2) { animation-delay: 220ms; }
-.home-practice[data-arrived="true"] .home-about-copy > .inline-link { animation-delay: 320ms; }
+.home-practice[data-arrived="true"] .home-about-copy > .home-about-button { animation-delay: 320ms; }
 @keyframes practice-word-arrive { from { translate: 0 .3em; opacity: .4; } to { translate: 0 0; opacity: 1; } }
 @keyframes practice-arrive { from { translate: 0 14px; opacity: .6; } to { translate: 0 0; opacity: 1; } }
 .home-capabilities h3 { font-size: 14px; font-weight: 400; margin-bottom: 8px; color: var(--muted); }
@@ -341,7 +341,7 @@ body:has(dialog[open]) { overflow: hidden; }
   .home-about-copy { max-width: 48ch; }
   .home-about-copy .home-about-introduction { font-size: 28px; }
   .home-about-copy p + p { margin-top: 20px; }
-  .home-about-copy .inline-link { margin-top: 20px; }
+  .home-about-button { margin-top: 24px; }
   .home-capabilities h3 { margin-bottom: 8px; }
   .capability-detail summary { padding-block: 20px; font-size: 24px; }
   .capability-detail p { padding-right: 20px; }
