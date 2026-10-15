@@ -25,7 +25,7 @@ Run `npm run lint` and `npm run build` to check the project.
 
 Project content, gallery assets, and contact details live in `lib/portfolio.ts`. Home features FOOLY COOLY and Studio Space. Work includes one Thvgger project combining the personal identity, this website, and related print studies, with all their gallery assets. Studio Space is marked as work in progress; no client relationship or results are claimed. Template brand examples are not displayed.
 
-The Thvgger project includes a silent recording of the homepage intro at `public/videos/thvgger/intro.mp4`, with a poster in `public/images/portfolio/thvgger`. The native video player has playback controls, plays inline, and loads the video when requested.
+The Thvgger project uses `components/PersonalCaseStudy.tsx` to group its artwork into Identity, Website, and Print chapters, with native chapter links and explanations beside the relevant work. It includes a silent recording of the homepage intro at `public/videos/thvgger/intro.mp4`, with a poster in `public/images/portfolio/thvgger`. The native video player has playback controls, plays inline, and loads the video when requested.
 
 FOOLY COOLY is presented by `components/StorefrontCaseStudy.tsx`. Its original FLCL vector and actual interface captures live in `public/images/portfolio/foolycooly`. The case study describes the animated identity, collection, product selection, and mobile layout. It labels the project as a prototype and credits sample product photography from Stüssy and Fear of God references. Source: https://github.com/thvgger/foolycooly.
 
@@ -34,5 +34,7 @@ Studio Space uses original vector components exported through Figma Console from
 The email uses the reserved placeholder `hello@thvgger.example`. Replace it with your real address before publishing. GitHub links point to https://github.com/thvgger.
 
 The visual direction is documented in `DESIGN.md`. Keyboard controls have visible focus and effects respect reduced-motion preferences.
+
+Every project ends with a visual next-project link and an All work link. The favicon uses the original striped cube: `app/icon.svg` adapts to light and dark browser themes, `app/favicon.ico` supplies fallback sizes, and `app/apple-icon.png` supplies the Apple touch icon.
 
 Set NEXT_PUBLIC_SITE_URL to your deployed origin when publishing so social preview URLs resolve to the live site.

@@ -1,5 +1,31 @@
 # UI/UX Improvements
 
+## Project detail review, 13 October 2026
+
+Source review of `/work/[slug]`, its three project presentations, shared styles, and entrance motion. These findings describe the implementation; no new browser or assistive-technology checks were performed.
+
+The shared title, summary, lead artwork, project facts, and next-project navigation provide a clear foundation. Dedicated presentations suit the identity and storefront projects. Preserve the original assets, honest prototype/in-progress labels, native chapter links, and reduced-motion handling. No critical usability issue was established in this source review.
+
+### High priority: Give Thvgger a chapter structure
+
+FOOLY COOLY and Studio Space connect explanations with artwork in individual chapters. Thvgger places all four story sections before a nine-image gallery and has no chapter index. Organize its existing content into Identity, Website, and Print sections, placing the relevant text beside each group of assets. This would make the longest gallery easier to scan and explain what each piece demonstrates.
+
+### High priority: Explain the design decisions
+
+The storefront and identity copy mostly describes the finished work. Add a short project goal and one or two concrete decisions with supporting artwork, such as why the FLCL mark contracts or how the striped cube carries across print and web. This would help prospective collaborators understand the reasoning behind the work. Add measured results only when evidence exists.
+
+### Medium priority: Reduce repeated artwork
+
+FOOLY COOLY uses the same desktop collection screenshot in its lead and Collection chapter. Keep the complete view as the opener and use a purposeful crop, annotated detail, or different interaction capture in the chapter. This would give each large image a distinct purpose.
+
+### Medium priority: Make the next project visible
+
+The final navigation is a pair of text links. Add the next project's cover and category while preserving All work. A visual preview would give visitors a clearer reason to continue browsing.
+
+### Low priority: Refine pacing after a visual check
+
+Studio Space has eight chapters with repeated heading, paragraph, and board arrangements; artwork entrances run for 1.2 seconds. Review a normal scroll on desktop and mobile before adjusting either. Group small logo variants and reserve longer reveals for major artwork if the page feels repetitive or slow.
+
 ## Personal introduction text motion, 8 October 2026
 
 The About heading now rises word by word with 60ms between words. Paragraphs and the About link follow with a small stagger, finishing within one second. The existing observer triggers the entrance once; text remains visible by default and reduced motion skips the sequence. The continuous heading text and native link remain accessible.

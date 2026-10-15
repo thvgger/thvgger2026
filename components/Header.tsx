@@ -7,6 +7,7 @@ import { LogoStatic } from "@/components/InteractiveCubeLogo";
 import UnderlineLink from "@/components/UnderlineLink";
 import RollingText from "@/components/RollingText";
 import { usePageTransition } from "@/components/PageTransition";
+import AnimatedFavicon from "@/components/AnimatedFavicon";
 
 const links = [
   { label: "Work", href: "/work" },
@@ -103,6 +104,7 @@ export default function Header() {
 
   return (
     <header ref={header} className="site-header" data-hero-mark={isHome ? "visible" : undefined}>
+      <AnimatedFavicon spinTrigger={logoSpin} />
       <Link href="/" className="home-link" tabIndex={isHome ? -1 : undefined} aria-label="Thvgger home" onClick={event => {
         setLogoSpin(spin => spin + 1);
         if (isHome && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {

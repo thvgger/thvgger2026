@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import UnderlineLink from "@/components/UnderlineLink";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/portfolio";
 import LogoCaseStudy from "@/components/LogoCaseStudy";
 import StorefrontCaseStudy from "@/components/StorefrontCaseStudy";
 import CaseStudyMotion from "@/components/CaseStudyMotion";
+import PersonalCaseStudy from "@/components/PersonalCaseStudy";
+import NextProject from "@/components/NextProject";
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
@@ -39,57 +40,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       ) : project.presentation === "storefront-study" ? (
         <StorefrontCaseStudy project={project} />
       ) : (
-        <>
-          <div className={`project-cover ${project.gallery[0].contain ? "image-contained" : ""}`}>
-            <Image src={project.cover} alt={project.gallery[0].alt} fill loading="eager" sizes="(max-width: 1320px) 94vw, 1240px" />
-          </div>
-          <div className="project-notes">
-            <dl className="project-facts">
-              <div><dt>Role</dt><dd>{project.role}</dd></div>
-              <div><dt>Focus</dt><dd>{project.tools}</dd></div>
-            </dl>
-            <div className="project-story">
-              {project.details.map(detail => <section key={detail.heading}><h2>{detail.heading}</h2><p>{detail.copy}</p></section>)}
-            </div>
-          </div>
-          {project.video ? (
-            <section className="project-video" aria-labelledby="project-video-title">
-              <h2 id="project-video-title">{project.video.title}</h2>
-              <figure>
-                <video
-                  controls
-                  muted
-                  playsInline
-                  preload="none"
-                  poster={project.video.poster}
-                  width={project.video.width}
-                  height={project.video.height}
-                  aria-label={project.video.title}
-                  aria-describedby="project-video-caption"
-                >
-                  <source src={project.video.src} type="video/mp4" />
-                  <a href={project.video.src}>Watch the homepage intro video</a>
-                </video>
-                <figcaption id="project-video-caption">{project.video.caption}</figcaption>
-              </figure>
-            </section>
-          ) : null}
-          <div className="project-gallery">
-            {project.gallery.slice(1).map(image => (
-              <figure key={image.src}>
-                <div className={`gallery-image ${image.contain ? "image-contained" : ""}`}>
-                  <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1320px) 94vw, 1240px" />
-                </div>
-                <figcaption>{image.alt}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </>
+        <PersonalCaseStudy project={project} />
       )}
-      <div className="project-bottom-links">
-        <UnderlineLink href="/work">All work</UnderlineLink>
-        <UnderlineLink href={`/work/${nextProject.id}`} arrow="up-right">{`Next: ${nextProject.title}`}</UnderlineLink>
-      </div>
+      <NextProject project={nextProject} />
     </CaseStudyMotion>
   );
 }

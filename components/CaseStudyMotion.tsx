@@ -3,9 +3,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 const ease = "cubic-bezier(.16, 1, .3, 1)";
-const textSelector = "h1, h2, .project-summary, .identity-intro-copy p, .identity-chapter-heading p, .project-story p";
+const textSelector = "h1, h2, .project-summary, .identity-intro-copy p, .identity-chapter-heading p";
 const labelSelector = ".project-kind, .project-facts dt, .identity-contents > span";
-const mediaSelector = ".project-cover, .gallery-image, .identity-family, .identity-display, .identity-board, .identity-colour-treatment, .identity-poster-board, .identity-placement-board, .identity-clear-board, .storefront-logo-board, .storefront-mobile-board, .storefront-screen > img";
+const mediaSelector = ".project-cover, .gallery-image, .identity-family, .identity-display, .identity-board, .identity-colour-treatment, .identity-poster-board, .identity-placement-board, .identity-clear-board, .storefront-logo-board, .storefront-mobile-board, .storefront-collection-crop, .storefront-screen > img";
 type TextBlock = { element: HTMLElement; nodes: ChildNode[]; text: string; lines: HTMLElement[] };
 
 function accessibleText(text: string) {

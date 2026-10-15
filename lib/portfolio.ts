@@ -14,10 +14,10 @@ export interface Project {
   presentation?: "logo-guide" | "storefront-study";
   status?: string;
   video?: { src: string; poster: string; width: number; height: number; title: string; caption: string };
-  gallery: { src: string; alt: string; contain?: boolean }[];
+  gallery: { src: string; alt: string; contain?: boolean; chapter?: string; caption?: string; background?: "dark" }[];
   role: string;
   tools: string;
-  details: { heading: string; copy: string }[];
+  details: { id: string; label: string; heading: string; copy: string }[];
 }
 
 export const projects: Project[] = [
@@ -68,21 +68,20 @@ export const projects: Project[] = [
     cover: "/images/portfolio/identity-laptop.webp",
     gallery: [
       { src: "/images/portfolio/identity-laptop.webp", alt: "Thvgger identity on a laptop in a dark sculptural setting" },
-      { src: "/images/thvgger images/thvggerlogo.png", alt: "Primary striped isometric cube mark", contain: true },
-      { src: "/images/thvgger images/thvggerlogostrokeonly.png", alt: "Outline variation of the Thvgger cube", contain: true },
-      { src: "/images/thvgger images/thvggerlogosecondary.jpg", alt: "Secondary arrangement of the Thvgger identity", contain: true },
-      { src: "/images/portfolio/digital-home.webp", alt: "Thvgger wordmark on a clean white digital canvas", contain: true },
-      { src: "/images/thvgger images/thvggerlogolight.png", alt: "Light version of the Thvgger identity", contain: true },
-      { src: "/images/portfolio/print-1.webp", alt: "First Thvgger stationery mockup" },
-      { src: "/images/portfolio/print-2.webp", alt: "Second Thvgger stationery composition" },
-      { src: "/images/portfolio/print-3.webp", alt: "Third Thvgger print layout" },
-      { src: "/images/portfolio/print-4.webp", alt: "Fourth Thvgger card mockup" },
+      { src: "/images/thvgger images/thvggerlogo.png", alt: "Primary striped isometric cube mark", contain: true, chapter: "identity", caption: "The primary mark: three faces built from repeated stripes." },
+      { src: "/images/thvgger images/thvggerlogostrokeonly.png", alt: "Outline variation of the Thvgger cube", contain: true, chapter: "identity", caption: "The same geometry, expressed as an outline." },
+      { src: "/images/thvgger images/thvggerlogosecondary.jpg", alt: "Secondary arrangement of the Thvgger identity", contain: true, chapter: "identity", caption: "An alternative arrangement of the cube and name." },
+      { src: "/images/portfolio/digital-home.webp", alt: "Thvgger wordmark on a clean white digital canvas", contain: true, chapter: "website", caption: "The cube and wordmark share a simple horizontal composition." },
+      { src: "/images/thvgger images/thvggerlogolight.png", alt: "Light version of the Thvgger identity", contain: true, chapter: "identity", background: "dark", caption: "A light treatment carries the mark onto a dark field." },
+      { src: "/images/portfolio/print-1.webp", alt: "First Thvgger stationery mockup", chapter: "print", caption: "The identity carried into a stationery study." },
+      { src: "/images/portfolio/print-2.webp", alt: "Second Thvgger stationery composition", chapter: "print", caption: "A second composition exploring scale and spacing." },
+      { src: "/images/portfolio/print-3.webp", alt: "Third Thvgger print layout", chapter: "print", caption: "The mark and typography arranged for print." },
+      { src: "/images/portfolio/print-4.webp", alt: "Fourth Thvgger card mockup", chapter: "print", caption: "A card study brings the same visual language to a smaller format." },
     ],
     details: [
-      { heading: "The identity", copy: "Give my own design and development work a recognizable signature. The cube brings three faces into one shape; its repeated stripes read as both a solid form and a graphic pattern. A primary mark, an outline variation, and alternative arrangements explore the same geometry at different scales." },
-      { heading: "A digital home", copy: "The identity becomes an interactive object on this website. A spacious opening leads into selected projects, a personal introduction, and a contact invitation. Dedicated project pages and simple navigation give the work room to speak." },
-      { heading: "In print", copy: "Stationery, cards, and print mockups take the same mark off screen. These personal studies explore scale, negative space, and the balance between the cube, typography, and empty space. Black and white keep those choices visible." },
-      { heading: "The build", copy: "Built with Next.js, React, TypeScript, and Motion. Responsive layouts, clear keyboard focus, and motion that respects the visitor's preferences carry the identity into a usable digital experience." },
+      { id: "identity", label: "Identity", heading: "One shape. Several expressions.", copy: "The cube gives my design and development work a recognisable signature. Its stripes describe three faces while leaving open space between them, so the mark reads as both an object and a pattern. The solid, outline, secondary, and light treatments keep that geometry consistent as the composition changes." },
+      { id: "website", label: "Website", heading: "An identity you can move.", copy: "The website turns the cube into something visitors can manipulate. Its opening introduces the mark before making room for the name and selected work. Inter and a monochrome canvas keep the surrounding interface quiet. Built with Next.js, React, TypeScript, and Motion, it preserves keyboard navigation and settles the animation for reduced motion." },
+      { id: "print", label: "Print", heading: "The same mark, off screen.", copy: "These personal stationery and card studies test the identity without movement. Changing the scale and placement of the cube creates different compositions; black and white keep the relationship between mark, type, and empty space visible. The repeated geometry connects the printed pieces to the website." },
     ],
   },
 ];

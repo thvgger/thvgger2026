@@ -17,8 +17,7 @@ function Logo({ name, alt = "", className = "", eager = false }: {
 }
 
 const chapters = [
-  { id: "primary", label: "Primary" },
-  { id: "secondary", label: "Secondary" },
+  { id: "primary", label: "Wordmarks" },
   { id: "symbol", label: "Symbol" },
   { id: "favicon", label: "Favicon" },
   { id: "colour", label: "Colour" },
@@ -52,8 +51,8 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
         </dl>
         <div className="identity-intro-copy">
           <h2>A logo that adapts.</h2>
-          <p>The slanted lettering gives Studio Space its momentum. The pink symbol gives it a signature. Together, they form a system that can stretch across a wide header, fit a compact layout, or reduce to a single recognisable shape.</p>
-          <p>This exploration brings those variations together and looks at how they work at different sizes, on different backgrounds, and in everyday digital spaces.</p>
+          <p>The goal is to keep Studio Space recognisable as the available space changes. The slanted lettering carries the full name; the pink symbol gives the identity a smaller signature when the wordmark would be difficult to read.</p>
+          <p>A horizontal and stacked wordmark share the same letterforms. Keeping that geometry and the pink consistent connects a wide header, a compact layout, and a browser tab.</p>
         </div>
       </div>
 
@@ -63,16 +62,12 @@ export default function LogoCaseStudy({ project }: { project: Pick<Project, "rol
       </nav>
 
       <section id="primary" className="identity-chapter">
-        <ChapterHeading title="The primary wordmark.">The full name in one line. This is the main expression of the identity, with enough width to let the lettering and symbol sit comfortably together.</ChapterHeading>
+        <ChapterHeading title="One name. Two proportions.">The horizontal wordmark gives the lettering room in wide layouts. Stacking the same words makes a narrower shape without shrinking the full name to fit. The letterforms and pink symbol keep both versions connected.</ChapterHeading>
         <figure>
           <div className="identity-board identity-light identity-primary-board"><Logo name="horizontal-ink" alt="Primary Studio Space wordmark in black and pink on a light background" /></div>
           <figcaption>For wide spaces: website headers, banners, and horizontal layouts.</figcaption>
         </figure>
-      </section>
-
-      <section id="secondary" className="identity-chapter">
-        <ChapterHeading title="A more compact shape.">Stacking the words keeps the full name visible while changing the footprint. The same lettering and symbol fit naturally into narrower compositions.</ChapterHeading>
-        <figure>
+        <figure id="secondary" className="identity-variant-group">
           <div className="identity-split">
             <div className="identity-board identity-dark identity-stacked-board"><Logo name="stacked-white" alt="Stacked Studio Space wordmark in white and pink on black" /></div>
             <div className="identity-board identity-light identity-stacked-board"><Logo name="stacked-ink" alt="Stacked Studio Space wordmark in black and pink on a light background" /></div>

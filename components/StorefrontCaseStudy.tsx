@@ -26,7 +26,7 @@ export default function StorefrontCaseStudy({ project }: { project: Pick<Project
         </dl>
         <div className="identity-intro-copy">
           <h2>A name in motion. A quiet storefront.</h2>
-          <p>FOOLY COOLY brings identity design and web development together. The full name compresses into FLCL while the collection stays visible. A restrained interface gives the clothing, footwear, and accessories room to carry the page.</p>
+          <p>The goal was to give a fashion storefront a distinct identity while keeping the collection easy to browse. The full name compresses into FLCL to leave more room for products; a restrained grid keeps attention on the clothing, footwear, and accessories.</p>
           <p>This is a storefront experiment with working search, filters, product details, and a demo cart. It explores the browsing experience before a real catalog and checkout.</p>
           <UnderlineLink href="https://flcl.thvgger.site" external aria-label="Visit the FOOLY COOLY website (opens in a new tab)">Visit flcl.thvgger.site</UnderlineLink>
         </div>
@@ -53,12 +53,20 @@ export default function StorefrontCaseStudy({ project }: { project: Pick<Project
       <section id="collection" className="identity-chapter">
         <div className="identity-chapter-heading">
           <h2>Let the collection speak.</h2>
-          <p>A fixed category sidebar sits beside four columns of product photography. Compact Manrope type, a monochrome palette, and generous spacing keep the collection clear. Search, size filters, and sorting help narrow the selection without leaving the page.</p>
+          <p>Categories stay in a narrow sidebar so browsing controls remain separate from the product grid. Each product uses the same image area, followed by its name and price, making pieces easy to compare. Search, size filters, and sorting narrow the collection without sending visitors to another page.</p>
         </div>
-        <figure className="storefront-screen">
-          <Image src={`${assetPath}/collection-desktop.webp`} width={1440} height={1000} alt="Desktop collection showing clothing and footwear, with Search, Filter, and Cart controls above" sizes="(max-width: 1320px) 94vw, 1240px" />
-          <figcaption>Front and alternate product views, with size previews on desktop hover and keyboard focus.</figcaption>
-        </figure>
+        <div className="storefront-collection-detail">
+          <figure>
+            <div className="storefront-collection-crop">
+              <Image src={`${assetPath}/collection-desktop.webp`} width={1440} height={1000} alt="Detail of the collection: category links alongside the first two products, with names and prices beneath the photographs" sizes="(max-width: 760px) 170vw, 1100px" />
+            </div>
+            <figcaption>A closer view of the navigation and product hierarchy.</figcaption>
+          </figure>
+          <dl className="storefront-collection-notes">
+            <div><dt>A separate place to browse</dt><dd>The active category is underlined. Search and Filter stay above the pieces, leaving the image area clear.</dd></div>
+            <div><dt>Photography first</dt><dd>Consistent image sizes and compact names and prices keep the product cards easy to scan.</dd></div>
+          </dl>
+        </div>
       </section>
 
       <section id="product" className="identity-chapter">
