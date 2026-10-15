@@ -37,6 +37,8 @@ export type LogoProps = {
   fill?: string;
   title?: string;
   spinTrigger?: number | boolean;
+  idleSpin?: boolean;
+  "aria-describedby"?: string;
   onClick?: (event?: React.MouseEvent<SVGSVGElement>) => void;
   onMouseDown?: (event?: React.MouseEvent<SVGSVGElement>) => void;
   gradientId?: string;
@@ -139,10 +141,14 @@ export const Logo: React.FC<LogoProps> = ({
   fill = "currentColor",
   spinTrigger,
   ref,
+  idleSpin = false,
+  "aria-describedby": describedBy,
 }) => {
   const reducedMotion = useReducedMotion();
   const revolutions = useMotionValue(0);
   const introRotation = useMotionValue(0);
+  const idleRotation = useMotionValue(0);
+  const element = React.useRef<SVGSVGElement | null>(null);
 
   const isDraggingRef = React.useRef(false);
   const previousSpinTrigger = React.useRef(spinTrigger);
@@ -165,6 +171,68 @@ export const Logo: React.FC<LogoProps> = ({
     }
   }, [spinTrigger, revolutions, reducedMotion]);
 
+  useEffect(() => {
+    const svg = element.current;
+    if (!idleSpin || !svg || reducedMotion) {
+      idleRotation.set(0);
+      return;
+    }
+    let visible = false;
+    let pointerDown = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let spin: ReturnType<typeof animate> | undefined;
+
+    function pause() {
+      clearTimeout(timer);
+      spin?.stop();
+      spin = undefined;
+    }
+    function available() {
+      return visible && !document.hidden && !pointerDown && !isDraggingRef.current && !svg?.matches(":hover, :focus");
+    }
+    function schedule() {
+      clearTimeout(timer);
+      if (!available()) return;
+      timer = setTimeout(() => {
+        if (!available()) return;
+        const turn = Math.PI * 2;
+        spin = animate(idleRotation, (Math.floor(idleRotation.get() / turn) + 1) * turn, {
+          duration: 1.2,
+          ease: [0.4, 0, 0.2, 1],
+          onComplete: () => { idleRotation.set(0); spin = undefined; schedule(); },
+        });
+      }, 8000);
+    }
+    const onPointerDown = () => { pointerDown = true; pause(); };
+    const onPointerUp = () => { pointerDown = false; schedule(); };
+    const onVisibility = () => { if (document.hidden) pause(); else schedule(); };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
+      if (visible) schedule(); else pause();
+    }, { threshold: [0, 0.5] });
+    observer.observe(svg);
+    svg.addEventListener("pointerenter", pause);
+    svg.addEventListener("pointerleave", schedule);
+    svg.addEventListener("pointerdown", onPointerDown);
+    svg.addEventListener("focus", pause);
+    svg.addEventListener("blur", schedule);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      pause();
+      observer.disconnect();
+      svg.removeEventListener("pointerenter", pause);
+      svg.removeEventListener("pointerleave", schedule);
+      svg.removeEventListener("pointerdown", onPointerDown);
+      svg.removeEventListener("focus", pause);
+      svg.removeEventListener("blur", schedule);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [idleSpin, idleRotation, reducedMotion]);
+
   function rotate() {
     revolutions.set(revolutions.get() + (reducedMotion ? 0.25 : 1));
   }
@@ -181,7 +249,7 @@ export const Logo: React.FC<LogoProps> = ({
   const springDragY = useSpring(dragY, SPRING_PARAMS);
 
   const pathD = useTransform(() => {
-    const rev = reducedMotion ? revolutions.get() * 2 * Math.PI : springRotationY.get() + introRotation.get();
+    const rev = reducedMotion ? revolutions.get() * 2 * Math.PI : springRotationY.get() + introRotation.get() + idleRotation.get();
     const sx = reducedMotion ? dragX.get() : springDragX.get();
     const sy = reducedMotion ? dragY.get() : springDragY.get();
 
@@ -202,7 +270,11 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <motion.svg
-      ref={ref}
+      ref={node => {
+        element.current = node;
+        if (typeof ref === "function") return ref(node);
+        if (ref) ref.current = node;
+      }}
       style={{ touchAction: "none", ...style }}
       whileHover={reducedMotion ? undefined : { scale: 1.05 }}
       whileTap={reducedMotion ? undefined : { scale: 0.92 }}
@@ -211,6 +283,7 @@ export const Logo: React.FC<LogoProps> = ({
       role="button"
       tabIndex={0}
       aria-label={title}
+      aria-describedby={describedBy}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();

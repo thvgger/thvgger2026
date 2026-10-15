@@ -6,7 +6,10 @@ export default function Hero() {
   return (
     <HeroIntro>
       <div className="home-wordmark">
-        <div className="hero-mark-stage"><InteractiveCubeLogo className="hero-mark" title="Thvgger cube. Drag to rotate, or press Enter to spin." /></div>
+        <div className="hero-mark-stage">
+          <InteractiveCubeLogo className="hero-mark" idleSpin aria-describedby="hero-cube-hint" title="Thvgger cube. Drag to rotate, or press Enter to spin." />
+          <span id="hero-cube-hint" className="hero-cube-hint">Drag to rotate</span>
+        </div>
         <div className="hero-name-window"><h1 id="home-title">Thvgger</h1></div>
       </div>
       <p className="hero-introduction">I design identities and build websites.</p>
