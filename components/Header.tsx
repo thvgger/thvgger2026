@@ -79,6 +79,7 @@ export default function Header() {
         reveal();
         return;
       }
+      
 
       const distance = position - checkpoint;
       if (Math.abs(distance) < 8) return;
