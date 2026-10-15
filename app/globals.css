@@ -505,7 +505,15 @@ body:has(dialog[open]) { overflow: hidden; }
 .storefront-logo-board { display: grid; place-items: center; padding: clamp(40px, 8vw, 100px); background: var(--canvas); }
 .storefront-logo { display: block; width: min(100%, 680px); height: auto; }
 .storefront-mobile-board { display: flex; justify-content: center; background: var(--canvas); padding: clamp(24px, 5vw, 64px); }
-.storefront-mobile-image { display: block; width: min(100%, 390px); height: auto; border: 1px solid var(--rule); }
+.phone-mockup { --phone-radius: clamp(28px, 3vw, 40px); position: relative; width: min(100%, 350px); padding: 26px 10px 22px; border-radius: var(--phone-radius); background: #111; box-shadow: 0 14px 28px #0000001f; }
+.phone-mockup::before, .phone-mockup::after { content: ""; position: absolute; width: 3px; background: #333; border-radius: 2px; }
+.phone-mockup::before { left: -3px; top: 90px; height: 44px; }
+.phone-mockup::after { right: -3px; top: 130px; height: 58px; }
+.phone-mockup-screen { overflow: hidden; border-radius: calc(var(--phone-radius) - 10px); background: #fff; }
+.phone-mockup-speaker { position: absolute; left: 50%; top: 11px; width: 36px; height: 4px; transform: translateX(-50%); border-radius: 4px; background: #444; }
+.phone-mockup-camera { position: absolute; left: calc(50% + 26px); top: 10px; width: 6px; height: 6px; border-radius: 50%; background: #343b46; }
+.phone-mockup-home { position: absolute; bottom: 10px; left: 36%; width: 28%; height: 3px; border-radius: 3px; background: #777; }
+.storefront-mobile-image { display: block; width: 100%; height: auto; }
 .storefront-source { display: flex; align-items: start; justify-content: space-between; gap: 40px; margin-top: 48px; font-size: 12px; line-height: 1.8; color: var(--muted); }
 .storefront-source p { max-width: 70ch; }
 .storefront-source a { flex-shrink: 0; color: var(--ink); }

@@ -1,5 +1,15 @@
 # UI/UX Improvements
 
+## Case-study reveal timing and phone mockup, 15 October 2026
+
+Fixed case-study reveals starting on a first-pixel intersection. Animation eligibility now uses current geometry inside a reading area below the header and above the viewport's bottom 20%. Require 40% of the element height, capped at 30% of the reading area for tall artwork. A passive scroll listener batches checks into one animation frame, while IntersectionObserver limits pending checks to nearby content. Image loading no longer marks a reveal as consumed: loading completion rechecks both visibility and the navigation curtain.
+
+Unfinished animation groups pause when fully outside the visible area, behind a navigation curtain, or in a hidden tab. Returning resumes the remaining motion. Completed entrances still run once. Text uses a 900ms reveal with its existing line stagger and a short lead-in; artwork uses a gentler 1.4-second wipe and scale. Reduced motion immediately settles the effects, resizing recalculates text lines, and content stays visible without JavaScript.
+
+Added a reusable CSS phone mockup around the original FOOLY COOLY mobile screenshot. The dark frame has decorative camera, speaker, side controls, and home indicator outside the screen image. It scales to the available width, caps at 350px, and preserves the original 390:844 image proportions.
+
+Verification: production build, TypeScript, ESLint, and diff checks passed. Instrumented production browser checks at 390 and 1440px confirmed no artwork reveal after waiting at the viewport edge, a fresh start after entering the reading area, frozen animation time while offscreen, and successful resumption. Deliberately delayed mobile imagery remained unconsumed while loading and revealed after returning. A busy route and the actual project-card transition blocked early animation starts. Phone framing passed at 320, 390, 768, and 1440px without horizontal overflow or altered screen proportions. Reduced motion and content without JavaScript passed; phone screenshots were visually inspected and no runtime exceptions were observed.
+
 ## Homepage About section overhaul, 15 October 2026
 
 Moved the section heading above a roomier two-column layout. A larger personal introduction leads into a short explanation of how Thvgger connects visual identity and web development. The existing texture remains at a quieter opacity. Identity, interface, and development disclosures now describe concrete work and link to Studio Space, FOOLY COOLY, and the Thvgger Website chapter. More about me uses the shared 240 × 72px outlined button and opens `/about`.

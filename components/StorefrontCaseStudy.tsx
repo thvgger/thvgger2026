@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Project } from "@/lib/portfolio";
 import UnderlineLink from "@/components/UnderlineLink";
+import PhoneMockup from "@/components/PhoneMockup";
 
 const assetPath = "/images/portfolio/foolycooly";
 const chapters = [
@@ -87,9 +88,11 @@ export default function StorefrontCaseStudy({ project }: { project: Pick<Project
         </div>
         <figure>
           <div className="storefront-mobile-board">
-            <Image src={`${assetPath}/collection-mobile.webp`} width={390} height={844} alt="Mobile FOOLY COOLY collection with the FLCL mark and Search, Filter, Cart, and Menu controls over two columns of products" className="storefront-mobile-image" sizes="(max-width: 480px) 78vw, 390px" />
+            <PhoneMockup>
+              <Image src={`${assetPath}/collection-mobile.webp`} width={390} height={844} alt="Mobile FOOLY COOLY collection with the FLCL mark and Search, Filter, Cart, and Menu controls over two columns of products" className="storefront-mobile-image" sizes="(max-width: 760px) 75vw, 330px" />
+            </PhoneMockup>
           </div>
-          <figcaption>The actual mobile layout, captured at 390 pixels wide.</figcaption>
+          <figcaption>The original 390-pixel mobile capture, shown in a phone mockup.</figcaption>
         </figure>
       </section>
 
