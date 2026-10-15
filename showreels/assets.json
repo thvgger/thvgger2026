@@ -1,0 +1,117 @@
+[
+  {
+    "source": "public/images/portfolio/studio-space/horizontal-white.svg",
+    "target": "public/assets/studio-space/horizontal-white.svg",
+    "sha256": "9cf2b1525e26862ee8aff3b43c0ee410365b2f52552ade4c85b22ad698bcceb3"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/horizontal-ink.svg",
+    "target": "public/assets/studio-space/horizontal-ink.svg",
+    "sha256": "408fefe5c85bf2bfe2ae98313f2bfce2cf700ae232314e7a0e817d9fd52f6fba"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/stacked-white.svg",
+    "target": "public/assets/studio-space/stacked-white.svg",
+    "sha256": "866e7fee2645b2fe9f78162aa218fb49e0c89f86d5d194343a9a16687f7d09f0"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/stacked-ink.svg",
+    "target": "public/assets/studio-space/stacked-ink.svg",
+    "sha256": "0f9afa448ce665167c02cf2b73d1b193ad2cc3d522d32572b9490c34cd118b75"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/symbol-pink.svg",
+    "target": "public/assets/studio-space/symbol-pink.svg",
+    "sha256": "8dce05c59f889cdb6028a5e4bbd0e34cef132aa4e5db6f6d8a0023af3e817949"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/symbol-white.svg",
+    "target": "public/assets/studio-space/symbol-white.svg",
+    "sha256": "a596317782b145b59f1d365a771d407ef19ac4a225c898c7dab436bdee2270c6"
+  },
+  {
+    "source": "public/images/portfolio/studio-space/symbol-ink.svg",
+    "target": "public/assets/studio-space/symbol-ink.svg",
+    "sha256": "cdf21fb3828aaa06df91a812a0610b6b4198f55fa91a8cfc1cc48b53a229d462"
+  },
+  {
+    "source": "public/images/portfolio/foolycooly/collection-desktop.webp",
+    "target": "public/assets/foolycooly/collection-desktop.webp",
+    "sha256": "f69d8c7146f461239c8a1b80e718e8b408e84ec1b950755afd0d02eaf88712a4"
+  },
+  {
+    "source": "public/images/portfolio/foolycooly/collection-mobile.webp",
+    "target": "public/assets/foolycooly/collection-mobile.webp",
+    "sha256": "ccaa0851ccf0fc5a7c5f42515456d23aa7270aea50d216863381760fc654b209"
+  },
+  {
+    "source": "public/images/portfolio/foolycooly/product-detail.webp",
+    "target": "public/assets/foolycooly/product-detail.webp",
+    "sha256": "1d5436e59312a8a8ffe76fda3a9a1ea7d659b78911ed1ecd16d133b9b1e9c761"
+  },
+  {
+    "source": "public/images/portfolio/foolycooly/flcl.svg",
+    "target": "public/assets/foolycooly/flcl.svg",
+    "sha256": "7cc499b8526c2d15ff92e8aa7b31042d173cde02780a9e985d86c3789d7fe51f"
+  },
+  {
+    "source": "public/images/portfolio/identity-laptop.webp",
+    "target": "public/assets/thvgger/identity-laptop.webp",
+    "sha256": "a0487cbb51b30b9b40a2738b9e2e987554152ea344f54af3fc4e98da6187fe9d"
+  },
+  {
+    "source": "public/images/portfolio/digital-home.webp",
+    "target": "public/assets/thvgger/digital-home.webp",
+    "sha256": "43b1cd96123b8968f7a969dfac128628389e4a39c4fbda66d3405a691e304324"
+  },
+  {
+    "source": "public/images/portfolio/print-1.webp",
+    "target": "public/assets/thvgger/print-1.webp",
+    "sha256": "de2bd19179b400ebe41af3b2d500635d9d3efb5785d1dc7779ec261ae6efe42b"
+  },
+  {
+    "source": "public/images/portfolio/print-2.webp",
+    "target": "public/assets/thvgger/print-2.webp",
+    "sha256": "cbb59caa01848d4e1c7699425691c4cb15e786eb9941b3017f1137a0664df210"
+  },
+  {
+    "source": "public/images/portfolio/print-3.webp",
+    "target": "public/assets/thvgger/print-3.webp",
+    "sha256": "b6e961ee38d244405a13aa44134cb55a01fde9bc099a8e962563318385524d36"
+  },
+  {
+    "source": "public/images/portfolio/print-4.webp",
+    "target": "public/assets/thvgger/print-4.webp",
+    "sha256": "005bd7ba509d2f20328f22b2aa6c5d0f2545b92b8cf7de778cb1c93660515205"
+  },
+  {
+    "source": "public/images/logo-hero.svg",
+    "target": "public/assets/thvgger/cube.svg",
+    "sha256": "a1085e119f2809e865242f294ac9e7df329c8e2368b1aec3a4008f8469ca261d"
+  },
+  {
+    "source": "components/Logo/math.ts",
+    "target": "src/assets/cube/math.ts",
+    "sha256": "b218b1c23b672033ab70fa9caa6e7058830a9d3d10c286de27f8e0dd7c4c1ae0"
+  },
+  {
+    "source": "components/Logo/Face.ts",
+    "target": "src/assets/cube/Face.ts",
+    "sha256": "42da468d5d9797d356fd692bf3fd6721a78a20a9cb95e088d75648d83a434235"
+  },
+  {
+    "source": "components/Logo/createStripes.ts",
+    "target": "src/assets/cube/createStripes.ts",
+    "sha256": "ec35365ad1e382a35a6c33e9ecf088cf8c9edd24a65410b4db5d9e3e886e10e7"
+  },
+  {
+    "source": "components/Logo/createCube.ts",
+    "target": "src/assets/cube/createCube.ts",
+    "sha256": "f1cb2498bbdcb82c890377d858cf70b7f773cd8800a9f315d902194a6d284b62"
+  },
+  {
+    "source": "../foolycooly/app/logo-paths.ts",
+    "target": "src/assets/logo-paths.ts",
+    "sha256": "7c578511952021b769873a4ae90fa4ce1ac96d603731f7f7149c5ca3297674cc"
+  }
+]

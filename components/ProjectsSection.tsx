@@ -2,6 +2,7 @@ import Image from "next/image";
 import ProjectLink from "@/components/ProjectLink";
 import { projects } from "@/lib/portfolio";
 import ArrowIcon from "@/components/ArrowIcon";
+import ProjectThumbnail from "@/components/ProjectThumbnail";
 
 export default function ProjectsSection() {
   return (
@@ -14,7 +15,7 @@ export default function ProjectsSection() {
         {projects.map((project, index) => (
           <li key={project.id}>
             <ProjectLink href={`/work/${project.id}`} title={project.title} className="work-entry">
-              <div className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
+              <ProjectThumbnail hoverReel={project.hoverReel} className={`work-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : project.gallery[0].contain ? "image-contained" : ""}`}>
                 <Image
                   src={project.cover}
                   alt={project.gallery[0].alt}
@@ -22,7 +23,7 @@ export default function ProjectsSection() {
                   sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1200px) 54vw, 628px"
                   loading={index === 0 ? "eager" : "lazy"}
                 />
-              </div>
+              </ProjectThumbnail>
               <div className="work-caption">
                 <div><h2>{project.title}</h2><p>{project.kind}</p><p className="project-list-summary">{project.summary}</p></div>
                 <ArrowIcon className="work-arrow" />

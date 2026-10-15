@@ -1,5 +1,7 @@
 # Thvgger visual direction
 
+Project previews on Home, Work, and case-study next-project links replace their image zoom with a distinct silent eight-second reel for the hovered project. The reels use Remotion at 1280 × 800, 30 fps: FOOLY COOLY shows its logo and storefront, Studio Space shows its identity family and pink accent, and Thvgger shows its original cube, mockups, print, and website. Keep the current covers while idle, start from the beginning on hover or keyboard focus, and reveal only once a video frame is ready. Restore the cover on leave. Touch and reduced-motion visitors retain static artwork; offscreen or hidden-tab playback pauses. Load videos on demand and use the static cover for the artwork click transition.
+
 A clean, professional portfolio with a curious side. Spacious typography and restrained navigation frame Thvgger's own striped cube, original work, and interactive details.
 
 Tokens: white #ffffff, black #000000, muted ink #565656, light canvas #f3f3f3, and rule #dedede. Preserve the established variable Inter family and large wordmark. Supporting headings use a fluid 36–64px scale, body text 16–20px, and small navigation 12–13px. Use generous space with tighter groups around related information.

@@ -165,7 +165,11 @@ body:has(dialog[open]) { overflow: hidden; }
 .work-image { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--canvas); }
 .work-image img { object-fit: cover; transition: transform .5s cubic-bezier(.2, .7, .3, 1); }
 .image-contained img { object-fit: contain; }
-.work-entry:hover .work-image img { transform: scale(1.015); }
+.project-hover-reel { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
+.project-thumbnail[data-playing="true"] > .project-hover-reel { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .project-hover-reel { display: none; transition: none; }
+}
 .work-caption { min-width: 0; display: flex; justify-content: space-between; align-items: start; gap: 24px; }
 .work-caption h2 { font-size: clamp(22px, 2.3vw, 32px); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
 .work-caption p { color: var(--muted); font-size: 13px; margin-top: 10px; }
@@ -220,7 +224,6 @@ body:has(dialog[open]) { overflow: hidden; }
 .next-project-caption p { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--muted); }
 .next-project-arrow { flex-shrink: 0; font-size: 32px; transition: transform .25s ease; }
 .next-project:is(:hover, :focus-visible) .next-project-arrow { transform: translate(4px, -4px); }
-.next-project:is(:hover, :focus-visible) .work-image img { transform: scale(1.015); }
 
 @media (max-width: 1000px) {
   .about-page { grid-template-columns: 1.3fr 1fr; gap: 48px; }
@@ -278,7 +281,6 @@ body:has(dialog[open]) { overflow: hidden; }
 .home-section-heading h2 { font-size: clamp(36px, 4vw, 54px); letter-spacing: -.035em; line-height: 1.12; }
 .home-project-image { position: relative; aspect-ratio: 16 / 10; background: var(--canvas); overflow: hidden; }
 .home-project-image img { object-fit: cover; transition: transform .55s cubic-bezier(.2, .7, .3, 1); }
-.home-project:hover .home-project-image img { transform: scale(1.035); }
 .home-project-caption { min-width: 0; display: flex; align-items: start; justify-content: space-between; gap: 24px; }
 .home-project-caption h3 { font-size: clamp(22px, 2.3vw, 32px); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
 .home-project-caption p { font-size: 13px; color: var(--muted); margin-top: 10px; }

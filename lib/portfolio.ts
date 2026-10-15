@@ -10,6 +10,7 @@ export interface Project {
   kind: string;
   summary: string;
   cover: string;
+  hoverReel?: string;
   coverTreatment?: "logo" | "screen";
   presentation?: "logo-guide" | "storefront-study";
   status?: string;
@@ -32,6 +33,7 @@ export const projects: Project[] = [
     coverTreatment: "screen",
     summary: "An experimental fashion storefront built around the FLCL identity. A moving wordmark, a quiet product grid, and a browsing experience that adapts from desktop to mobile.",
     cover: "/images/portfolio/foolycooly/collection-desktop.webp",
+    hoverReel: "/videos/showreels/foolycooly.mp4",
     gallery: [
       { src: "/images/portfolio/foolycooly/collection-desktop.webp", alt: "FOOLY COOLY desktop storefront with the FLCL mark, category sidebar, and four-column product grid" },
       { src: "/images/portfolio/foolycooly/flcl.svg", alt: "Original black FLCL mark with the small FOOLY COOLY wordmark below", contain: true },
@@ -51,6 +53,7 @@ export const projects: Project[] = [
     coverTreatment: "logo",
     summary: "An identity in motion: slanted lettering, a sharp pink symbol, and a family of marks that adapts from a full wordmark to a browser tab. A work in progress.",
     cover: "/images/portfolio/studio-space/horizontal-white.svg",
+    hoverReel: "/videos/showreels/studio-space.mp4",
     gallery: [{ src: "/images/portfolio/studio-space/horizontal-white.svg", alt: "Studio Space wordmark in white with its angular pink symbol", contain: true }],
     details: [],
   },
@@ -66,6 +69,7 @@ export const projects: Project[] = [
     },
     summary: "A personal identity built around a striped isometric cube, carried through logo variations, stationery studies, and this website. One visual system across print and the web.",
     cover: "/images/portfolio/identity-laptop.webp",
+    hoverReel: "/videos/showreels/thvgger.mp4",
     gallery: [
       { src: "/images/portfolio/identity-laptop.webp", alt: "Thvgger identity on a laptop in a dark sculptural setting" },
       { src: "/images/thvgger images/thvggerlogo.png", alt: "Primary striped isometric cube mark", contain: true, chapter: "identity", caption: "The primary mark: three faces built from repeated stripes." },

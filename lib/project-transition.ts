@@ -33,6 +33,8 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
   media.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
   const clone = source.cloneNode(true) as HTMLElement;
   clone.removeAttribute("id");
+  clone.removeAttribute("data-playing");
+  clone.querySelectorAll("video").forEach(video => video.remove());
   Object.assign(clone.style, { width: "100%", height: "100%", margin: "0", visibility: "visible" });
   const originalImage = source.querySelector<HTMLImageElement>("img");
   const clonedImage = clone.querySelector<HTMLImageElement>("img");
@@ -96,6 +98,7 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
     cleanup() {
       source.style.visibility = visibility;
       panel.replaceChildren();
+      window.dispatchEvent(new Event("project-navigation-end"));
     },
   };
 }

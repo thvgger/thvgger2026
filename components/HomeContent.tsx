@@ -6,6 +6,7 @@ import UnderlineLink from "@/components/UnderlineLink";
 import Button from "@/components/Button";
 import ArrowIcon from "@/components/ArrowIcon";
 import HomePractice, { CapabilityDetail } from "@/components/HomePractice";
+import ProjectThumbnail from "@/components/ProjectThumbnail";
 
 const selectedProjects = projects.filter(project => project.id === "foolycooly" || project.id === "studio-space");
 const capabilities = [
@@ -41,14 +42,14 @@ export default function HomeContent() {
           {selectedProjects.map((project) => (
             <li key={project.id}>
               <ProjectLink href={`/work/${project.id}`} title={project.title} className="home-project">
-                <div className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
+                <ProjectThumbnail hoverReel={project.hoverReel} className={`home-project-image ${project.coverTreatment ? `${project.coverTreatment}-cover` : ""}`}>
                   <Image
                     src={project.cover}
                     alt={project.gallery[0].alt}
                     fill
                     sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1200px) 54vw, 628px"
                   />
-                </div>
+                </ProjectThumbnail>
                 <div className="home-project-caption">
                   <div><h3>{project.title}</h3><p>{project.kind}</p><p className="project-list-summary">{project.summary}</p></div>
                   <span><ArrowIcon /></span>
