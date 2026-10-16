@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 
 const ease = "cubic-bezier(.22, .61, .36, 1)";
 const textSelector = "h1, h2, .project-summary, .identity-intro-copy p, .identity-chapter-heading p";
@@ -52,7 +52,7 @@ function splitLines(block: TextBlock) {
 
 export default function CaseStudyMotion({ children }: { children: ReactNode }) {
   const root = useRef<HTMLElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const article = root.current;
     if (!article) return;
     let disposed = false;
@@ -65,7 +65,7 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     const visible = new Set<HTMLElement>();
     const blocks: TextBlock[] = [];
     const labels = new Map<HTMLElement, { nodes: ChildNode[]; characters: HTMLElement[] }>();
-    type Artwork = { index: number; images: HTMLImageElement[]; overflow: string; ready: boolean; loading: boolean; wrappedImage?: HTMLImageElement };
+    type Artwork = { index: number; images: HTMLImageElement[]; overflow: string; clipPath: string; armed: boolean; ready: boolean; loading: boolean; wrappedImage?: HTMLImageElement };
     const media = new Map<HTMLElement, Artwork>();
     let observer: IntersectionObserver | undefined;
     let resizeObserver: ResizeObserver | undefined;
@@ -88,13 +88,19 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
       animations.forEach(animation => animation.cancel());
       animations.clear();
       groups.clear();
+      media.forEach((artwork, element) => {
+        if (!artwork.armed) return;
+        element.style.clipPath = artwork.clipPath;
+        artwork.armed = false;
+        seen.add(element);
+      });
       [...jobs].forEach(finish => finish());
     }
     function scheduleReveal() {
       if (disposed || frame !== undefined) return;
       frame = requestAnimationFrame(() => { frame = undefined; reveal(); });
     }
-    async function prepareArtwork(artwork: Artwork) {
+    async function prepareArtwork(element: HTMLElement, artwork: Artwork) {
       artwork.loading = true;
       await Promise.all(artwork.images.map(image => {
         if (image.complete) return Promise.resolve();
@@ -114,6 +120,13 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
       }));
       artwork.loading = false;
       artwork.ready = artwork.images.every(image => image.complete);
+      // A slow or stalled image should load normally after the deadline,
+      // rather than staying masked or starting a late, surprising wipe.
+      if (!disposed && !artwork.ready) {
+        element.style.clipPath = artwork.clipPath;
+        artwork.armed = false;
+        seen.add(element);
+      }
       scheduleReveal();
     }
     function reveal() {
@@ -136,7 +149,9 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         });
       });
       if (blocked) return;
-      for (const element of visible) {
+      // A fully clipped image can have an empty IntersectionObserver result.
+      // Check its layout box directly so its own mask cannot block the trigger.
+      for (const element of [...visible, ...media.keys()]) {
         if (seen.has(element)) continue;
         // A first-pixel intersection is too early. Require a useful portion of
         // the element inside the reading area, with a cap for tall artwork.
@@ -146,7 +161,7 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         if (rect.width <= 0 || rect.height <= 0 || exposure < required || exposure <= 0) continue;
         const artwork = media.get(element);
         if (artwork && !artwork.ready) {
-          if (!artwork.loading) void prepareArtwork(artwork);
+          if (!artwork.loading) void prepareArtwork(element, artwork);
           continue;
         }
         seen.add(element);
@@ -160,11 +175,53 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         ], 500, 100 + index * 20, "cubic-bezier(.625, .05, 0, 1)"));
         if (artwork) {
           const start = artwork.index % 2 === 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)";
+          // Hand the pre-applied mask to WAAPI in the same frame. There is
+          // never an unmasked frame between loading and the reveal delay.
+          element.style.clipPath = artwork.clipPath;
+          artwork.armed = false;
           animate(element, element, [{ clipPath: start }, { clipPath: "inset(0% 0% 0% 0%)" }], 1400, 160);
           artwork.images.forEach(image => animate(element, image, [{ transform: "scale(1.2)" }, { transform: "scale(1)" }], 1400, 160));
         }
       }
     }
+
+    // Prepare artwork before paint, independently of font loading. Only hide
+    // offscreen artwork (or artwork behind the navigation curtain); anything
+    // already visible stays settled instead of disappearing after hydration.
+    article.querySelectorAll<HTMLElement>(mediaSelector).forEach((source, index) => {
+      let element = source;
+      let wrappedImage: HTMLImageElement | undefined;
+      if (source instanceof HTMLImageElement) {
+        wrappedImage = source;
+        element = document.createElement("div");
+        source.before(element);
+        element.append(source);
+      }
+      const overflow = element.style.overflow;
+      const clipPath = element.style.clipPath;
+      element.style.overflow = "hidden";
+      element.classList.add("case-media-mask");
+      const images = [...element.querySelectorAll<HTMLImageElement>("img")];
+      const rect = element.getBoundingClientRect();
+      const armed = !preference.matches && (rect.top >= window.innerHeight || main?.getAttribute("aria-busy") === "true");
+      if (armed) element.style.clipPath = index % 2 === 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)";
+      else seen.add(element);
+      media.set(element, { index, images, ready: images.every(image => image.complete), loading: false, overflow, clipPath, armed, wrappedImage });
+    });
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) visible.add(entry.target as HTMLElement); else visible.delete(entry.target as HTMLElement); });
+      scheduleReveal();
+    }, { threshold: 0 });
+    scheduleReveal();
+    resizeObserver = new ResizeObserver(entries => {
+      const width = entries[0].contentRect.width;
+      if (Math.abs(width - previousWidth) < 1) return;
+      previousWidth = width;
+      settle();
+      blocks.forEach(splitLines);
+      scheduleReveal();
+    });
+    resizeObserver.observe(article);
 
     void document.fonts.ready.then(() => {
       if (disposed) return;
@@ -193,35 +250,7 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         element.replaceChildren(accessibleText(text), visual);
         labels.set(element, { nodes, characters });
       });
-      article.querySelectorAll<HTMLElement>(mediaSelector).forEach((source, index) => {
-        let element = source;
-        let wrappedImage: HTMLImageElement | undefined;
-        if (source instanceof HTMLImageElement) {
-          wrappedImage = source;
-          element = document.createElement("div");
-          source.before(element);
-          element.append(source);
-        }
-        const overflow = element.style.overflow;
-        element.style.overflow = "hidden";
-        element.classList.add("case-media-mask");
-        const images = [...element.querySelectorAll<HTMLImageElement>("img")];
-        media.set(element, { index, images, ready: images.every(image => image.complete), loading: false, overflow, wrappedImage });
-      });
-      observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => { if (entry.isIntersecting) visible.add(entry.target as HTMLElement); else visible.delete(entry.target as HTMLElement); });
-        scheduleReveal();
-      }, { threshold: 0 });
-      [...blocks.map(block => block.element), ...labels.keys(), ...media.keys()].forEach(element => observer?.observe(element));
-      resizeObserver = new ResizeObserver(entries => {
-        const width = entries[0].contentRect.width;
-        if (Math.abs(width - previousWidth) < 1) return;
-        previousWidth = width;
-        settle();
-        blocks.forEach(splitLines);
-        scheduleReveal();
-      });
-      resizeObserver.observe(article);
+      [...blocks.map(block => block.element), ...labels.keys()].forEach(element => observer?.observe(element));
     });
     const routeObserver = new MutationObserver(scheduleReveal);
     if (main) routeObserver.observe(main, { attributes: true, attributeFilter: ["aria-busy"] });
