@@ -16,31 +16,33 @@ function accessibleText(text: string) {
 }
 
 function splitLines(block: TextBlock) {
-  const words = (block.text.match(/\S+\s*/g) ?? []).map(text => {
-    const span = document.createElement("span");
-    span.textContent = text.trimEnd();
-    return span;
-  });
-  const measurement = document.createDocumentFragment();
-  words.forEach((word, index) => { measurement.append(word); if (index < words.length - 1) measurement.append(" "); });
-  block.element.replaceChildren(measurement);
-  // Measure the browser's actual line breaks at the current font and responsive width.
-  const positions = words.map(word => word.getBoundingClientRect().top);
-  const groups: string[][] = [];
+  // Measure the original text flow. Wrapping each word in a span changes
+  // kerning and the browser's `text-wrap: pretty` decisions.
+  const text = document.createTextNode(block.text);
+  block.element.replaceChildren(text);
+  const range = document.createRange();
+  const groups: { start: number; end: number }[] = [];
   let top = -Infinity;
-  words.forEach((word, index) => {
-    if (Math.abs(positions[index] - top) > 2) { groups.push([]); top = positions[index]; }
-    groups[groups.length - 1].push(word.textContent ?? "");
-  });
+  for (const word of block.text.matchAll(/\S+/g)) {
+    range.setStart(text, word.index);
+    range.setEnd(text, word.index + word[0].length);
+    const position = range.getBoundingClientRect().top;
+    if (Math.abs(position - top) > 2) {
+      groups.push({ start: word.index, end: word.index + word[0].length });
+      top = position;
+    } else {
+      groups[groups.length - 1].end = word.index + word[0].length;
+    }
+  }
   const fragment = document.createDocumentFragment();
   fragment.append(accessibleText(block.text));
-  block.lines = groups.map(words => {
+  block.lines = groups.map(({ start, end }) => {
     const mask = document.createElement("span");
     mask.className = "case-line-window";
     mask.setAttribute("aria-hidden", "true");
     const line = document.createElement("span");
     line.className = "case-line";
-    line.textContent = words.join(" ");
+    line.textContent = block.text.slice(start, end);
     mask.append(line);
     fragment.append(mask);
     return line;
@@ -119,12 +121,16 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
       const blocked = preference.matches || document.hidden || main?.getAttribute("aria-busy") === "true";
       const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-height")) || 76;
       const bottom = window.innerHeight * 0.8;
-      // Keep the remaining motion for the next time the visitor can see it.
+      // Preserve unfinished artwork motion; interrupted text settles below.
       groups.forEach((group, element) => {
         const rect = element.getBoundingClientRect();
         const inView = rect.bottom > top && rect.top < window.innerHeight;
         group.forEach(animation => {
-          if (blocked || !inView) {
+          // Text must never wait half-clipped when someone scrolls away.
+          // Cancelling restores its visible default; artwork can resume later.
+          if (!inView && !media.has(element)) {
+            animation.cancel();
+          } else if (blocked || !inView) {
             if (animation.playState === "running") animation.pause();
           } else if (animation.playState === "paused") animation.play();
         });
@@ -163,7 +169,7 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     void document.fonts.ready.then(() => {
       if (disposed) return;
       article.querySelectorAll<HTMLElement>(textSelector).forEach(element => {
-        if (element.querySelector("a, button")) return;
+        if (element.children.length > 0) return;
         const block = { element, nodes: [...element.childNodes], text: element.textContent ?? "", lines: [] };
         blocks.push(block);
         splitLines(block);
@@ -220,10 +226,13 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     const routeObserver = new MutationObserver(scheduleReveal);
     if (main) routeObserver.observe(main, { attributes: true, attributeFilter: ["aria-busy"] });
     const onPreference = () => { if (preference.matches) settle(); scheduleReveal(); };
-    // Pause immediately when hidden; requestAnimationFrame itself stops in a
+    // Settle text and pause artwork immediately; requestAnimationFrame stops in a
     // background tab, so waiting for its next callback would be too late.
     const onVisibility = () => {
-      if (document.hidden) animations.forEach(animation => animation.pause());
+      if (document.hidden) groups.forEach((group, element) => group.forEach(animation => {
+        if (media.has(element)) animation.pause();
+        else animation.cancel();
+      }));
       else scheduleReveal();
     };
     preference.addEventListener("change", onPreference);
