@@ -1,8 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
-const ease = "cubic-bezier(.22, .61, .36, 1)";
+const ease = "power2.out";
 const textSelector = "h1, h2, .project-summary, .identity-intro-copy p, .identity-chapter-heading p";
 const labelSelector = ".project-kind, .project-facts dt, .identity-contents > span";
 const mediaSelector = ".project-cover, .gallery-image, .identity-family, .identity-display, .identity-board, .identity-colour-treatment, .identity-poster-board, .identity-placement-board, .identity-clear-board, .storefront-logo-board, .storefront-mobile-board, .storefront-collection-crop, .storefront-screen > img";
@@ -52,14 +53,14 @@ function splitLines(block: TextBlock) {
 
 export default function CaseStudyMotion({ children }: { children: ReactNode }) {
   const root = useRef<HTMLElement>(null);
-  useLayoutEffect(() => {
+  useGSAP((_, contextSafe) => {
     const article = root.current;
     if (!article) return;
     let disposed = false;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const main = document.getElementById("main");
-    const animations = new Set<Animation>();
-    const groups = new Map<HTMLElement, Set<Animation>>();
+    const animations = new Set<gsap.core.Tween>();
+    const groups = new Map<HTMLElement, Set<gsap.core.Tween>>();
     const jobs = new Set<() => void>();
     const seen = new Set<HTMLElement>();
     const visible = new Set<HTMLElement>();
@@ -72,18 +73,22 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     let previousWidth = article.getBoundingClientRect().width;
     let frame: number | undefined;
 
-    function animate(owner: HTMLElement, element: HTMLElement, frames: Keyframe[], duration: number, delay = 0, easing = ease) {
-      const animation = element.animate(frames, { duration, delay, easing, fill: "backwards" });
+    const animate = contextSafe!((owner: HTMLElement, element: HTMLElement, from: gsap.TweenVars, to: gsap.TweenVars, duration: number, delay = 0, easing = ease) => {
+      const animation = gsap.fromTo(element, from, {
+        ...to, duration: duration / 1000, delay: delay / 1000, ease: easing,
+        onComplete: () => {
+          animations.delete(animation);
+          group.delete(animation);
+          if (groups.get(owner) === group && group.size === 0) groups.delete(owner);
+          // Return ownership of the settled appearance to the stylesheet.
+          animation.revert();
+        },
+      });
       animations.add(animation);
-      const group = groups.get(owner) ?? new Set<Animation>();
+      const group = groups.get(owner) ?? new Set<gsap.core.Tween>();
       groups.set(owner, group);
       group.add(animation);
-      void animation.finished.catch(() => {}).finally(() => {
-        animations.delete(animation);
-        group.delete(animation);
-        if (groups.get(owner) === group && group.size === 0) groups.delete(owner);
-      });
-    }
+    });
     function releaseText(element: HTMLElement) {
       const opacity = pendingText.get(element);
       if (opacity === undefined) return;
@@ -91,7 +96,7 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
       pendingText.delete(element);
     }
     function settle() {
-      animations.forEach(animation => animation.cancel());
+      animations.forEach(animation => animation.revert());
       animations.clear();
       groups.clear();
       pendingText.forEach((_, element) => {
@@ -152,10 +157,13 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
           // Text must never wait half-clipped when someone scrolls away.
           // Cancelling restores its visible default; artwork can resume later.
           if (!inView && !media.has(element)) {
-            animation.cancel();
+            animation.revert();
+            animations.delete(animation);
+            group.delete(animation);
+            if (group.size === 0) groups.delete(element);
           } else if (blocked || !inView) {
-            if (animation.playState === "running") animation.pause();
-          } else if (animation.playState === "paused") animation.play();
+            if (!animation.paused()) animation.pause();
+          } else if (animation.paused()) animation.play();
         });
       });
       if (blocked) return;
@@ -184,25 +192,23 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
           continue;
         }
         seen.add(element);
-        // Restore visibility and install the backwards-filled entrance in one
+        // Restore visibility and install the GSAP entrance in one
         // task, so a fully visible text frame cannot precede the animation.
         releaseText(element);
         const block = blocks.find(block => block.element === element);
-        if (block) block.lines.forEach((line, index) => animate(element, line, [
-          { transform: "translateY(115%)" }, { transform: "translateY(0)" },
-        ], 900, 100 + index * 80));
+        if (block) block.lines.forEach((line, index) => animate(element, line,
+          { yPercent: 115 }, { yPercent: 0 }, 900, 100 + index * 80));
         const label = labels.get(element);
-        if (label) label.characters.forEach((character, index) => animate(element, character, [
-          { transform: "translateY(1.25em)" }, { transform: "translateY(0)" },
-        ], 500, 100 + index * 20, "cubic-bezier(.625, .05, 0, 1)"));
+        if (label) label.characters.forEach((character, index) => animate(element, character,
+          { y: "1.25em" }, { y: 0 }, 500, 100 + index * 20, "power4.out"));
         if (artwork) {
           const start = artwork.index % 2 === 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)";
-          // Hand the pre-applied mask to WAAPI in the same frame. There is
+          // Hand the pre-applied mask to GSAP in the same frame. There is
           // never an unmasked frame between loading and the reveal delay.
           element.style.clipPath = artwork.clipPath;
           artwork.armed = false;
-          animate(element, element, [{ clipPath: start }, { clipPath: "inset(0% 0% 0% 0%)" }], 1400, 160);
-          artwork.images.forEach(image => animate(element, image, [{ transform: "scale(1.2)" }, { transform: "scale(1)" }], 1400, 160));
+          animate(element, element, { clipPath: start }, { clipPath: "inset(0% 0% 0% 0%)" }, 1400, 160);
+          artwork.images.forEach(image => animate(element, image, { scale: 1.2 }, { scale: 1 }, 1400, 160));
         }
       }
     }
@@ -295,7 +301,12 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     const onVisibility = () => {
       if (document.hidden) groups.forEach((group, element) => group.forEach(animation => {
         if (media.has(element)) animation.pause();
-        else animation.cancel();
+        else {
+          animation.revert();
+          animations.delete(animation);
+          group.delete(animation);
+          if (group.size === 0) groups.delete(element);
+        }
       }));
       else scheduleReveal();
     };
@@ -322,6 +333,6 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         if (wrappedImage) element.replaceWith(wrappedImage);
       });
     };
-  }, []);
+  }, { scope: root });
   return <article ref={root} className="project-page page-shell">{children}</article>;
 }
