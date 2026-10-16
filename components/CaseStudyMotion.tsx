@@ -65,10 +65,10 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
     const visible = new Set<HTMLElement>();
     const blocks: TextBlock[] = [];
     const labels = new Map<HTMLElement, { nodes: ChildNode[]; characters: HTMLElement[] }>();
+    const pendingText = new Map<HTMLElement, string>();
+    let textReady = false;
     type Artwork = { index: number; images: HTMLImageElement[]; overflow: string; clipPath: string; armed: boolean; ready: boolean; loading: boolean; wrappedImage?: HTMLImageElement };
     const media = new Map<HTMLElement, Artwork>();
-    let observer: IntersectionObserver | undefined;
-    let resizeObserver: ResizeObserver | undefined;
     let previousWidth = article.getBoundingClientRect().width;
     let frame: number | undefined;
 
@@ -84,10 +84,20 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         if (groups.get(owner) === group && group.size === 0) groups.delete(owner);
       });
     }
+    function releaseText(element: HTMLElement) {
+      const opacity = pendingText.get(element);
+      if (opacity === undefined) return;
+      element.style.opacity = opacity;
+      pendingText.delete(element);
+    }
     function settle() {
       animations.forEach(animation => animation.cancel());
       animations.clear();
       groups.clear();
+      pendingText.forEach((_, element) => {
+        releaseText(element);
+        seen.add(element);
+      });
       media.forEach((artwork, element) => {
         if (!artwork.armed) return;
         element.style.clipPath = artwork.clipPath;
@@ -149,6 +159,15 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         });
       });
       if (blocked) return;
+      // If fonts are still loading, let newly visible copy appear normally.
+      // It must never disappear again when line measurement becomes ready.
+      if (!textReady) pendingText.forEach((_, element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > top) {
+          releaseText(element);
+          seen.add(element);
+        }
+      });
       // A fully clipped image can have an empty IntersectionObserver result.
       // Check its layout box directly so its own mask cannot block the trigger.
       for (const element of [...visible, ...media.keys()]) {
@@ -165,13 +184,16 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
           continue;
         }
         seen.add(element);
+        // Restore visibility and install the backwards-filled entrance in one
+        // task, so a fully visible text frame cannot precede the animation.
+        releaseText(element);
         const block = blocks.find(block => block.element === element);
         if (block) block.lines.forEach((line, index) => animate(element, line, [
           { transform: "translateY(115%)" }, { transform: "translateY(0)" },
         ], 900, 100 + index * 80));
         const label = labels.get(element);
         if (label) label.characters.forEach((character, index) => animate(element, character, [
-          { transform: "translateY(0)" }, { transform: "translateY(-1.25em)" },
+          { transform: "translateY(1.25em)" }, { transform: "translateY(0)" },
         ], 500, 100 + index * 20, "cubic-bezier(.625, .05, 0, 1)"));
         if (artwork) {
           const start = artwork.index % 2 === 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)";
@@ -184,6 +206,17 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         }
       }
     }
+
+    // Prepare text before paint too. Visible copy never restarts an entrance;
+    // offscreen copy stays hidden through measurement and the trigger delay.
+    article.querySelectorAll<HTMLElement>(`${textSelector}, ${labelSelector}`).forEach(element => {
+      if (element.children.length > 0) return;
+      const rect = element.getBoundingClientRect();
+      if (!preference.matches && (rect.top >= window.innerHeight || main?.getAttribute("aria-busy") === "true")) {
+        pendingText.set(element, element.style.opacity);
+        element.style.opacity = "0";
+      } else seen.add(element);
+    });
 
     // Prepare artwork before paint, independently of font loading. Only hide
     // offscreen artwork (or artwork behind the navigation curtain); anything
@@ -208,12 +241,12 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
       else seen.add(element);
       media.set(element, { index, images, ready: images.every(image => image.complete), loading: false, overflow, clipPath, armed, wrappedImage });
     });
-    observer = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) visible.add(entry.target as HTMLElement); else visible.delete(entry.target as HTMLElement); });
       scheduleReveal();
     }, { threshold: 0 });
     scheduleReveal();
-    resizeObserver = new ResizeObserver(entries => {
+    const resizeObserver = new ResizeObserver(entries => {
       const width = entries[0].contentRect.width;
       if (Math.abs(width - previousWidth) < 1) return;
       previousWidth = width;
@@ -250,7 +283,9 @@ export default function CaseStudyMotion({ children }: { children: ReactNode }) {
         element.replaceChildren(accessibleText(text), visual);
         labels.set(element, { nodes, characters });
       });
+      textReady = true;
       [...blocks.map(block => block.element), ...labels.keys()].forEach(element => observer?.observe(element));
+      scheduleReveal();
     });
     const routeObserver = new MutationObserver(scheduleReveal);
     if (main) routeObserver.observe(main, { attributes: true, attributeFilter: ["aria-busy"] });
