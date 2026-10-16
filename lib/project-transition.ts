@@ -1,5 +1,6 @@
 import { projectRipple, type RipplePoint } from "@/lib/project-ripple";
 import { releasePreview, type ProjectPreviewArrival } from "@/lib/project-preview";
+import { gsap } from "@/lib/gsap";
 
 export type ProjectTransitionSource = { source: HTMLElement; point?: RipplePoint };
 type Animate = (element: HTMLElement, frames: Keyframe[], options: KeyframeAnimationOptions) => Animation;
@@ -38,6 +39,7 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
   clone.querySelectorAll("video").forEach(video => video.remove());
   let video = source.querySelector<HTMLVideoElement>("video");
   const preview = source.dataset.previewSrc;
+  const showVideo = () => { if (video) video.style.opacity = "1"; };
   if (video) source.dispatchEvent(new Event("project-preview-transfer"));
   else if (preview) {
     video = document.createElement("video");
@@ -50,10 +52,13 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
   if (video) {
     video.className = "project-transition-video";
     video.setAttribute("aria-hidden", "true");
+    if (video.readyState >= 2) showVideo();
+    else video.addEventListener("loadeddata", showVideo, { once: true });
     clone.append(video);
     void video.play().catch(() => {});
   }
   let handedOff = false;
+  let watchHandoff: (() => void) | undefined;
   Object.assign(clone.style, { width: "100%", height: "100%", margin: "0", visibility: "visible" });
   const originalImage = source.querySelector<HTMLImageElement>("img");
   const clonedImage = clone.querySelector<HTMLImageElement>("img");
@@ -115,29 +120,45 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
       // The route's layout effects and scroll restoration settle before measuring.
       if (!document.hidden) await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       destination.dispatchEvent(new Event("project-banner-enter"));
-      const bounds = destination.getBoundingClientRect();
-      const destinationTitle = document.getElementById("project-title");
-      const titleOffset = (destinationTitle?.getBoundingClientRect().top ?? heading.getBoundingClientRect().top) - heading.getBoundingClientRect().top;
-      const move = animate(media, [
-        { transform: `translate(${target.left}px, ${target.top}px) scale(${scale})` },
-        { transform: `translate(${bounds.left}px, ${bounds.top}px) scale(${bounds.width / rect.width}, ${bounds.height / rect.height})` },
-      ], { duration: 560, easing: "cubic-bezier(.22, 1, .36, 1)" });
-      const moveTitle = animate(lockup, [
-        { transform: "translateY(-50%)" },
-        { transform: `translateY(calc(-50% + ${titleOffset}px))` },
-      ], { duration: 560, easing: "cubic-bezier(.22, 1, .36, 1)" });
-      await Promise.all([move, moveTitle].map(finished));
-      animate(signature, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
-      animate(lockup, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 });
-      await finished(animate(backdrop, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 }));
-      if (video) {
+      const handoff = () => {
+        if (!video || handedOff) return;
+        video.removeEventListener("loadeddata", showVideo);
         const arrival: ProjectPreviewArrival = { video, claimed: false };
         destination.dispatchEvent(new CustomEvent("project-preview-arrive", { detail: arrival }));
         handedOff = arrival.claimed;
-      }
-      media.style.visibility = "hidden";
+      };
+      const distance = backdrop.getBoundingClientRect().height * 1.15;
+      const exitOptions = { duration: 820, easing: "cubic-bezier(.76, 0, .24, 1)" };
+      // The small preview belongs to the interstitial. It leaves with the
+      // curved curtain, revealing the full-bleed video and the page beneath.
+      const curtainExit = animate(backdrop, [
+        { transform: "translateY(0)" }, { transform: "translateY(-115%)" },
+      ], exitOptions);
+      const previewExit = animate(media, [
+        { transform: `translate(${target.left}px, ${target.top}px) scale(${scale})` },
+        { transform: `translate(${target.left}px, ${target.top - distance}px) scale(${scale})` },
+      ], exitOptions);
+      const titleExit = animate(lockup, [
+        { transform: "translateY(-50%)" },
+        { transform: `translateY(calc(-50% - ${distance}px))` },
+      ], exitOptions);
+      // Move the live player only after the small preview is out of sight,
+      // while the curtain still covers the full-width video's reading area.
+      watchHandoff = () => {
+        if (media.getBoundingClientRect().bottom <= 0) {
+          handoff();
+          if (watchHandoff) gsap.ticker.remove(watchHandoff);
+          watchHandoff = undefined;
+        }
+      };
+      gsap.ticker.add(watchHandoff);
+      animate(signature, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
+      await Promise.all([curtainExit, previewExit, titleExit].map(finished));
+      handoff();
     },
     cleanup() {
+      if (watchHandoff) gsap.ticker.remove(watchHandoff);
+      video?.removeEventListener("loadeddata", showVideo);
       if (video && !handedOff) releasePreview(video);
       source.style.visibility = visibility;
       panel.replaceChildren();

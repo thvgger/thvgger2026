@@ -31,22 +31,24 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <div className="project-detail" key={project.id}>
-      <ProjectBanner title={project.title} preview={project.hoverReel} poster={project.cover} treatment={project.coverTreatment ? `${project.coverTreatment}-cover` : ""} />
-      <CaseStudyMotion>
-        <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
-        <div className="project-heading">
-          <p className="project-kind">{project.kind}</p>
-          <p className="project-summary">{project.summary}</p>
-        </div>
-        {project.presentation === "logo-guide" ? (
-          <LogoCaseStudy project={project} />
-        ) : project.presentation === "storefront-study" ? (
-          <StorefrontCaseStudy project={project} />
-        ) : (
-          <PersonalCaseStudy project={project} />
-        )}
-        <NextProject project={nextProject} />
-      </CaseStudyMotion>
+      <ProjectBanner title={project.title} kind={project.kind} preview={project.hoverReel} poster={project.cover} treatment={project.coverTreatment ? `${project.coverTreatment}-cover` : ""} />
+      <div className="project-sheet">
+        <div className="project-banner-title"><h1 id="project-title">{project.title}</h1><p>{project.kind}</p></div>
+        <CaseStudyMotion>
+          <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
+          <div className="project-heading">
+            <p className="project-summary">{project.summary}</p>
+          </div>
+          {project.presentation === "logo-guide" ? (
+            <LogoCaseStudy project={project} />
+          ) : project.presentation === "storefront-study" ? (
+            <StorefrontCaseStudy project={project} />
+          ) : (
+            <PersonalCaseStudy project={project} />
+          )}
+          <NextProject project={nextProject} />
+        </CaseStudyMotion>
+      </div>
     </div>
   );
 }
