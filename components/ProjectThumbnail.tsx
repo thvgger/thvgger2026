@@ -38,6 +38,7 @@ export default function ProjectThumbnail({ children, className, hoverReel }: {
     };
     const fail = () => { failed = true; stop(true); };
     const sync = () => {
+      if (navigating) return;
       const intended = hovered || focused;
       if (!intended || !visible || document.hidden || motion.matches || !finePointer.matches || navigating || failed) {
         stop(!intended || motion.matches || navigating);
@@ -83,8 +84,17 @@ export default function ProjectThumbnail({ children, className, hoverReel }: {
     const onBlur = () => { focused = false; sync(); };
     const onNavigate = (event: MouseEvent) => {
       if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      stop(true);
       navigating = true;
+    };
+    const onTransfer = () => {
+      generation += 1;
+      if (video && pendingFrame !== undefined) video.cancelVideoFrameCallback?.(pendingFrame);
+      pendingFrame = undefined;
+      video?.removeEventListener("error", fail);
+      // The transition now owns this exact decoder and its playback position.
+      video = undefined;
+      navigating = true;
+      hide();
     };
     const onNavigationEnd = () => {
       navigating = false;
@@ -99,6 +109,7 @@ export default function ProjectThumbnail({ children, className, hoverReel }: {
     link.addEventListener("focus", onFocus);
     link.addEventListener("blur", onBlur);
     link.addEventListener("click", onNavigate);
+    frame.addEventListener("project-preview-transfer", onTransfer);
     document.addEventListener("visibilitychange", sync);
     window.addEventListener("project-navigation-end", onNavigationEnd);
     motion.addEventListener("change", sync);
@@ -111,6 +122,7 @@ export default function ProjectThumbnail({ children, className, hoverReel }: {
       link.removeEventListener("focus", onFocus);
       link.removeEventListener("blur", onBlur);
       link.removeEventListener("click", onNavigate);
+      frame.removeEventListener("project-preview-transfer", onTransfer);
       document.removeEventListener("visibilitychange", sync);
       window.removeEventListener("project-navigation-end", onNavigationEnd);
       motion.removeEventListener("change", sync);
@@ -125,5 +137,5 @@ export default function ProjectThumbnail({ children, className, hoverReel }: {
     };
   }, [hoverReel]);
 
-  return <div ref={container} className={`${className} project-thumbnail`}>{children}</div>;
+  return <div ref={container} className={`${className} project-thumbnail`} data-preview-src={hoverReel}>{children}</div>;
 }

@@ -114,8 +114,31 @@ h1, h2 { font-weight: 500; }
 .project-transition-word { display: block; transform: translateY(110%); }
 .project-transition-media { position: absolute; top: 0; left: 0; transform-origin: top left; overflow: hidden; }
 .project-transition-ripple { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.project-transition-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .project-transition-signature { position: absolute; top: max(28px, env(safe-area-inset-top)); left: var(--gutter); display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--white); opacity: 0; }
 .project-transition-signature svg { width: 32px; height: 36px; }
+.project-banner-track { --banner-height: clamp(380px, 68svh, 720px); --preview-width: clamp(160px, 22vw, 340px); --preview-height: calc(var(--preview-width) * 9 / 16); --preview-gap: clamp(24px, 3vw, 40px); position: relative; height: var(--banner-height); }
+.project-banner-stage { position: relative; height: var(--banner-height); isolation: isolate; }
+.project-banner-surface { position: absolute; inset: 0 0 auto; height: var(--banner-height); background: var(--ink); transform-origin: top; z-index: -1; }
+.project-banner-media { position: absolute; left: calc((100% - var(--preview-width)) / 2); top: calc(var(--banner-height) * .6 - var(--preview-height) - var(--preview-gap)); width: var(--preview-width); height: var(--preview-height); background: var(--ink); overflow: hidden; }
+.project-banner-media > .project-banner-poster { object-fit: cover; }
+.project-banner-media.logo-cover > .project-banner-poster { object-fit: contain; }
+.project-banner-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+.project-banner-media[data-playing="true"] > .project-banner-video { opacity: 1; }
+.project-banner-shade { position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgb(0 0 0 / .85)); opacity: 0; pointer-events: none; }
+.project-banner-lockup { position: absolute; top: calc(var(--banner-height) * .6); left: var(--gutter); right: var(--gutter); color: var(--white); text-align: center; pointer-events: none; }
+.project-banner-lockup h1 { font-size: clamp(32px, 5.5vw, 80px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; }
+.project-banner-controls { position: absolute; top: calc(var(--banner-height) - 68px); left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; color: var(--white); gap: 20px; }
+.project-banner-controls button { min-height: 44px; font-size: 12px; text-underline-offset: 5px; }
+.project-banner-controls button:is(:hover, :focus-visible) { text-decoration: underline; }
+.project-banner-expand, .collapse-label { display: none; }
+.project-banner-track[data-scroll-ready="true"] { height: calc(100svh - var(--header-height) + var(--banner-travel, 48svh)); margin-bottom: calc(var(--banner-height) - (100svh - var(--header-height))); }
+.project-banner-track[data-scroll-ready="true"] .project-banner-stage { position: sticky; top: var(--header-height); height: calc(100svh - var(--header-height)); }
+.project-banner-track[data-scroll-ready="true"] .project-banner-expand { display: block; }
+.project-banner-track[data-expanded="true"] .expand-label { display: none; }
+.project-banner-track[data-expanded="true"] .collapse-label { display: inline; }
+.project-detail > .project-page { position: relative; }
+.project-detail .project-heading { align-items: start; margin-top: 32px; }
 .desktop-nav, .menu-trigger { opacity: 1; visibility: visible; transform: translateY(0); transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s; }
 .site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) { background: transparent; pointer-events: none; }
 .site-header[data-navigation="hidden"]:not(:has(:focus-visible)):not(:has(dialog[open])) :is(.desktop-nav, .menu-trigger) { opacity: 0; visibility: hidden; transform: translateY(calc(-100% - 24px)); pointer-events: none; transition: transform .24s cubic-bezier(.22, 1, .36, 1), opacity .2s ease, visibility 0s .24s; }

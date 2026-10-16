@@ -1,4 +1,5 @@
 import { projectRipple, type RipplePoint } from "@/lib/project-ripple";
+import { releasePreview, type ProjectPreviewArrival } from "@/lib/project-preview";
 
 export type ProjectTransitionSource = { source: HTMLElement; point?: RipplePoint };
 type Animate = (element: HTMLElement, frames: Keyframe[], options: KeyframeAnimationOptions) => Animation;
@@ -35,6 +36,24 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
   clone.removeAttribute("id");
   clone.removeAttribute("data-playing");
   clone.querySelectorAll("video").forEach(video => video.remove());
+  let video = source.querySelector<HTMLVideoElement>("video");
+  const preview = source.dataset.previewSrc;
+  if (video) source.dispatchEvent(new Event("project-preview-transfer"));
+  else if (preview) {
+    video = document.createElement("video");
+    video.src = preview;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.playsInline = true;
+  }
+  if (video) {
+    video.className = "project-transition-video";
+    video.setAttribute("aria-hidden", "true");
+    clone.append(video);
+    void video.play().catch(() => {});
+  }
+  let handedOff = false;
   Object.assign(clone.style, { width: "100%", height: "100%", margin: "0", visibility: "visible" });
   const originalImage = source.querySelector<HTMLImageElement>("img");
   const clonedImage = clone.querySelector<HTMLImageElement>("img");
@@ -67,7 +86,7 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
 
   return {
     async cover() {
-      if (!document.hidden && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) await projectRipple(clone, source, point);
+      if (!video && !document.hidden && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) await projectRipple(clone, source, point);
       if (!panel.isConnected) return;
       const cover = animate(backdrop, [
         { transform: "translateY(115%)" }, { transform: "translateY(0)" },
@@ -86,16 +105,40 @@ export function createProjectTransition(panel: HTMLElement, title: string, { sou
       await Promise.all([cover, move, ...titles].map(finished));
     },
     async reveal() {
-      await new Promise(resolve => setTimeout(resolve, document.hidden || window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180));
       if (!panel.isConnected) return;
-      animate(media, [{ opacity: 1 }, { opacity: 0 }], { duration: 180 });
-      animate(signature, [{ opacity: 1 }, { opacity: 0 }], { duration: 180 });
-      const reveal = animate(backdrop, [
-        { transform: "translateY(0)" }, { transform: "translateY(-115%)" },
-      ], { duration: 540, delay: 100 });
-      await finished(reveal);
+      const destination = [...document.querySelectorAll<HTMLElement>("[data-project-preview]")].find(element => element.dataset.projectPreview === preview);
+      if (!destination) {
+        await finished(animate(panel, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 }));
+        return;
+      }
+      destination.dispatchEvent(new Event("project-banner-enter"));
+      // The route's layout effects and scroll restoration settle before measuring.
+      if (!document.hidden) await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      destination.dispatchEvent(new Event("project-banner-enter"));
+      const bounds = destination.getBoundingClientRect();
+      const destinationTitle = document.getElementById("project-title");
+      const titleOffset = (destinationTitle?.getBoundingClientRect().top ?? heading.getBoundingClientRect().top) - heading.getBoundingClientRect().top;
+      const move = animate(media, [
+        { transform: `translate(${target.left}px, ${target.top}px) scale(${scale})` },
+        { transform: `translate(${bounds.left}px, ${bounds.top}px) scale(${bounds.width / rect.width}, ${bounds.height / rect.height})` },
+      ], { duration: 560, easing: "cubic-bezier(.22, 1, .36, 1)" });
+      const moveTitle = animate(lockup, [
+        { transform: "translateY(-50%)" },
+        { transform: `translateY(calc(-50% + ${titleOffset}px))` },
+      ], { duration: 560, easing: "cubic-bezier(.22, 1, .36, 1)" });
+      await Promise.all([move, moveTitle].map(finished));
+      animate(signature, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
+      animate(lockup, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 });
+      await finished(animate(backdrop, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 }));
+      if (video) {
+        const arrival: ProjectPreviewArrival = { video, claimed: false };
+        destination.dispatchEvent(new CustomEvent("project-preview-arrive", { detail: arrival }));
+        handedOff = arrival.claimed;
+      }
+      media.style.visibility = "hidden";
     },
     cleanup() {
+      if (video && !handedOff) releasePreview(video);
       source.style.visibility = visibility;
       panel.replaceChildren();
       window.dispatchEvent(new Event("project-navigation-end"));

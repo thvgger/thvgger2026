@@ -7,6 +7,7 @@ import StorefrontCaseStudy from "@/components/StorefrontCaseStudy";
 import CaseStudyMotion from "@/components/CaseStudyMotion";
 import PersonalCaseStudy from "@/components/PersonalCaseStudy";
 import NextProject from "@/components/NextProject";
+import ProjectBanner from "@/components/ProjectBanner";
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
@@ -29,20 +30,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
-    <CaseStudyMotion key={project.id}>
-      <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
-      <div className="project-heading">
-        <div><p className="project-kind">{project.kind}</p><h1>{project.title}</h1></div>
-        <p className="project-summary">{project.summary}</p>
-      </div>
-      {project.presentation === "logo-guide" ? (
-        <LogoCaseStudy project={project} />
-      ) : project.presentation === "storefront-study" ? (
-        <StorefrontCaseStudy project={project} />
-      ) : (
-        <PersonalCaseStudy project={project} />
-      )}
-      <NextProject project={nextProject} />
-    </CaseStudyMotion>
+    <div className="project-detail" key={project.id}>
+      <ProjectBanner title={project.title} preview={project.hoverReel} poster={project.cover} treatment={project.coverTreatment ? `${project.coverTreatment}-cover` : ""} />
+      <CaseStudyMotion>
+        <UnderlineLink href="/work" className="back-link" arrow="left">All work</UnderlineLink>
+        <div className="project-heading">
+          <p className="project-kind">{project.kind}</p>
+          <p className="project-summary">{project.summary}</p>
+        </div>
+        {project.presentation === "logo-guide" ? (
+          <LogoCaseStudy project={project} />
+        ) : project.presentation === "storefront-study" ? (
+          <StorefrontCaseStudy project={project} />
+        ) : (
+          <PersonalCaseStudy project={project} />
+        )}
+        <NextProject project={nextProject} />
+      </CaseStudyMotion>
+    </div>
   );
 }
